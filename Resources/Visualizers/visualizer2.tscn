@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://cpj1an0be0piu"]
+
+[ext_resource type="Shader" path="res://Resources/Visualizers/visualizer2.gdshader" id="1_e872m"]
+[ext_resource type="Script" path="res://Resources/Visualizers/visualizer2.gd" id="1_ooimh"]
+
+[sub_resource type="Gradient" id="Gradient_hvdmg"]
+offsets = PackedFloat32Array(0.5)
+colors = PackedColorArray(0.505882, 0.435294, 0.964706, 1)
+metadata/_snap_enabled = true
+metadata/_snap_count = 20
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_01dlh"]
+gradient = SubResource("Gradient_hvdmg")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.7, 0.5)
+repeat = 2
+metadata/_snap_enabled = true
+metadata/_snap_count = 20
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bml47"]
+shader = ExtResource("1_e872m")
+shader_parameter/columns = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/columnsAmount = 15
+shader_parameter/color = SubResource("GradientTexture2D_01dlh")
+
+[sub_resource type="Gradient" id="Gradient_37oi8"]
+colors = PackedColorArray(0.137255, 0.113725, 0.239216, 1, 0.213181, 0.18088, 0.354193, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kvu4d"]
+resource_local_to_scene = true
+gradient = SubResource("Gradient_37oi8")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(0, 1)
+metadata/_snap_enabled = true
+
+[node name="visualizer2" type="TextureRect"]
+texture_filter = 6
+material = SubResource("ShaderMaterial_bml47")
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_kvu4d")
+expand_mode = 3
+stretch_mode = 5
+script = ExtResource("1_ooimh")
+VU_COUNT = 16
+FREQ_MAX = 15500.0

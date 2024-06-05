@@ -1,0 +1,587 @@
+[gd_scene load_steps=23 format=3 uid="uid://c6xmr7thb3j54"]
+
+[ext_resource type="Script" path="res://Resources/SongElement.gd" id="1_8hvke"]
+[ext_resource type="Texture2D" uid="uid://bqr6dex5q3fyu" path="res://Resources/Bg.png" id="2_dcy72"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ntnih"]
+bg_color = Color(0.338747, 0.291508, 0.540155, 0.498039)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.592157, 0.501961, 1, 0.980392)
+border_blend = true
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 20
+shadow_color = Color(0.592157, 0.501961, 1, 0.980392)
+anti_aliasing_size = 1.555
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q762y"]
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+corner_detail = 5
+anti_aliasing_size = 1.555
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51tcj"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7gh1f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8liqx"]
+bg_color = Color(0.772549, 0.721569, 1, 1)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[sub_resource type="Animation" id="Animation_7ubm7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/line1:custom_minimum_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(6, 10)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VBoxContainer2/line2:custom_minimum_size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(6, 32)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("VBoxContainer3/line3:custom_minimum_size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(6, 64)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("VBoxContainer4/line4:custom_minimum_size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(6, 42)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("VBoxContainer5/line5:custom_minimum_size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(6, 21)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("VBoxContainer6/line6:custom_minimum_size")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(6, 43)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("VBoxContainer7/line7:custom_minimum_size")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(6, 10)]
+}
+
+[sub_resource type="Animation" id="Animation_ufwvq"]
+resource_name = "playing"
+length = 1.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/line1:custom_minimum_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.4),
+"transitions": PackedFloat32Array(-2, 1, -0.5),
+"update": 0,
+"values": [Vector2(6, 8), Vector2(6, 14), Vector2(6, 8)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VBoxContainer2/line2:custom_minimum_size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.4),
+"transitions": PackedFloat32Array(-2, 1, -0.5),
+"update": 0,
+"values": [Vector2(6, 26), Vector2(6, 36), Vector2(6, 26)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("VBoxContainer3/line3:custom_minimum_size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.4),
+"transitions": PackedFloat32Array(-2, 1, -0.5),
+"update": 0,
+"values": [Vector2(6, 52), Vector2(6, 68), Vector2(6, 52)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("VBoxContainer4/line4:custom_minimum_size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.4),
+"transitions": PackedFloat32Array(-2, 1, -0.5),
+"update": 0,
+"values": [Vector2(6, 34), Vector2(6, 46), Vector2(6, 34)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("VBoxContainer5/line5:custom_minimum_size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.4),
+"transitions": PackedFloat32Array(-2, 1, -0.5),
+"update": 0,
+"values": [Vector2(6, 17), Vector2(6, 25), Vector2(6, 17)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("VBoxContainer6/line6:custom_minimum_size")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.9, 1.4),
+"transitions": PackedFloat32Array(-2, 1, -2),
+"update": 0,
+"values": [Vector2(6, 38), Vector2(6, 47), Vector2(6, 38)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("VBoxContainer7/line7:custom_minimum_size")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1.2, 1.4),
+"transitions": PackedFloat32Array(-2, 1, -0.5),
+"update": 0,
+"values": [Vector2(6, 8), Vector2(6, 14), Vector2(6, 8)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_02hc6"]
+_data = {
+"RESET": SubResource("Animation_7ubm7"),
+"playing": SubResource("Animation_ufwvq")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_5ii8i"]
+line_spacing = 0.0
+font_size = 20
+font_color = Color(0.772549, 0.721569, 1, 1)
+shadow_size = 0
+shadow_color = Color(0.592157, 0.501961, 1, 1)
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_os0jo"]
+line_spacing = 0.0
+font_size = 12
+font_color = Color(0.772549, 0.721569, 1, 1)
+shadow_size = 0
+shadow_color = Color(0.592157, 0.501961, 1, 1)
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ikxkc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vrjem"]
+bg_color = Color(0.137255, 0.113725, 0.239216, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h01qo"]
+bg_color = Color(0.74902, 0.698039, 0.996078, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_ggj1i"]
+line_spacing = 0.0
+font_size = 14
+font_color = Color(0.772549, 0.721569, 1, 1)
+outline_size = 16
+outline_color = Color(0.772549, 0.721569, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_umtcj"]
+bg_color = Color(0.176471, 0.14902, 0.301961, 0.941176)
+border_color = Color(0.592157, 0.501961, 1, 0.980392)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 20
+shadow_color = Color(0.592157, 0.501961, 1, 0.843137)
+shadow_size = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qpfhy"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cfms6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cjfve"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jrxms"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ivbrx"]
+
+[node name="SongElement" type="Control"]
+custom_minimum_size = Vector2(20, 120)
+layout_mode = 3
+anchor_right = 0.277778
+anchor_bottom = 0.185185
+mouse_filter = 1
+script = ExtResource("1_8hvke")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.009
+anchor_right = 0.009
+offset_left = 0.119998
+offset_right = 334.12
+offset_bottom = 123.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ntnih")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0236686
+anchor_top = 0.0666667
+anchor_right = 0.976331
+anchor_bottom = 0.933333
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="TextureRect2" type="Panel" parent="Panel/HBoxContainer/MarginContainer"]
+clip_children = 1
+custom_minimum_size = Vector2(106, 106)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_q762y")
+
+[node name="songThumbnailTextureRect" type="TextureRect" parent="Panel/HBoxContainer/MarginContainer/TextureRect2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dcy72")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="songThumbnailPanelContainer" type="PanelContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/songThumbnailTextureRect"]
+self_modulate = Color(0, 0, 0, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_51tcj")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2"]
+visible = false
+layout_mode = 2
+anchor_left = 0.180952
+anchor_top = 0.188679
+anchor_right = 0.809524
+anchor_bottom = 0.792453
+offset_left = 1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_7gh1f")
+
+[node name="line1" type="Panel" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(6, 10)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_7gh1f")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="line2" type="Panel" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(6, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="line3" type="Panel" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(6, 64)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="line4" type="Panel" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer4"]
+custom_minimum_size = Vector2(6, 42)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
+
+[node name="VBoxContainer5" type="VBoxContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="line5" type="Panel" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer5"]
+custom_minimum_size = Vector2(6, 21)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
+
+[node name="VBoxContainer6" type="VBoxContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="line6" type="Panel" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer6"]
+custom_minimum_size = Vector2(6, 43)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
+
+[node name="VBoxContainer7" type="VBoxContainer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="line7" type="Panel" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer/VBoxContainer7"]
+custom_minimum_size = Vector2(6, 10)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
+
+[node name="linesAnimationPlayer" type="AnimationPlayer" parent="Panel/HBoxContainer/MarginContainer/TextureRect2/HBoxContainer"]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_02hc6")
+}
+playback_default_blend_time = 0.1
+speed_scale = 2.0
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="SongTitle" type="Label" parent="Panel/HBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+text = "Song Name"
+label_settings = SubResource("LabelSettings_5ii8i")
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Author" type="Label" parent="Panel/HBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+text = "Artist Name"
+label_settings = SubResource("LabelSettings_os0jo")
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="HSeparator" type="HSeparator" parent="Panel/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/separator = SubResource("StyleBoxEmpty_ikxkc")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="CurrentDuration" type="Label" parent="Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 1
+text = "0:00"
+label_settings = SubResource("LabelSettings_os0jo")
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="songProgressBar" type="ProgressBar" parent="Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_vrjem")
+theme_override_styles/fill = SubResource("StyleBoxFlat_h01qo")
+step = 0.0
+show_percentage = false
+
+[node name="TotalDuration" type="Label" parent="Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 1
+text = "0:00"
+label_settings = SubResource("LabelSettings_os0jo")
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Panel" type="Panel" parent="Panel/HBoxContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.89
+anchor_top = 0.098
+anchor_right = 0.89
+anchor_bottom = 0.098
+offset_left = 0.0699768
+offset_top = -0.0540009
+offset_right = 24.07
+offset_bottom = 23.946
+text = "▶"
+label_settings = SubResource("LabelSettings_ggj1i")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="Panel"]
+visible = false
+custom_minimum_size = Vector2(32, 6)
+layout_mode = 2
+anchor_left = 0.614
+anchor_top = 0.855
+anchor_right = 0.614
+anchor_bottom = 0.855
+offset_left = 0.0583038
+offset_top = 0.0350037
+offset_right = 32.0583
+offset_bottom = 6.035
+theme_override_styles/panel = SubResource("StyleBoxFlat_umtcj")
+
+[node name="SongElementButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.009
+anchor_right = 0.009
+offset_left = 0.119998
+offset_right = 334.12
+offset_bottom = 123.0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qpfhy")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_cfms6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_cjfve")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_jrxms")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ivbrx")
+
+[connection signal="button_down" from="SongElementButton" to="." method="_on_song_element_button_button_down"]
+[connection signal="button_up" from="SongElementButton" to="." method="_on_song_element_button_button_up"]
+[connection signal="focus_entered" from="SongElementButton" to="." method="_on_song_element_button_focus_entered"]
+[connection signal="focus_exited" from="SongElementButton" to="." method="_on_song_element_button_focus_exited"]
+[connection signal="mouse_entered" from="SongElementButton" to="." method="_on_song_element_button_mouse_entered"]
+[connection signal="mouse_exited" from="SongElementButton" to="." method="_on_song_element_button_mouse_exited"]
+[connection signal="pressed" from="SongElementButton" to="." method="_on_song_element_button_pressed"]

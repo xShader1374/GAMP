@@ -1,0 +1,159 @@
+[gd_scene load_steps=7 format=3 uid="uid://0vlen8tywgrm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_83b6m"]
+bg_color = Color(0.175, 0.15, 0.3, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.592157, 0.501961, 1, 0.980392)
+border_blend = true
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+corner_detail = 20
+shadow_color = Color(0.592157, 0.501961, 1, 0.980392)
+anti_aliasing_size = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t48r3"]
+bg_color = Color(0.0666667, 0.0509804, 0.129412, 0.8)
+corner_radius_top_left = 36
+corner_radius_top_right = 36
+corner_detail = 20
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kcdhl"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_oxnie"]
+line_spacing = 0.0
+font_color = Color(0.772549, 0.721569, 1, 1)
+shadow_color = Color(0.592157, 0.501961, 1, 1)
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ec2v8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_hhq8v"]
+line_spacing = 0.0
+font_size = 64
+font_color = Color(0.772549, 0.721569, 1, 1)
+shadow_color = Color(0.592157, 0.501961, 1, 1)
+shadow_offset = Vector2(0, 0)
+
+[node name="SelectLocationWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.95
+offset_left = -57.6
+offset_top = -32.4
+offset_right = 57.6001
+offset_bottom = 32.4
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+pivot_offset = Vector2(576, 324)
+theme_override_styles/panel = SubResource("StyleBoxFlat_83b6m")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="Panel"]
+layout_mode = 2
+anchor_left = 0.00607639
+anchor_top = 0.0123457
+anchor_right = 0.993924
+anchor_bottom = 0.0679012
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_t48r3")
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="Panel/Panel/HBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 514
+theme_override_styles/separator = SubResource("StyleBoxEmpty_kcdhl")
+
+[node name="Label" type="Label" parent="Panel/Panel/HBoxContainer"]
+layout_mode = 2
+text = " Select Location "
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="Panel/Panel/HBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 406
+theme_override_styles/separator = SubResource("StyleBoxEmpty_ec2v8")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Panel/HBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Button" type="Button" parent="Panel/Panel/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+text = "_"
+
+[node name="Button2" type="Button" parent="Panel/Panel/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+text = "[  ]"
+
+[node name="Button3" type="Button" parent="Panel/Panel/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+text = "x"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.00607639
+anchor_top = 0.0679012
+anchor_right = 0.993924
+anchor_bottom = 0.987654
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = " Select Location "
+label_settings = SubResource("LabelSettings_hhq8v")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Panel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(31, 31)
+layout_mode = 2
+text = "F"
