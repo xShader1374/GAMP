@@ -16,6 +16,7 @@ extends Control
 
 #endregion
 
+var SongElementScene: PackedScene = preload("res://Resources/songElement.tscn")
 var globalUserDataPath : String = OS.get_user_data_dir()
 
 #region EQ Variables Region
@@ -83,6 +84,11 @@ var mouse_pos : Vector2 = Vector2.ZERO
 var drag_from : Vector2 = Vector2.ZERO
 #endregion
 
+var authorNameToRequestImage: String = ""
+
+var downloadingSongAuthorName: String = ""
+var downloadingSongName: String = ""
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
@@ -96,7 +102,7 @@ func _ready() -> void:
 	
 	print("Is YTDLP Started: " + str(YtDlp.is_setup()))
 	
-	for i in EQBands.size(): # EQ Part, sets the index to each band slider (0, 1, 2 etc.)
+	for i: int in EQBands.size(): # EQ Part, sets the index to each band slider (0, 1, 2 etc.)
 		EQBands[i].setEQNumber(i)
 	
 	setAudioBusVolume(-16)
@@ -109,19 +115,19 @@ func _ready() -> void:
 	
 	$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel".mouse_filter = MOUSE_FILTER_IGNORE
 	%loadingLyricsCenterContainer.mouse_filter = MOUSE_FILTER_IGNORE
-	$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel/loadingLyricsCenterContainer/VBoxContainer".mouse_filter = MOUSE_FILTER_IGNORE
+	$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel/loadingLyricsCenterContainer/MarginContainer".mouse_filter = MOUSE_FILTER_IGNORE
 	%loadingLyricsLabel.mouse_filter = MOUSE_FILTER_IGNORE
 	%loadingLyricsBytesLabel.mouse_filter = MOUSE_FILTER_IGNORE
 	%loadingLyricsProgressBar.mouse_filter = MOUSE_FILTER_IGNORE
-	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if %MusicPlayer.playing:
 		progressBar.value = %MusicPlayer.get_playback_position()
 		currentDurationLabel.text = formatSongDuration(%MusicPlayer.get_playback_position())
-		currentSongElement.get_node("Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/songProgressBar").value = progressBar.value
-		currentSongElement.get_node("Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/CurrentDuration").text = formatSongDuration($MusicPlayer.get_playback_position())
+		currentSongElement.get_node("Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/songProgressBar").value = progressBar.value
+		currentSongElement.get_node("Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/CurrentDuration").text = formatSongDuration($MusicPlayer.get_playback_position())
+		currentSongElement.currentSongTimestamp = %MusicPlayer.get_playback_position()
 
 #region Window Managament Section
 func _on_minimize_button_pressed() -> void:
@@ -171,8 +177,8 @@ func _on_panel_gui_input(event: InputEvent) -> void:
 					dragging = false
 		elif event is InputEventMouseMotion:
 			if dragging:
-				var window : Window = self.get_window()
-				var real_mouse_pos : Vector2 = get_global_mouse_position() - drag_from
+				var window: Window = self.get_window()
+				var real_mouse_pos: Vector2 = get_global_mouse_position() - drag_from
 				@warning_ignore("narrowing_conversion")
 				window.position += Vector2i(real_mouse_pos.x, real_mouse_pos.y)
 	else:
@@ -185,37 +191,39 @@ func _on_import_dir_button_pressed() -> void:
 	var filters : PackedStringArray = [".wav", ".mp3", ".ogg"]
 	DisplayServer.file_dialog_show("Import Directory", OS.get_system_dir(OS.SYSTEM_DIR_MUSIC), "", true, DisplayServer.FILE_DIALOG_MODE_OPEN_DIR, filters, onNativeFileDialogDirSelected)
 
-func onNativeFileDialogDirSelected(status : bool, selected_paths : PackedStringArray, something):
-	if status:
+func onNativeFileDialogDirSelected(status : int, selected_paths : PackedStringArray, something: int) -> void:
+	if status == 1:
 		printt(status, selected_paths, something)
 		dirSelectedImportSong(selected_paths[0])
+	else:
+		print("Failed to import folder")
 
 func dirSelectedImportSong(dir: String) -> void:
-	var diraccess : DirAccess = DirAccess.open(dir)
-	var filesInDir : PackedStringArray = diraccess.get_files()
+	var diraccess: DirAccess = DirAccess.open(dir)
+	var filesInDir: PackedStringArray = diraccess.get_files()
 	
 	if filesInDir.size() != 0:
 		$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SmoothScrollContainer/HBoxContainer/VBoxContainer/Label.hide()
 		
-		var importSongsThread : Thread = Thread.new()
+		var importSongsThread: Thread = Thread.new()
 		
-		importSongsThread.start(importSongsThreaded.bind(filesInDir, dir), Thread.PRIORITY_HIGH)
+		importSongsThread.start(importSongsThreaded.bind(filesInDir, dir))
 		importSongsThread.wait_to_finish()
 
-func importSongsThreaded(filesInDir : PackedStringArray, dir : String) -> void:
-	for i : int in filesInDir.size():
-			var fileName : String = filesInDir[i]
-			var fileExtension : String = fileName.get_extension()
-			var baseFileName : String = fileName.get_basename() # File name, without the extention, ex. "g.mp3" becomes "g"
-			var splittedFileName : PackedStringArray = baseFileName.split("")
+func importSongsThreaded(filesInDir: PackedStringArray, dir: String) -> void:
+	for i: int in filesInDir.size():
+			var fileName: String = filesInDir[i]
+			var fileExtension: String = fileName.get_extension()
+			var baseFileName: String = fileName.get_basename() # File name, without the extension, ex. "g.mp3" becomes "g"
+			var splittedFileName: PackedStringArray = baseFileName.split("")
 			# now we gotta take everything before the "-" so that it becomes the Author and whatever it's over "-" it's the Song Title
 			var delimiterFound : bool = false
 			
-			var songAuthor : String = ""
-			var songTitle : String = ""
+			var songAuthor: String = ""
+			var songTitle: String = ""
 			
-			for j in splittedFileName.size():
-				var fileNameChars : String = splittedFileName[j]
+			for j: int in splittedFileName.size():
+				var fileNameChars: String = splittedFileName[j]
 				if !delimiterFound:
 					if fileNameChars != "-":
 						songAuthor += fileNameChars
@@ -228,11 +236,11 @@ func importSongsThreaded(filesInDir : PackedStringArray, dir : String) -> void:
 			songAuthor = songAuthor.strip_edges(true, true)
 			songTitle = songTitle.strip_edges(true, true)
 			
-			print("Done.")
+			#print("Done reading the song: '", songAuthor, " - ", songTitle, "', importing it now...")
 			
 			if fileExtension == "wav" or fileExtension == "mp3" or fileExtension == "ogg":
-				var SongElement = load("res://Resources/songElement.tscn").instantiate()
-				songElementsContainer.call_deferred("add_child", SongElement) #.add_child(SongElement)
+				var SongElement: MarginContainer = SongElementScene.instantiate()
+				songElementsContainer.call_deferred("add_child", SongElement, true) #.add_child(SongElement)
 				
 				#SongElement.setTitle(songTitle)
 				#SongElement.setAuthor(songAuthor)
@@ -247,90 +255,89 @@ func importSongsThreaded(filesInDir : PackedStringArray, dir : String) -> void:
 				match fileExtension:
 					"wav":
 						var tempStream : AudioStreamWAV = AudioStreamWAV.new()
-						var tempbytes : PackedByteArray = FileAccess.get_file_as_bytes(fileCompletePath)
 						
 						tempStream.set_format(AudioStreamWAV.FORMAT_16_BITS)
 						tempStream.mix_rate = 48000
 						tempStream.stereo = true
-						tempStream.set_data(tempbytes)
+						tempStream.data = load_song_data(fileCompletePath)
 						
 						songTotalDuration = formatSongDuration(tempStream.get_length())
 					
 					"mp3":
-						var tempStream : AudioStreamMP3 = AudioStreamMP3.new()
-						var tempbytes : PackedByteArray = FileAccess.get_file_as_bytes(fileCompletePath)
+						var tempStream: AudioStreamMP3 = AudioStreamMP3.new()
 						
-						tempStream.set_data(tempbytes)
+						tempStream.data = load_song_data(fileCompletePath)
 						songTotalDuration = formatSongDuration(tempStream.get_length())
 					
 					"ogg":
 						var tempStream : AudioStreamOggVorbis = AudioStreamOggVorbis.load_from_file(fileCompletePath)
 						songTotalDuration = formatSongDuration(tempStream.get_length())
 						
+				
 				SongElement.setTotalDuration(songTotalDuration)
+				
 			else:
 				print("File: '", fileName, "' is not an .mp3/.wav/.ogg, skipping...")
 			
 			print(filesInDir[i])
 
-func importSingleSong(filePath : String):
-			var fileName : String = filePath.get_basename() + "." + filePath.get_extension()
-			var fileExtension : String = fileName.get_extension()
-			var baseFileName : String = fileName.get_basename() # File name, without the extention, ex. "g.mp3" becomes "g"
-			var splittedFileName : PackedStringArray = baseFileName.split("")
-			# now we gotta take everything before the "-" so that it becomes the Author and whatever it's over "-" it's the Song Title
-			var delimiterFound : bool = false
+func importSingleSong(filePath: String) -> void:
+			var fileName: String = filePath.get_basename() + "." + filePath.get_extension()
+			var fileExtension: String = filePath.get_extension()
+			var baseFileName: String = filePath.get_basename() # File name, without the extention, ex. "g.mp3" becomes "g"
 			
-			var songAuthor : String = ""
-			var songTitle : String = ""
+			#region Maybe Delete
+			#var songAuthor : String = ""
+			#var songTitle : String = ""
 			
-			for j in splittedFileName.size():
-				var fileNameChars : String = splittedFileName[j]
-				if !delimiterFound:
-					if fileNameChars != "-":
-						songAuthor += fileNameChars
-						delimiterFound = false
-					else:
-						delimiterFound = true
-				else:
-					songTitle += fileNameChars
+			#for j: int in splittedFileName.size():
+			#	var fileNameChars : String = splittedFileName[j]
+			#	if !delimiterFound:
+			#		if fileNameChars != "-":
+			#			songAuthor += fileNameChars
+			#			delimiterFound = false
+			#		else:
+			#			delimiterFound = true
+			#	else:
+			#		songTitle += fileNameChars
 			
-			songAuthor = songAuthor.strip_edges(true, true)
-			songTitle = songTitle.strip_edges(true, true)
+			#songAuthor = songAuthor.strip_edges(true, true)
+			#songTitle = songTitle.strip_edges(true, true)
+			#endregion
 			
 			print("Done.")
 			
 			if fileExtension == "wav" or fileExtension == "mp3" or fileExtension == "ogg":
-				var SongElement = load("res://Resources/songElement.tscn").instantiate()
+				var SongElement: MarginContainer = SongElementScene.instantiate()
 				songElementsContainer.call_deferred("add_child", SongElement) #.add_child(SongElement)
 				
 				#SongElement.setTitle(songTitle)
 				#SongElement.setAuthor(songAuthor)
 				SongElement.setSongFileName(fileName)
-				SongElement.setSongFileNamePath(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/" + fileName)
-				SongElement.setSongFileNameDir(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC))
+				
+				SongElement.setSongFileNamePath(filePath)
+				SongElement.setSongFileNameDir(fileName.get_base_dir())
+				
 				SongElement.setCurrentDuration("0:00")
 				
-				var fileCompletePath : String = OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/" + fileName
+				var fileCompletePath : String = fileName
 				var songTotalDuration : String
 				
 				match fileExtension:
 					"wav":
 						var tempStream : AudioStreamWAV = AudioStreamWAV.new()
-						var tempbytes : PackedByteArray = FileAccess.get_file_as_bytes(fileCompletePath)
 						
 						tempStream.set_format(AudioStreamWAV.FORMAT_16_BITS)
 						tempStream.mix_rate = 48000
 						tempStream.stereo = true
-						tempStream.set_data(tempbytes)
+						tempStream.data = load_song_data(fileCompletePath)
 						
 						songTotalDuration = formatSongDuration(tempStream.get_length())
 					
 					"mp3":
-						var tempStream : AudioStreamMP3 = AudioStreamMP3.new()
-						var tempbytes : PackedByteArray = FileAccess.get_file_as_bytes(fileCompletePath)
+						var tempStream: AudioStreamMP3 = AudioStreamMP3.new()
 						
-						tempStream.set_data(tempbytes)
+						tempStream.data = load_song_data(fileCompletePath)
 						songTotalDuration = formatSongDuration(tempStream.get_length())
 					
 					"ogg":
@@ -340,6 +347,12 @@ func importSingleSong(filePath : String):
 				SongElement.setTotalDuration(songTotalDuration)
 			else:
 				print("File: '", fileName, "' is not an .mp3/.wav/.ogg, skipping...")
+
+func load_song_data(path: String) -> PackedByteArray:
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	
+	return file.get_buffer(file.get_length())
+
 #endregion
 
 func _on_play_button_pressed() -> void:
@@ -347,28 +360,28 @@ func _on_play_button_pressed() -> void:
 
 func prev() -> void: # goes to the previous song (if there is one)
 	if %MusicPlayer.stream != null:
-		var parentChildCount = songElementsContainer.get_child_count()
-		var currentSongElementPosition = currentSongElement.get_index()
-		var prevChildIndex = currentSongElementPosition-1
+		var parentChildCount: int = songElementsContainer.get_child_count()
+		var currentSongElementPosition: int = currentSongElement.get_index()
+		var prevChildIndex: int = currentSongElementPosition - 1
 		if prevChildIndex > 2:
-			var nextChild = songElementsContainer.get_child(prevChildIndex)
+			var nextChild: MarginContainer = songElementsContainer.get_child(prevChildIndex)
 			nextChild.songElementPressed()
 		else:
-			var nextChild = songElementsContainer.get_child(parentChildCount-1)
+			var nextChild: MarginContainer = songElementsContainer.get_child(parentChildCount - 1)
 			nextChild.songElementPressed()
 		
 	
 
 func next() -> void: # skips to the next song (if there is one, if there is not, it goes to the first one)
 	if %MusicPlayer.stream != null:
-		var parentChildCount = songElementsContainer.get_child_count()
-		var currentSongElementPosition = currentSongElement.get_index()
-		var nextChildIndex = currentSongElementPosition+1
+		var parentChildCount: int = songElementsContainer.get_child_count()
+		var currentSongElementPosition: int = currentSongElement.get_index()
+		var nextChildIndex: int = currentSongElementPosition + 1
 		if nextChildIndex < parentChildCount:
-			var nextChild = songElementsContainer.get_child(nextChildIndex)
+			var nextChild: MarginContainer = songElementsContainer.get_child(nextChildIndex)
 			nextChild.songElementPressed()
 		else:
-			var nextChild = songElementsContainer.get_child(2)
+			var nextChild: MarginContainer = songElementsContainer.get_child(2)
 			nextChild.songElementPressed()
 		
 	
@@ -388,12 +401,22 @@ func pauseAndResume() -> void: # pauses if it's playing and resumes if it's not 
 		%MusicPlayer.stream_paused = true
 
 
-func formatSongDuration(duration : float) -> String:
-	var minutes : int = int(duration / 60)
+func formatSongDuration(duration: float) -> String:
+	var minutes : int = int(duration / 60.0)
 	var seconds : int = int(duration - minutes * 60.0)
 	var finalDuration : String = str(minutes).pad_zeros(1) + ":" + str(seconds).pad_zeros(2)
 	return finalDuration
 
+func reverseFormatSongDuration(duration: String) -> float:
+	var parts: PackedStringArray = duration.split(":")
+	if parts.size() != 2:
+		push_error("Formato durata non valido. Deve essere in formato 'mm:ss'")
+		return 0.0
+	
+	var minutes: int = int(parts[0])
+	var seconds: int = int(parts[1])
+	
+	return float(minutes * 60 + seconds)
 
 func setSongTitleAuthorDuration(author : String, title : String, _duration : String) -> void:
 	songAuthorLabel.text = author
@@ -404,15 +427,15 @@ func setSongTitleAuthorDuration(author : String, title : String, _duration : Str
 	# i could use some math but why should i make the cpu calculate things when 
 	# i can just change existing values?
 	progressBar.max_value = %MusicPlayer.stream.get_length()
-	currentSongElement.get_node("Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/songProgressBar").max_value = progressBar.max_value
+	currentSongElement.get_node("Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/songProgressBar").max_value = progressBar.max_value
 
-func play(stream = null, fromPosition : int = 0) -> void: # plays the song
+func play(stream: AudioStream = null, fromPosition: float = 0.0) -> void: # plays the song
 	if stream != null:
 		%MusicPlayer.stream = stream
 	%MusicPlayer.play(fromPosition)
 
 func stop() -> void: # resets the song to 0:00 and pauses it
-	%MusicPlayer.play(0)
+	%MusicPlayer.play(0.0)
 	%MusicPlayer.stream_paused = true
 
 func loopOn() -> void:
@@ -431,20 +454,20 @@ func loopButton() -> void: # loops the song
 		loop = false
 	
 
-func loadSongFile(filepath : String): # loads the song file (supports only .wav, .mp3 and .ogg)
-	var extension : String = filepath.get_extension()
+func loadSongFile(filepath : String) -> AudioStream: # loads the song file (supports only .wav, .mp3 and .ogg)
+	var extension: String = filepath.get_extension()
 	
-	var bytes : PackedByteArray = FileAccess.get_file_as_bytes(filepath)
+	var data: PackedByteArray = load_song_data(filepath)
 	
 	match extension:
 		"mp3":
 			print("file is an mp3!")
 			
 			var newStream : AudioStreamMP3 = AudioStreamMP3.new()
-			newStream.set_data(bytes)
+			newStream.set_data(data)
 			print()
 			
-			bytes.clear()
+			data.clear()
 			return newStream
 		"wav":
 			print("file is a wav!")
@@ -452,18 +475,20 @@ func loadSongFile(filepath : String): # loads the song file (supports only .wav,
 			newStream.set_format(AudioStreamWAV.FORMAT_16_BITS)
 			newStream.mix_rate = 48000
 			newStream.stereo = true
-			newStream.set_data(bytes)
+			newStream.set_data(data)
 			
-			bytes.clear()
+			data.clear()
 			return newStream
 		"ogg":
 			print("file is an ogg!")
 			var newStream : AudioStreamOggVorbis = AudioStreamOggVorbis.load_from_file(filepath)
 			
-			bytes.clear()
+			data.clear()
 			return newStream
+		_:
+			return null
 
-func songElementSelectedFunction(songElementNode : Node, songFileName : String, songFileNamePath : String, songFileNameDir : String, songAuthor : String, songTitle : String, songTotalDuration : String):
+func songElementSelectedFunction(songElementNode : Node, songFileName : String, songFileNamePath : String, songFileNameDir : String, songAuthor : String, songTitle : String, songTotalDuration : String, songCurrentTimestamp: float) -> void:
 	if currentSongElement != null and currentSongElement.playing :
 		currentSongElement.stopPlayingAnimation()
 		currentSongElement.playing = false
@@ -481,13 +506,14 @@ func songElementSelectedFunction(songElementNode : Node, songFileName : String, 
 	
 	currentSongElement.playing = true
 	
-	play(loadSongFile(songFileNamePath), 0)
+	play(loadSongFile(songFileNamePath), songCurrentTimestamp)
 	setSongTitleAuthorDuration(songAuthor, songTitle, songTotalDuration)
 	
 	# Lyrics Retriever Section: 
 	
 	requestSongLyrics(songTitle, songAuthor, songTotalDuration)
 	#requestSongImage(songAuthor, songTitle)
+	requestAuthorImage(songAuthor)
 	changeSongCoverImage(currentSongElement.song_thumbnail_texture_rect.texture)
 	changeBGImage(currentSongElement.song_thumbnail_texture_rect.texture)
 	
@@ -504,6 +530,17 @@ func changeBGImage(newBGImage: ImageTexture) -> void:
 	changeBGImageTween.chain().tween_property(%BGTextureRect, "self_modulate", Color.WHITE, 0.2)
 	
 
+func changeAuthorImage() -> void:
+	var changeAuthorImageTween: Tween = create_tween()
+	
+	changeAuthorImageTween.set_ease(Tween.EASE_IN_OUT)
+	changeAuthorImageTween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	changeAuthorImageTween.set_trans(Tween.TRANS_QUAD)
+	
+	changeAuthorImageTween.tween_property(%authorCoverTextureRect, "self_modulate", Color.BLACK, 0.2)
+	changeAuthorImageTween.chain().tween_callback(%authorCoverTextureRect.request) #(%songCoverTextureRect, "texture", newSongCoverImage, 0)
+	changeAuthorImageTween.chain().tween_property(%authorCoverTextureRect, "self_modulate", Color.WHITE, 0.2).set_delay(0.2)
+
 func changeSongCoverImage(newSongCoverImage: ImageTexture) -> void:
 	var changeSongCoverImageTween : Tween = create_tween()
 	
@@ -512,33 +549,49 @@ func changeSongCoverImage(newSongCoverImage: ImageTexture) -> void:
 	changeSongCoverImageTween.set_trans(Tween.TRANS_QUAD)
 	
 	changeSongCoverImageTween.tween_property(%songCoverTextureRect, "self_modulate", Color.BLACK, 0.2)
-	changeSongCoverImageTween.chain().tween_property(%songCoverTextureRect, "texture", newSongCoverImage, 0)
+	changeSongCoverImageTween.chain().tween_callback(%songCoverTextureRect.set_texture.bind(newSongCoverImage)) #(%songCoverTextureRect, "texture", newSongCoverImage, 0)
 	changeSongCoverImageTween.chain().tween_property(%songCoverTextureRect, "self_modulate", Color.WHITE, 0.2)
-	
 
-func requestSongLyrics(Title : String, Author : String, Duration : String) -> void:
-	var url_starting_part : String = "http://xshader1374personal.infinityfreeapp.com/getLyricsMusix.php?t="
-	var songTitleURL : String = Title.replace(" ", "%20")
+func time_to_seconds(time_string: String) -> int:
+	var parts: PackedStringArray = time_string.split(":")
+	if parts.size() != 2:
+		push_error("Formato tempo non valido. Deve essere in formato 'mm:ss'")
+		return 0
+	
+	var minutes: int = int(parts[0])
+	var seconds: int = int(parts[1])
+	
+	return minutes * 60 + seconds
+
+#region Lyrics Management
+func requestSongLyrics(Title: String, Author: String, Duration: String) -> void:
+	## This is the API we get the Lyrics from
+	var url_starting_part: String = "https://lrclib.net/api/get?artist_name="
+	
+	var songTitleURL: String = Title.replace(" ", "%20")
 	songTitleURL = songTitleURL.replace("?", "%3F")
-	var songAuthorURL : String = Author.replace(" ", "%20")
+	
+	var songAuthorURL: String = Author.replace(" ", "%20")
 	songAuthorURL = songAuthorURL.replace("?", "%3F")
-	var final_url : String = url_starting_part + songTitleURL + "&a=" + songAuthorURL + "&d=" + Duration + "&type=alternative"
+	
+	var final_url: String = url_starting_part + songAuthorURL + "&track_name=" + songTitleURL + "&duration=" + str(time_to_seconds(Duration))
 	
 	print("Searching lyrics with URL: ", final_url)
 	
-	var headers : PackedStringArray = [
-		"Accept-Encoding:true",
-		"User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-		"Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-		"Accept-Language:en-US,en;q=0.5"
+	var headers: PackedStringArray = [
+		#"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+		#"Accept-Encoding: true",
+		#"Accept: application/json",
+		#"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+		#"Accept-Language: en-US,en;q=0.5"
 	]
 	
 	LyricsSynchronizer.set_process(false)
 	LyricsSynchronizer.lineCounter = 0
 	LyricsSynchronizer.syncSeconds.clear()
 	LyricsSynchronizer.lyricsLineLabels.clear()
-	song_lyrics_http_request.cancel_request()
 	
+	song_lyrics_http_request.cancel_request()
 	song_lyrics_http_request.request(final_url, headers, HTTPClient.METHOD_GET)
 	
 	# Start and show the loading thingy
@@ -547,9 +600,127 @@ func requestSongLyrics(Title : String, Author : String, Duration : String) -> vo
 	%songLyricsLinesVBoxContainer.hide()
 	%loadingLyricsCenterContainer.show()
 
+func _on_song_lyrics_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+	# stop and hide the loading thingy
+	
+	printt(result, response_code, headers, body)
+	var parsedBody: Dictionary = JSON.parse_string(body.get_string_from_utf8())
+	%loadingLyricsCenterContainer.hide()
+	
+	if response_code == 200:
+		%songLyricsLinesVBoxContainer.show()
+		%songLyricsLinesVBoxContainer.get_parent().scroll_to_top()
+		
+		song_lyrics_label.text = ""
+		
+		loadImportedSyncedLyrics(parsedBody.syncedLyrics)
+		
+		LyricsSynchronizer.set_process(true)
+	elif response_code == 404:
+		print(parsedBody)
+		song_lyrics_label.text = "Can't find lyrics for this song.\n(Using LRCLIB API)"
 
-func requestAuthorImage(Author : String) -> void: ## WIP
-	pass
+func stripEverythingBetweenSomethingFromString(string : String, symbol1 : String, symbol2 : String) -> String:
+	var newString : String = ""
+	var insideDelimeters : bool = false
+	
+	for Char : String in string:
+		
+		if Char == symbol1:
+			insideDelimeters = true
+		elif Char == symbol2:
+			insideDelimeters = false
+		elif !insideDelimeters:
+			newString += Char
+	
+	return newString
+
+func stripSyncSecondsFromLyrics(FullLyrics : String) -> String:
+	return stripEverythingBetweenSomethingFromString(FullLyrics, "[", "]")
+
+func loadImportedSyncedLyrics(fullLyrics : String) -> void:
+	var lyricsLinesOLD : Array[Node] = %songLyricsLinesVBoxContainer.get_children()
+	
+	for child: Label in lyricsLinesOLD:
+		child.queue_free()
+	
+	var lyricsLines : PackedStringArray = fullLyrics.split("\n")
+	
+	# 10 characters
+	
+	for line : String in lyricsLines:
+		
+		var lyricLineStripped : String = line.right(line.length() - 10)
+		
+		LyricsSynchronizer.syncSeconds.append(line.left(10))
+		
+		
+		var newLyricsLineNode : Label = Label.new()
+		
+		newLyricsLineNode.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		newLyricsLineNode.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		newLyricsLineNode.label_settings = song_lyrics_label.label_settings
+		
+		newLyricsLineNode.text = lyricLineStripped
+		
+		newLyricsLineNode.pivot_offset = newLyricsLineNode.size / 2.0
+		
+		%songLyricsLinesVBoxContainer.add_child(newLyricsLineNode)
+		
+		LyricsSynchronizer.lyricsLineLabels.append(newLyricsLineNode)
+		
+		newLyricsLineNode.gui_input.connect(LyricsSynchronizer.lyrics_line_double_click.bind(newLyricsLineNode))
+		
+		newLyricsLineNode.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		newLyricsLineNode.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		newLyricsLineNode.mouse_filter = Control.MOUSE_FILTER_PASS
+	
+	print(LyricsSynchronizer.syncSeconds, LyricsSynchronizer.syncSeconds.size())
+	print(LyricsSynchronizer.lyricsLineLabels, LyricsSynchronizer.lyricsLineLabels.size())
+#endregion
+
+
+func requestAuthorImage(Author: String) -> void:
+	authorNameToRequestImage = Author
+	%authorCoverTokenHTTPRequest.cancel_request()
+	%authorCoverTokenHTTPRequest.request("https://open.spotify.com/get_access_token?reason=transport&productType=web_player")
+	
+	print(Author)
+
+func _on_author_cover_token_http_request_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	if response_code == 200:
+		var json: JSON = JSON.new()
+		
+		json.parse(body.get_string_from_utf8())
+		
+		print("Token is: ", json.get_data().accessToken)
+		
+		var finalAuthorName: String = authorNameToRequestImage.replace(" ", "%20")
+		finalAuthorName = finalAuthorName.replace("?", "%3F")
+		
+		%authorCoverHTTPRequest.request("https://api.spotify.com/v1/search?type=artist&q=" + finalAuthorName + "&decorate_restrictions=false&best_match=true&include_external=audio&limit=3", ["Authorization: Bearer " + json.get_data().accessToken])
+	else:
+		printerr("Couldn't get TOKEN Author Image from Spotify API: ", response_code)
+
+func _on_author_cover_http_request_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	if response_code == 200:
+		var json: JSON = JSON.new()
+		
+		json.parse(body.get_string_from_utf8())
+		
+		var foundURL: String = json.get_data().best_match.items[0].images[0].url
+		
+		%authorCoverTextureRect.url = foundURL
+		changeAuthorImage()
+		
+		print("\nBest Match Author Image pfp URL: ", foundURL)
+	else:
+		%authorCoverTextureRect.url = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F010%2F892%2F324%2Foriginal%2Fx-transparent-free-png.png&f=1&nofb=1&ipt=a964354a8dad0bca3ff81c5fbf84ca99eb4420b3ed26f6b9b29e3dcb7a36232c&ipo=images"
+		changeAuthorImage()
+		printerr("Getting Author Cover: Something went wrong, code: ", response_code)
+
+
+
 
 func requestSongImage(Author : String, Title : String) -> void:
 	var output : Array = []
@@ -684,40 +855,40 @@ func _on_total_duration_gui_input(event: InputEvent) -> void:
 func _on_presets_option_button_item_selected(index: int) -> void:
 	match index:
 		0:
-			for i in EQ21Effect.get_band_count():
+			for i: int in EQ21Effect.get_band_count():
 				EQ21Effect.set_band_gain_db(i, defaultPreset[i])
 				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
 		1:
-			for i in EQ21Effect.get_band_count():
+			for i: int in EQ21Effect.get_band_count():
 				EQ21Effect.set_band_gain_db(i, bassBoostedPreset[i])
 				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
 		2:
-			for i in EQ21Effect.get_band_count():
+			for i: int in EQ21Effect.get_band_count():
 				EQ21Effect.set_band_gain_db(i, enhanchedVocalsPreset[i])
 				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
 		3:
-			for i in EQ21Effect.get_band_count():
+			for i: int in EQ21Effect.get_band_count():
 				EQ21Effect.set_band_gain_db(i, powerfulPreset[i])
 				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
 		4:
-			for i in EQ21Effect.get_band_count():
+			for i: int in EQ21Effect.get_band_count():
 				EQ21Effect.set_band_gain_db(i, powerful2Preset[i])
 				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
 		5:
-			for i in EQ21Effect.get_band_count():
+			for i: int in EQ21Effect.get_band_count():
 				EQ21Effect.set_band_gain_db(i, powerful3Preset[i])
 				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
 		6:
-			for i in EQ21Effect.get_band_count():
+			for i: int in EQ21Effect.get_band_count():
 				EQ21Effect.set_band_gain_db(i, powerful4Preset[i])
 				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
 
 func _on_music_player_finished() -> void:
 	if loop:
-		%MusicPlayer.play(0)
+		%MusicPlayer.play(0.0)
 
 func get_track_part(url : String) -> String:
-	var pos := url.find("track")
+	var pos: int = url.find("track")
 	if pos != -1:
 		# Se "track" viene trovato, estrae tutto dal carattere successivo a "track"
 		return "track" + url.substr(pos + len("track"))
@@ -750,80 +921,12 @@ func downloadFromSpotifyThreaded(link : String) -> void:
 	
 	#OS.execute('powershell.exe', [str(globalUserDataPath + "/spotdl.exe"), str(link)], output, false, true)
 	
-	print(output)
+	print("Using link to download: ", link, "\n", output)
 
-func stripEverythingBetweenSomethingFromString(string : String, symbol1 : String, symbol2 : String) -> String:
-	var newString : String = ""
-	var insideDelimeters : bool = false
-	
-	for Char : String in string:
-		
-		if Char == symbol1:
-			insideDelimeters = true
-		elif Char == symbol2:
-			insideDelimeters = false
-		elif !insideDelimeters:
-			newString += Char
-	
-	return newString
 
-func stripSyncSecondsFromLyrics(FullLyrics : String) -> String:
-	return stripEverythingBetweenSomethingFromString(FullLyrics, "[", "]")
 
-func loadImportedSyncedLyrics(fullLyrics : String) -> void:
-	var lyricsLinesOLD : Array[Node] = %songLyricsLinesVBoxContainer.get_children()
-	for child : Label in lyricsLinesOLD:
-		child.queue_free()
-	
-	var lyricsLines : PackedStringArray = fullLyrics.split("\n")
-	
-	# 10 characters
-	
-	for line : String in lyricsLines:
-		
-		var lyricLineStripped : String = line.right(line.length() - 10)
-		
-		LyricsSynchronizer.syncSeconds.append(line.left(10))
-		
-		
-		var newLyricsLineNode : Label = Label.new()
-		
-		newLyricsLineNode.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		newLyricsLineNode.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		newLyricsLineNode.label_settings = song_lyrics_label.label_settings
-		
-		newLyricsLineNode.text = lyricLineStripped
-		
-		newLyricsLineNode.pivot_offset = newLyricsLineNode.size / 2
-		
-		%songLyricsLinesVBoxContainer.add_child(newLyricsLineNode)
-		
-		LyricsSynchronizer.lyricsLineLabels.append(newLyricsLineNode)
-		
-	
-	print(LyricsSynchronizer.syncSeconds, LyricsSynchronizer.syncSeconds.size())
-	print(LyricsSynchronizer.lyricsLineLabels, LyricsSynchronizer.lyricsLineLabels.size())
-	
 
-func _on_song_lyrics_http_request_request_completed(_result: int, _response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
-	# stop and hide the loading thingy
-	
-	var parsedBody : String = body.get_string_from_utf8()
-	
-	%loadingLyricsCenterContainer.hide()
-	
-	if parsedBody.contains('"isError":true'):
-		song_lyrics_label.text = "Can't find lyrics for this song.\n(Using MusixMatch API)"
-	else:
-		%songLyricsLinesVBoxContainer.show()
-		%songLyricsLinesVBoxContainer.get_parent().scroll_to_top()
-		song_lyrics_label.text = ""
-		loadImportedSyncedLyrics(parsedBody)
-		LyricsSynchronizer.set_process(true)
-		#song_lyrics_label.text = stripSyncSecondsFromLyrics(parsedBody)
-	
-	
-	
+
 
 func _on_manually_search_lyrics_button_pressed() -> void:
 	if !manual_search_popup_control.visible:
@@ -851,7 +954,7 @@ func _on_final_manual_search_button_pressed() -> void:
 
 func _on_song_cover_http_request_request_completed(_result: int, _response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	
-	var json = JSON.new()
+	var json: JSON = JSON.new()
 	
 	json.parse(body.get_string_from_utf8())
 	
@@ -885,12 +988,17 @@ func _on_spotify_download_http_request_request_completed(_result: int, _response
 	print("Download finished!\n", body.get_string_from_utf8())
 	%SpotifyLineEdit.text = "Download finished!"
 	
-	var file : FileAccess = FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/DownloadedSong.mp3", FileAccess.WRITE)
+	if !DirAccess.dir_exists_absolute(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded"):
+		DirAccess.make_dir_absolute(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
+	
+	var file: FileAccess = FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded/" + downloadingSongAuthorName + " - " + downloadingSongName + ".mp3", FileAccess.WRITE)
 	
 	file.store_buffer(body)
 	file.close()
 	
-	importSingleSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/DownloadedSong.mp3")
+	dirSelectedImportSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
+	
+	#importSingleSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded/DownloadedSong.mp3")
 	
 	# Rename File after importing? or before? kinda
 	

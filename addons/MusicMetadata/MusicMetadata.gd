@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/MusicMetadata/icon.svg")
+@icon("res://addons/MusicMeta/icon.svg")
 extends Resource
 class_name MusicMetadata
 
@@ -12,10 +12,10 @@ class_name MusicMetadata
 ## See [code] MusicMetadataUIBehave [/code] for a UI implementation example (or use it directly).
 
 ## Seconds per minute, used for internal calculations.
-const SEC_PER_MIN : int = 60
+const SEC_PER_MIN: int = 60
 
 ## Maps the series of preset ID3 genere's to their readable genere name
-const ID3_GENERE_IDS:Dictionary = {
+const ID3_GENERE_IDS: Dictionary[String, String] = {
 	'0' : "Blues",
 	'1' : "Classic Rock",
 	'2' : "Country",
@@ -213,7 +213,7 @@ const ID3_GENERE_IDS:Dictionary = {
 }
 
 ## Maps Some ID3 frame names to their human readable names
-const ID3_FRAME_ID_TO_URL_NAME:Dictionary = {
+const ID3_FRAME_ID_TO_URL_NAME: Dictionary[String, String] = {
 	"WCOM" : "Commercial",
 	'WCOP' : "Copyright",
 	'WFED' : "Podcast",
@@ -234,7 +234,7 @@ const ID3_FRAME_ID_TO_URL_NAME:Dictionary = {
 }
 
 ## Used during parsing as the preferred newline to use when parsing requires a newline to be inserted.
-var preferred_newline : int = "\n".to_ascii_buffer()[0]
+var preferred_newline: int = "\n".to_ascii_buffer()[0]
 
 ## The track's [i]Beats Per Minute[/i].
 @export var bpm: int = 0
@@ -268,7 +268,7 @@ var preferred_newline : int = "\n".to_ascii_buffer()[0]
 @export_multiline var user_defined_text: String = ""
 ## The track's [i]Urls[/i].
 ## It's keys are of [String]s with the type of url, it's values are of [String]s with the url.
-@export var urls:Dictionary = {}
+@export var urls:Dictionary[String, String] = {}
 ## The track's [i]Copyright Message[/i].
 @export var copyright:String = ""
 ## The track's [i]Terms Of Use[/i].
@@ -281,7 +281,7 @@ func _init(source:Variant = null) -> void:
 	if source != null:
 		if source is Array:
 			source = PackedByteArray(source)
-			
+
 		if source is PackedByteArray:
 			set_from_data(source)
 		elif source is AudioStream:
@@ -291,7 +291,7 @@ func _init(source:Variant = null) -> void:
 ## Only works with [AudioStreamMP3], [AudioStreamOggVorbis], and [AudioStreamWAV] streams.
 ## See the [b]note[/b] in [method MusicMetadata.set_from_wav_stream]
 ## for information regarding parsing [AudioStreamWAV] stream's metadata.
-func set_from_stream(stream:AudioStream) -> void:
+func set_from_stream(stream: AudioStream) -> void:
 	if stream is AudioStreamMP3:
 		set_from_MP3_stream(stream)
 	elif stream is AudioStreamOggVorbis:
@@ -299,7 +299,7 @@ func set_from_stream(stream:AudioStream) -> void:
 	elif stream is AudioStreamWAV:
 		set_from_wav_stream(stream)
 	else:
-		assert(false, "Stream type not supported")
+		push_warning("Stream type not supported")
 
 ## Updates the metadata object's values from the data found in the [AudioStreamMP3] [param stream].
 func set_from_MP3_stream(stream:AudioStreamMP3) -> void:
@@ -317,51 +317,195 @@ func set_from_oggvorbis_stream(stream:AudioStreamOggVorbis) -> void:
 ## because of this, it is strongly suggested to instead pars the raw data form the file itself using
 ## [method MusicMetadata.set_from_data] instead, unless you are sure that the metadata required will not
 ## be stripped by Godot.
-func set_from_wav_stream(stream:AudioStreamWAV) -> void:
+func set_from_wav_stream(stream: AudioStreamWAV) -> void:
 	assert(stream != null and stream.data != null, "Stream must contain data")
 	set_from_data(stream.data)
 
 ## Updates the metadata object's values based from data found in the [PackedByteArray] [param data].
-func set_from_data(data:PackedByteArray):
+func set_from_data(data: PackedByteArray):
 	if data.size() < 10:
-		push_error("Error: Stream data is too small. ")
-		return null
+		push_error("Error: Stream data is too small.")
+		return
+
+	var header: PackedByteArray = data.slice(0, 10)
+	var id3_id: String = header.slice(0, 3).get_string_from_ascii()
 	
-	var header = data.slice(0, 10)
-	var id3_id = header.slice(0, 3).get_string_from_ascii()
 	if id3_id == "ID3":
-		var v = "ID3v2.%d.%d" % [header[3], header[4]]
+		var v: String = "ID3v2.%d.%d" % [header[3], header[4]]
 		set_from_ID3_data(data, v)
+	elif data.slice(-32, -28).get_string_from_ascii() == "APETAGEX":
+		set_from_APEv2_data(data)
+	elif data.slice(0, 4).get_string_from_ascii() == "OggS":
+		set_from_vorbis_comments(data)
+	elif data.slice(0, 4).get_string_from_ascii() == "RIFF":
+		set_from_riff_info(data)
+	else:
+		# Prova a cercare un tag ID3v1 alla fine del file
+		var id3v1_tag = data.slice(-128)
+		if id3v1_tag.slice(0, 3).get_string_from_ascii() == "TAG":
+			set_from_ID3v1_data(id3v1_tag)
+		else:
+			push_warning("Unknown metadata format")
+
+## Imposta i valori dei metadati dai dati ID3v1 trovati nel [PackedByteArray] [param data].
+func set_from_ID3v1_data(data: PackedByteArray) -> void:
+	title = data.slice(3, 33).get_string_from_ascii().strip_edges()
+	artist = data.slice(33, 63).get_string_from_ascii().strip_edges()
+	album = data.slice(63, 93).get_string_from_ascii().strip_edges()
+	year = data.slice(93, 97).get_string_from_ascii().to_int()
+	if data[97] == 0:
+		comments = data.slice(97, 125).get_string_from_ascii().strip_edges()
+		track_no = data[126]
+	else:
+		comments = data.slice(97, 127).get_string_from_ascii().strip_edges()
+	genere = ID3_GENERE_IDS.get(str(data[127]), "Unknown")
+
+## Tenta di impostare i valori dei metadati da un formato sconosciuto.
+func set_from_unknown_format(data: PackedByteArray) -> void:
+	# Implementa qui la logica per rilevare e analizzare altri formati di metadati
+	# Ad esempio, potresti cercare stringhe specifiche o strutture di dati note
+	pass
+
 
 ## Updates the metadata object's values from the ID3 data found in the [PackedByteArray] [param data].
 ## The specific version of ID3 data must also be specified in [param ver].
-func set_from_ID3_data(data: PackedByteArray, ver:String) -> void:
-	var header = data.slice(0, 10)
-	var null_as_seperator:bool = (ver == "ID3v2.4.0" or ver == "ID3v2.3.0")
-	var flags:int = header[5]
-	var _unsync:bool = flags & 0x80 > 0
-	var extended:bool = flags & 0x40 > 0
-	var _experimental:bool = flags & 0x20 > 0
-	var _has_footer:bool = flags & 0x10 > 0
-	var idx:int = 10
-	var end:int = idx + _bytes_to_int(header.slice(6, 10))
+func set_from_ID3_data(data: PackedByteArray, ver: String) -> void:
+	var header: PackedByteArray = data.slice(0, 10)
+	var null_as_separator: bool = (ver == "ID3v2.4.0" or ver == "ID3v2.3.0")
+	var flags: int = header[5]
+	var unsync: bool = flags & 0x80 > 0
+	var extended: bool = flags & 0x40 > 0
+	var experimental: bool = flags & 0x20 > 0
+	var has_footer: bool = flags & 0x10 > 0
+	var idx: int = 10
+	var end: int = idx + _bytes_to_int(header.slice(6, 10))
+
 	if extended:
 		idx += _bytes_to_int(data.slice(idx, idx + 4))
-		
+
 	while idx < end:
-		var frame_id = data.slice(idx, idx + 4).get_string_from_ascii()
-		var size = _bytes_to_int(data.slice(idx + 4, idx + 8), frame_id != "APIC")
-		
-		# if greater than byte, not sync safe number (0b0111_1111 -> 0x7f)
+		var frame_id: String = data.slice(idx, idx + 4).get_string_from_ascii()
+		var size: int = _bytes_to_int(data.slice(idx + 4, idx + 8), frame_id != "APIC")
+
+		# Se maggiore di byte, non è un numero sync safe (0b0111_1111 -> 0x7f)
 		if size > 0x7f:
 			size = _bytes_to_int(data.slice(idx + 4, idx + 8), false)
 		idx += 10
-		
-		var frame_data = data.slice(idx, idx+size)
+
+		var frame_data: PackedByteArray = data.slice(idx, idx + size)
 		if frame_data.size() > 0:
-			set_value_from_ID3_frame(frame_id, frame_data, null_as_seperator)
+			if unsync:
+				frame_data = _unsynchronize(frame_data)
+			set_value_from_ID3_frame(frame_id, frame_data, null_as_separator)
 
 		idx += size
+
+## Imposta i valori dei metadati dai dati APEv2 trovati nel [PackedByteArray] [param data].
+func set_from_APEv2_data(data: PackedByteArray) -> void:
+	var footer = data.slice(-32)
+	var version = footer.decode_u32(8)
+	var size = footer.decode_u32(12)
+	var count = footer.decode_u32(16)
+	
+	var tags = data.slice(-size, -32)
+	var offset = 0
+	
+	for i: int in range(count):
+		var tag_size = tags.decode_u32(offset)
+		offset += 4
+		var flags = tags.decode_u32(offset)
+		offset += 4
+		var key_end = tags.find(0, offset)
+		var key = tags.slice(offset, key_end).get_string_from_utf8()
+		offset = key_end + 1
+		var value = tags.slice(offset, offset + tag_size).get_string_from_utf8()
+		offset += tag_size
+		
+		match key.to_lower():
+			"title": title = value
+			"artist": artist = value
+			"album": album = value
+			"year": year = value.to_int()
+			"track": track_no = value.to_int()
+			"genre": genere = value
+			"comment": comments = value
+
+## Imposta i valori dei metadati dai Vorbis Comments trovati nel [PackedByteArray] [param data].
+func set_from_vorbis_comments(data: PackedByteArray) -> void:
+	var vendor_length := data.decode_u32(7)
+	var offset := 11 + vendor_length
+	var comment_list_length := data.decode_u32(offset)
+	offset += 4
+	
+	for i: int in range(comment_list_length):
+		var length := data.decode_u32(offset)
+		offset += 4
+		var comment := data.slice(offset, offset + length).get_string_from_utf8()
+		offset += length
+		
+		var parts := comment.split("=")
+		if parts.size() == 2:
+			match parts[0].to_lower():
+				"title": title = parts[1]
+				"artist": artist = parts[1]
+				"album": album = parts[1]
+				"date": year = parts[1].to_int()
+				"tracknumber": track_no = parts[1].to_int()
+				"genre": genere = parts[1]
+				"comment": comments = parts[1]
+
+## Imposta i valori dei metadati dai RIFF INFO tags trovati nel [PackedByteArray] [param data].
+func set_from_riff_info(data: PackedByteArray) -> void:
+	var list_tag := "LIST".to_ascii_buffer()
+	var offset := 0
+	
+	# Cerca il tag "LIST"
+	while offset < data.size() - 4:
+		if data.slice(offset, offset + 4) == list_tag:
+			break
+		offset += 1
+	
+	if offset >= data.size() - 4:
+		push_warning("RIFF LIST chunk not found")
+		return
+	
+	offset += 4  # Salta "LIST"
+	var chunk_size := data.decode_u32(offset)
+	offset += 4
+	
+	var end_offset = offset + chunk_size
+	
+	while offset < end_offset:
+		var chunk_id := data.slice(offset, offset + 4).get_string_from_ascii()
+		offset += 4
+		var chunk_data_size := data.decode_u32(offset)
+		offset += 4
+		var value := data.slice(offset, offset + chunk_data_size).get_string_from_utf8().strip_edges()
+		offset += chunk_data_size
+		
+		# Assicuriamoci che l'offset sia allineato a 2 byte
+		if offset % 2 != 0:
+			offset += 1
+		
+		match chunk_id:
+			"INAM": title = value
+			"IART": artist = value
+			"IPRD": album = value
+			"ICRD": year = value.to_int() if value.is_valid_int() else 0
+			"ITRK": track_no = value.to_int() if value.is_valid_int() else 0
+			"IGNR": genere = value
+			"ICMT": comments = value
+
+## Desincronizza i dati del frame.
+func _unsynchronize(data: PackedByteArray) -> PackedByteArray:
+	var result: PackedByteArray = PackedByteArray()
+	var i: int = 0
+	while i < data.size():
+		result.append(data[i])
+		if data[i] == 0xFF and i + 1 < data.size() and data[i + 1] & 0xE0 == 0xE0:
+			result.append(0x00)
+		i += 1
+	return result
 
 ## Prints some of the metadata info to the output.
 func print_info() -> void:
@@ -380,9 +524,9 @@ func print_info() -> void:
 ## When true, a [code] null [/code] value will be treated as a newline,
 ## instead of terminating the data, if its to be read as a string.
 ## Used internally when a ID3 frame is found when parsing binary data.
-func set_value_from_ID3_frame(frame_name:String, sliced_frame_data:PackedByteArray, null_as_sep:bool = false) -> void:
+func set_value_from_ID3_frame(frame_name: String, sliced_frame_data: PackedByteArray, null_as_sep: bool = false) -> void:
 	if sliced_frame_data.size() <= 0:
-		assert(false, "bad data provided")
+		print("DEBUG: Bad data provided for frame ", frame_name)
 		return
 	
 	match frame_name:
@@ -411,27 +555,42 @@ func set_value_from_ID3_frame(frame_name:String, sliced_frame_data:PackedByteArr
 		"USER":
 			terms_of_use = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
 		"TCON", 'TCO':
-			var gen_key : String = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
+
+			var gen_key: String = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
+
 			gen_key = gen_key.strip_escapes().strip_edges()
+
 			
-			if gen_key != "":
-				while gen_key[0] == "(" and gen_key[-1] == ")":
-					gen_key = gen_key.substr(1,gen_key.length()-2)
-				if gen_key.is_valid_int():
-					gen_key = str(int(gen_key))
-				if gen_key in ID3_GENERE_IDS:
-					genere = ID3_GENERE_IDS[gen_key]
-				else:
-					genere = gen_key
+			if gen_key.is_empty():
+				print("DEBUG: Empty genre value, skipping further processing")
+				return
+			
+
+			
+			while gen_key.length() >= 2 and gen_key[0] == "(" and gen_key[-1] == ")":
+
+				gen_key = gen_key.substr(1, gen_key.length() - 2)
+
+			
+			if gen_key.is_valid_int():
+
+				gen_key = str(int(gen_key))
+			
+			if gen_key in ID3_GENERE_IDS:
+				genere = ID3_GENERE_IDS[gen_key]
+
+			else:
+				genere = gen_key
+
 		"APIC", 'PIC':
 			sliced_frame_data = sliced_frame_data.slice(1)
-			var zero1 = sliced_frame_data.find(0)
+			var zero1: float = sliced_frame_data.find(0)
 			
 			if zero1 <= 0:
 				assert(false, "bad cover photo")
 				return
 			
-			var mime_type = sliced_frame_data.slice(0, zero1).get_string_from_ascii()
+			var mime_type: String = sliced_frame_data.slice(0, zero1).get_string_from_ascii()
 			
 			zero1 += 1 # Picture type
 			if zero1 >= sliced_frame_data.size():
@@ -443,11 +602,10 @@ func set_value_from_ID3_frame(frame_name:String, sliced_frame_data:PackedByteArr
 				assert(false, "bad cover photo")
 				return
 				
-			var zero2 = sliced_frame_data.find(0, zero1)
-			var image_bytes : PackedByteArray = sliced_frame_data.slice(zero2 + 1)
+			var zero2: float = sliced_frame_data.find(0, zero1)
+			var image_bytes: PackedByteArray = sliced_frame_data.slice(zero2 + 1)
 			
-			var img : Image = Image.new()
-			
+			var img: Image = Image.new()
 			match mime_type:
 				"image/png":
 					img.load_png_from_buffer(image_bytes)
@@ -456,12 +614,7 @@ func set_value_from_ID3_frame(frame_name:String, sliced_frame_data:PackedByteArr
 				_:
 					assert(false, "mime type %s not yet supported..." % [mime_type])
 					return
-			
-			img.resize(img.get_width()/2, img.get_height()/2, Image.INTERPOLATE_LANCZOS)
-			img.compress(Image.COMPRESS_BPTC)
 			cover = ImageTexture.create_from_image(img)
-			
-			img = null
 		var fr_id when fr_id in ID3_FRAME_ID_TO_URL_NAME.keys():
 			urls[ID3_FRAME_ID_TO_URL_NAME[fr_id]] = _get_string_from_ID3data(sliced_frame_data)
 
@@ -470,8 +623,8 @@ func set_value_from_ID3_frame(frame_name:String, sliced_frame_data:PackedByteArr
 var _USC_STRING_DECLARATION_HASH:int = [1, 0xff, 0xfe].hash()
 # ## This method is intended to be private.
 # ## Gets a string from the given ID3 formated [param data]. Accounts for USC formated strings.
-func _get_string_from_ID3data(data, null_to_newline:bool = false) -> String:
-	var ret = ""
+func _get_string_from_ID3data(data: PackedByteArray, null_to_newline:bool = false) -> String:
+	var ret: String = ""
 	
 	if data.size() > 3 and Array(data.slice(0, 3)).hash() == _USC_STRING_DECLARATION_HASH:
 		# Null-terminated string of ucs2 chars
@@ -488,7 +641,7 @@ func _get_string_from_ID3data(data, null_to_newline:bool = false) -> String:
 # ## This method is intended to be private.
 # ## Gets a [String] from a USC formated [Array] of bytes.
 # ## Assumes that the given [param bytes] are USC formated (does not check).
-func _get_string_from_ucs2(bytes: Array, null_to_newline:bool = false) -> String:
+func _get_string_from_ucs2(bytes: PackedByteArray, null_to_newline:bool = false) -> String:
 	var s:String = ""
 	var idx:int = 0
 	while idx < (bytes.size() - 1):
@@ -503,21 +656,21 @@ func _get_string_from_ucs2(bytes: Array, null_to_newline:bool = false) -> String
 # ## This method is intended to be private.
 # ## Replaces a instance of byte '[param this]' with the byte '[param with]' in the byte array.
 # ## Instead of modifying the original [param byte_array], this returns a modified copy.
-func _byte_array_replace(byte_array:PackedByteArray, this:int, with:int) -> PackedByteArray:
+func _byte_array_replace(byte_array: PackedByteArray, this:int, with:int) -> PackedByteArray:
 	byte_array = byte_array.duplicate()
 	while byte_array.has(this):
-		var ind : int = byte_array.find(this)
+		var ind: int = byte_array.find(this)
 		byte_array[ind] = with
 	return byte_array
 
 # ## This method is intended to be private.
 # ## Converts a given [Array] of [param bytes] into a [int],
 # ## also accounting for a syncsafe formated int when [param is_syncsafe] is set.
-func _bytes_to_int(bytes: Array, is_syncsafe = true) -> int:
+func _bytes_to_int(bytes: PackedByteArray, is_syncsafe = true) -> int:
 	# Syncsafe uses 0x80 multiplier otherwise use 0x100 multiplier
 	var mult:int = 0x80 if is_syncsafe else 0x100
 	var n:int = 0
-	for byte : int in bytes:
+	for byte: int in bytes:
 		n *= mult
 		n += byte
 	return n

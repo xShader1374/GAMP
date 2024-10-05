@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/MusicMetadata/icon.svg")
+@icon("res://addons/MusicMeta/icon.svg")
 extends Control
 
 ## The current [MusicMetadata] object being displayed at this time.
@@ -9,7 +9,7 @@ extends Control
 	set(_value):
 		set_metadata(_value)
 # ## This is intended to be private.
-# ## A backing variable for [metadata].
+# ## A backing varible for [metadata].
 var _metadata = null
 
 ## A reference to the [TextureRect] used to display the [member MusicMetadata.cover].

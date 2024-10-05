@@ -11,7 +11,7 @@ func _ready() -> void:
 	self.connect("drag_started", Callable(main, "EQBandSliderDragStarted"))
 	self.connect("drag_ended", Callable(main, "EQBandSliderDragEnded"))
 
-func setEQNumber(index : int):
+func setEQNumber(index: int) -> void:
 	EQNumber = index
 
 

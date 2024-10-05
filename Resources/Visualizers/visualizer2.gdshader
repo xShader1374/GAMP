@@ -7,8 +7,8 @@
 shader_type canvas_item;
 render_mode unshaded;
 
-uniform float columns[16];
-uniform int columnsAmount = 15;
+uniform float columns[32];
+uniform int columnsAmount = 30;
 uniform sampler2D color : filter_linear_mipmap_anisotropic;
 
 void fragment( )

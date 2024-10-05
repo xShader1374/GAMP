@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://clinxpoq7jdjn"
-path="res://.godot/imported/icon.png-b81d9c9c9305ced1290e869d41598c1f.ctex"
+uid="uid://bbivlh2jbmxa3"
+path="res://.godot/imported/NetworkTextureRect.svg-8350b14ba886e8fd9b2d4dd226bf91fe.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/MusicMetadata/icon.png"
-dest_files=["res://.godot/imported/icon.png-b81d9c9c9305ced1290e869d41598c1f.ctex"]
+source_file="res://addons/tattomoosa.network-texture-rect/icons/NetworkTextureRect.svg"
+dest_files=["res://.godot/imported/NetworkTextureRect.svg-8350b14ba886e8fd9b2d4dd226bf91fe.ctex"]
 
 [params]
 
@@ -32,3 +33,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=true

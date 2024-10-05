@@ -22,7 +22,7 @@ var damping_drag := 0.1
 @export
 var follow_focus_ := true
 ## Margin of the currently focused element
-@export_range(0, 50)
+@export_range(0, 500)
 var follow_focus_margin := 20
 ## Makes the container scrollable vertically
 @export
@@ -255,17 +255,15 @@ func _on_focus_changed(control: Control) -> void:
 	var is_child : bool = false
 	if content_node.is_ancestor_of(control):
 		is_child = true
-	if not is_child:
-		return
-	if not follow_focus_:
+	if !is_child or !follow_focus_ or is_scrolling:
 		return
 	
-	var focus_size_x = control.size.x
-	var focus_size_y = control.size.y
-	var focus_left = control.global_position.x - self.global_position.x
-	var focus_right = focus_left + focus_size_x
-	var focus_top = control.global_position.y - self.global_position.y
-	var focus_bottom = focus_top + focus_size_y
+	var focus_size_x: float = control.size.x
+	var focus_size_y: float = control.size.y
+	var focus_left: float = control.global_position.x - self.global_position.x
+	var focus_right: float = focus_left + focus_size_x
+	var focus_top: float = control.global_position.y - self.global_position.y
+	var focus_bottom: float = focus_top + focus_size_y
 	
 	if focus_top < 0.0:
 		scroll_y_to(content_node.position.y - focus_top + follow_focus_margin)
@@ -301,7 +299,7 @@ func _scrollbar_hide_timer_timeout() -> void:
 	if !any_scroll_bar_dragged():
 		hide_scrollbars()
 
-func _set_hide_scrollbar_over_time(value) -> bool:
+func _set_hide_scrollbar_over_time(value: bool) -> bool:
 	if value == false:
 		if scrollbar_hide_timer != null:
 			scrollbar_hide_timer.stop()
@@ -335,7 +333,7 @@ func scroll(vertical : bool, axis_velocity : float, axis_pos : float, delta : fl
 	
 	# Applies counterforces when overdragging
 	if not content_dragging:
-		var result = handle_overdrag(vertical, axis_velocity, axis_pos)
+		var result: Array = handle_overdrag(vertical, axis_velocity, axis_pos)
 		axis_velocity = result[0]
 		axis_pos = result[1]
 
@@ -375,34 +373,34 @@ func scroll(vertical : bool, axis_velocity : float, axis_pos : float, delta : fl
 		pos.x = axis_pos
 		velocity.x = axis_velocity
 
-func handle_overdrag(vertical : bool, axis_velocity : float, axis_pos : float) -> Array:
+func handle_overdrag(vertical : bool, axis_velocity : float, axis_pos : float) -> PackedFloat32Array:
 	# Left/Right or Top/Bottom depending on x or y
-	var dist1 = top_distance if vertical else left_distance
-	var dist2 = bottom_distance if vertical else right_distance
+	var dist1: float = top_distance if vertical else left_distance
+	var dist2: float = bottom_distance if vertical else right_distance
 	
 	# Modify dist2 if content is smaller than container
 	if vertical:
-		var size_y = size.y
+		var size_y: float = size.y
 		if get_h_scroll_bar().visible:
 			size_y -= get_h_scroll_bar().size.y
 		dist2 += max(size_y - content_node.size.y, 0)
 	else:
-		var size_x = content_node.size.x
+		var size_x: float = content_node.size.x
 		if get_v_scroll_bar().visible:
 			size_x -= get_v_scroll_bar().size.x
 		dist2 += max(size_x - content_node.size.x, 0)
 	
-	var calculate = func(dist):
+	var calculate: Callable = func(dist: float) -> float:
 		# Apply bounce force
-		axis_velocity = lerp(axis_velocity, -dist/8*get_process_delta_time()*100, damping)
+		axis_velocity = lerp(axis_velocity, -dist/8.0*get_process_delta_time()*100.0, damping)
 		# If it will be fast enough to scroll back next frame
 		# Apply a speed that will make it scroll back exactly
 		if will_stop_within(vertical, axis_velocity):
-			axis_velocity = -dist*(1-friction)/(1-pow(friction, stop_frame(axis_velocity)))
+			axis_velocity = -dist*(1.0-friction)/(1.0-pow(friction, stop_frame(axis_velocity)))
 
 		return axis_velocity
 	
-	var result = [axis_velocity, axis_pos]
+	var result: Array[float] = [axis_velocity, axis_pos]
 	
 	if not (dist1 > 0 or dist2 < 0) or will_stop_within(vertical, axis_velocity):
 		return result
@@ -442,7 +440,7 @@ func handle_scrollbar_drag() -> bool:
 func handle_content_dragging() -> void:
 	var calculate_dest = func(delta: float, damping: float) -> float:
 		if delta >= 0.0:
-			return delta / (1 + delta * damping * 0.1)
+			return delta / (1.0 + delta * damping * 0.1)
 		else:
 			return delta
 	
@@ -452,17 +450,17 @@ func handle_content_dragging() -> void:
 		temp_relative: float	# Event's relative movement accumulation
 	) -> float:
 		if temp_relative + temp_dist1 > 0.0:
-			var delta = min(temp_relative, temp_relative + temp_dist1)
-			var dest = calculate_dest.call(delta, damping_drag)
+			var delta: float = min(temp_relative, temp_relative + temp_dist1)
+			var dest: float = calculate_dest.call(delta, damping_drag)
 			return dest - min(0.0, temp_dist1)
 		elif temp_relative + temp_dist2 < 0.0:
-			var delta = max(temp_relative, temp_relative + temp_dist2)
-			var dest = -calculate_dest.call(-delta, damping_drag)
+			var delta: float = max(temp_relative, temp_relative + temp_dist2)
+			var dest: float = -calculate_dest.call(-delta, damping_drag)
 			return dest - max(0.0, temp_dist2)
 		else: return temp_relative
 	
 	if should_scroll_vertical():
-		var y_pos = calculate_position.call(
+		var y_pos: float = calculate_position.call(
 			drag_temp_data[2],	# Temp top_distance
 			drag_temp_data[3],	# Temp bottom_distance
 			drag_temp_data[1]	# Temp y relative accumulation
@@ -470,7 +468,7 @@ func handle_content_dragging() -> void:
 		velocity.y = (y_pos - pos.y) / get_process_delta_time() / 100
 		pos.y = y_pos
 	if should_scroll_horizontal():
-		var x_pos = calculate_position.call(
+		var x_pos: float = calculate_position.call(
 			drag_temp_data[4],	# Temp left_distance
 			drag_temp_data[5],	# Temp right_distance
 			drag_temp_data[0]	# Temp x relative accumulation
@@ -498,9 +496,9 @@ func stop_frame(vel : float) -> float:
 
 func will_stop_within(vertical : bool, vel : float) -> bool:
 	# Calculate stop frame
-	var stop_frame = stop_frame(vel)
+	var stop_frame: float = stop_frame(vel)
 	# Distance it takes to stop scrolling
-	var stop_distance = vel*(1-pow(friction,stop_frame))/(1-friction)
+	var stop_distance: float = vel*(1-pow(friction,stop_frame))/(1-friction)
 	# Position it will stop at
 	var stop_pos
 	if vertical:
@@ -508,7 +506,7 @@ func will_stop_within(vertical : bool, vel : float) -> bool:
 	else:
 		stop_pos = pos.x + stop_distance
 
-	var diff = self.size.y - content_node.size.y if vertical else self.size.x - content_node.size.x
+	var diff: float = self.size.y - content_node.size.y if vertical else self.size.x - content_node.size.x
 
 	# Whether content node will stop inside the container
 	return stop_pos <= 0.0 and stop_pos >= min(diff, 0.0)
