@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://bu7dco3gq5etw"]
+[gd_scene load_steps=101 format=3 uid="uid://bu7dco3gq5etw"]
 
 [ext_resource type="Script" path="res://Resources/main.gd" id="1_oad5e"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_d0112"]
@@ -292,7 +292,7 @@ gradient = SubResource("Gradient_wsjo5")
 use_hdr = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_swqws"]
-bg_color = Color(0.6, 0.49, 1, 0.569)
+bg_color = Color(1, 1, 1, 0.569)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
@@ -307,6 +307,19 @@ shader_parameter/wave_amp = 0.028
 shader_parameter/wave_size = 2.8
 shader_parameter/wave_time_mul = 0.5
 shader_parameter/total_phases = 18
+
+[sub_resource type="Gradient" id="Gradient_r3xo5"]
+offsets = PackedFloat32Array(0.1, 0.3)
+colors = PackedColorArray(0, 0, 0, 0, 0.419608, 0.333333, 0.686275, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_l3dx1"]
+gradient = SubResource("Gradient_r3xo5")
+width = 539
+use_hdr = true
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_megpm"]
 content_margin_left = 8.0
@@ -1463,6 +1476,14 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_swqws")
 material = SubResource("ShaderMaterial_f6yxw")
 layout_mode = 2
 mouse_filter = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/PanelContainer"]
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 2
+size_flags_vertical = 0
+texture = SubResource("GradientTexture2D_l3dx1")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel"]
 layout_mode = 2
