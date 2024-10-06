@@ -51,7 +51,7 @@ func songElementPressed() -> void:
 	var tween : Tween = create_tween()
 	
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	tween.set_trans(Tween.TRANS_QUAD)
 	
 	tween.parallel().tween_property(self, "modulate", Color.WHITE * 1.15, .2).from_current()
@@ -63,7 +63,7 @@ func _on_song_element_button_mouse_entered() -> void:
 	var tween : Tween = create_tween()
 	
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	tween.set_trans(Tween.TRANS_QUAD)
 	
 	tween.tween_property(self, "scale", Vector2(0.98, 0.98), .15).from_current()
@@ -79,7 +79,7 @@ func _on_song_element_button_mouse_exited() -> void:
 	var tween: Tween = create_tween()
 	
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	tween.set_trans(Tween.TRANS_QUAD)
 	
 	tween.tween_property(self, "scale", Vector2(1.0, 1.0), .15).from_current()

@@ -449,12 +449,10 @@ func loopOff() -> void:
 		%MusicPlayer.stream.loop = false
 
 func loopButton() -> void: # loops the song
-	if loop == false:
+	if !loop:
 		loop = true
-		
 	else:
 		loop = false
-	
 
 func loadSongFile(filepath : String) -> AudioStream: # loads the song file (supports only .wav, .mp3 and .ogg)
 	var extension: String = filepath.get_extension()
@@ -888,6 +886,8 @@ func _on_presets_option_button_item_selected(index: int) -> void:
 func _on_music_player_finished() -> void:
 	if loop:
 		%MusicPlayer.play(0.0)
+	else:
+		next()
 
 func get_track_part(url : String) -> String:
 	var pos: int = url.find("track")
