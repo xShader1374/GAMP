@@ -48,31 +48,48 @@ func songElementPressed() -> void:
 	songElementButton.grab_focus()
 	emit_signal("songElementSelected", self, songFileName, songFileNamePath, songFileNameDir, %Author.text, %SongTitle.text, %TotalDuration.text, currentSongTimestamp)
 	
-
-func _on_song_element_button_mouse_entered() -> void:
-	hover = true
 	var tween : Tween = create_tween()
 	
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
 	tween.set_trans(Tween.TRANS_QUAD)
 	
-	tween.tween_property(self, "scale", Vector2(0.98, 0.98), .15)
-	tween.chain().tween_property(songElementButton, "scale", Vector2(0.98, 0.98), .15)
+	tween.parallel().tween_property(self, "modulate", Color.WHITE * 1.15, .2).from_current()
+	
+
+func _on_song_element_button_mouse_entered() -> void:
+	hover = true
+	
+	var tween : Tween = create_tween()
+	
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	tween.set_trans(Tween.TRANS_QUAD)
+	
+	tween.tween_property(self, "scale", Vector2(0.98, 0.98), .15).from_current()
+	tween.parallel().tween_property(self, "modulate", Color.WHITE * 1.175, .15).from_current()
+	#tween.chain().tween_property(songElementButton, "scale", Vector2(0.98, 0.98), .15)
 	
 	$Panel/Panel.show()
 
 
 func _on_song_element_button_mouse_exited() -> void:
 	hover = false
-	var tween : Tween = create_tween()
+	
+	var tween: Tween = create_tween()
 	
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
 	tween.set_trans(Tween.TRANS_QUAD)
 	
-	tween.tween_property(self, "scale", Vector2(1.0, 1.0), .15)
-	tween.chain().tween_property(songElementButton, "scale", Vector2(1.0, 1.0), .15)
+	tween.tween_property(self, "scale", Vector2(1.0, 1.0), .15).from_current()
+	
+	if playing:
+		tween.parallel().tween_property(self, "modulate", Color.WHITE * 1.15, .2).from_current()
+	else:
+		tween.parallel().tween_property(self, "modulate", Color.WHITE, .15).from_current()
+	
+	#tween.chain().tween_property(songElementButton, "scale", Vector2(1.0, 1.0), .15)
 	
 	$Panel/Panel.hide()
 

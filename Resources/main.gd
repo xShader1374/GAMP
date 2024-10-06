@@ -89,6 +89,8 @@ var authorNameToRequestImage: String = ""
 var downloadingSongAuthorName: String = ""
 var downloadingSongName: String = ""
 
+var lyricsFullscreen: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
@@ -1001,3 +1003,16 @@ func _on_spotify_download_http_request_request_completed(_result: int, _response
 	#importSingleSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded/DownloadedSong.mp3")
 	
 	# Rename File after importing? or before? kinda
+
+
+func _on_lyrics_full_screen_button_pressed() -> void:
+	if !lyricsFullscreen:
+		lyricsFullscreen = true
+		
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer".hide()
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VSeparator2".hide()
+	else:
+		lyricsFullscreen = false
+		
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer".show()
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VSeparator2".show()
