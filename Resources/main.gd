@@ -773,8 +773,8 @@ func EQBandSliderDragEnded(_value_changed: bool) -> void:
 	EQbandDragStarted = false
 
 func EQBandSliderValueChanged(body : Node, value: float) -> void:
-	if EQbandDragStarted:
-		EQ21Effect.set_band_gain_db(body.EQNumber, value)
+	#if EQbandDragStarted:
+	EQ21Effect.set_band_gain_db(body.EQNumber, value)
 
 func _on_progress_bar_2_drag_started() -> void:
 	progressBarDragStarted = true
@@ -1001,4 +1001,3 @@ func _on_spotify_download_http_request_request_completed(_result: int, _response
 	#importSingleSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded/DownloadedSong.mp3")
 	
 	# Rename File after importing? or before? kinda
-	

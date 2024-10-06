@@ -3,7 +3,7 @@ extends VSlider
 @onready var main : Control = $"../../../../../../../../../../../../../.."
 var EQNumber : int = 0
 
-signal dragValue(Body : Node, Value : float)
+signal dragValue(Body: VSlider, Value: float)
 
 func _ready() -> void:
 	self.connect("dragValue", Callable(main, "EQBandSliderValueChanged"))
