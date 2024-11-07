@@ -89,6 +89,8 @@ var authorNameToRequestImage: String = ""
 var downloadingSongAuthorName: String = ""
 var downloadingSongName: String = ""
 
+var savify_output: Array = []
+
 var lyricsFullscreen: bool = false
 
 # Called when the node enters the scene tree for the first time.
@@ -251,12 +253,12 @@ func importSongsThreaded(filesInDir: PackedStringArray, dir: String) -> void:
 				SongElement.setSongFileNameDir(dir)
 				SongElement.setCurrentDuration("0:00")
 				
-				var fileCompletePath : String = dir + "/" + fileName
-				var songTotalDuration : String
+				var fileCompletePath: String = dir + "/" + fileName
+				var songTotalDuration: String
 				
 				match fileExtension:
 					"wav":
-						var tempStream : AudioStreamWAV = AudioStreamWAV.new()
+						var tempStream: AudioStreamWAV = AudioStreamWAV.new()
 						
 						tempStream.set_format(AudioStreamWAV.FORMAT_16_BITS)
 						tempStream.mix_rate = 48000
@@ -371,8 +373,6 @@ func prev() -> void: # goes to the previous song (if there is one)
 		else:
 			var nextChild: MarginContainer = songElementsContainer.get_child(parentChildCount - 1)
 			nextChild.songElementPressed()
-		
-	
 
 func next() -> void: # skips to the next song (if there is one, if there is not, it goes to the first one)
 	if %MusicPlayer.stream != null:
@@ -385,8 +385,6 @@ func next() -> void: # skips to the next song (if there is one, if there is not,
 		else:
 			var nextChild: MarginContainer = songElementsContainer.get_child(2)
 			nextChild.songElementPressed()
-		
-	
 
 func pauseAndResume() -> void: # pauses if it's playing and resumes if it's not (but has started) a song 
 	if %MusicPlayer.stream_paused == true:
@@ -517,6 +515,7 @@ func songElementSelectedFunction(songElementNode : Node, songFileName : String, 
 	changeSongCoverImage(currentSongElement.song_thumbnail_texture_rect.texture)
 	changeBGImage(currentSongElement.song_thumbnail_texture_rect.texture)
 	
+	$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer.current_tab = 2
 
 func changeBGImage(newBGImage: ImageTexture) -> void:
 	var changeBGImageTween : Tween = create_tween()
@@ -604,7 +603,9 @@ func _on_song_lyrics_http_request_request_completed(result: int, response_code: 
 	# stop and hide the loading thingy
 	
 	printt(result, response_code, headers, body)
-	var parsedBody: Dictionary = JSON.parse_string(body.get_string_from_utf8())
+	
+	var parsedBody: Dictionary = {}
+	
 	%loadingLyricsCenterContainer.hide()
 	
 	if response_code == 200:
@@ -613,7 +614,10 @@ func _on_song_lyrics_http_request_request_completed(result: int, response_code: 
 		
 		song_lyrics_label.text = ""
 		
-		loadImportedSyncedLyrics(parsedBody.syncedLyrics)
+		# Checks if body is not null
+		if body:
+			parsedBody = JSON.parse_string(body.get_string_from_utf8())
+			loadImportedSyncedLyrics(parsedBody.syncedLyrics)
 		
 		LyricsSynchronizer.set_process(true)
 	elif response_code == 404:
@@ -648,20 +652,23 @@ func loadImportedSyncedLyrics(fullLyrics : String) -> void:
 	
 	# 10 characters
 	
-	for line : String in lyricsLines:
+	for line: String in lyricsLines:
 		
-		var lyricLineStripped : String = line.right(line.length() - 10)
+		var lyricLineStripped: String = line.right(line.length() - 10)
 		
 		LyricsSynchronizer.syncSeconds.append(line.left(10))
 		
 		
-		var newLyricsLineNode : Label = Label.new()
+		var newLyricsLineNode: Label = Label.new()
 		
 		newLyricsLineNode.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		newLyricsLineNode.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		newLyricsLineNode.label_settings = song_lyrics_label.label_settings
 		
-		newLyricsLineNode.text = lyricLineStripped
+		if lyricLineStripped == " ":
+			newLyricsLineNode.text = "♪"
+		else:
+			newLyricsLineNode.text = lyricLineStripped.right(-1)
 		
 		newLyricsLineNode.pivot_offset = newLyricsLineNode.size / 2.0
 		
@@ -669,7 +676,9 @@ func loadImportedSyncedLyrics(fullLyrics : String) -> void:
 		
 		LyricsSynchronizer.lyricsLineLabels.append(newLyricsLineNode)
 		
-		newLyricsLineNode.gui_input.connect(LyricsSynchronizer.lyrics_line_double_click.bind(newLyricsLineNode))
+		newLyricsLineNode.gui_input.connect(LyricsSynchronizer.lyrics_line_GUI_input_event.bind(newLyricsLineNode))
+		newLyricsLineNode.mouse_entered.connect(LyricsSynchronizer.lyrics_line_mouse_entered.bind(newLyricsLineNode))
+		newLyricsLineNode.mouse_exited.connect(LyricsSynchronizer.lyrics_line_mouse_exited.bind(newLyricsLineNode))
 		
 		newLyricsLineNode.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		newLyricsLineNode.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -900,16 +909,35 @@ func get_track_part(url : String) -> String:
 
 func _on_spotify_line_edit_text_submitted(new_text: String) -> void:
 	
-	%spotifyDownloadHTTPRequest.request("https://yank.g3v.co.uk/" + get_track_part(new_text))
+	#region Maybe Delete #2
+	#%spotifyDownloadHTTPRequest.request("https://yank.g3v.co.uk/" + get_track_part(new_text))
 	
-	print("Downloading song with URL: ", "https://yank.g3v.co.uk/" + get_track_part(new_text))
+	#print("Downloading song with URL: ", "https://yank.g3v.co.uk/" + get_track_part(new_text))
 	
 	#var spotifyDownloaderThread : Thread = Thread.new()
 	#spotifyDownloaderThread.start(downloadFromSpotifyThreaded.bind(new_text), Thread.PRIORITY_HIGH )
 	
 	#spotifyDownloaderThread.wait_to_finish()
+	#endregion
+	
+	var SavifyPath: String = OS.get_user_data_dir() + "/Spotdl.exe"
 	
 	%SpotifyLineEdit.text = "Downloading..."
+	
+	#var result1: Dictionary = OS.execute_with_pipe(SavifyPath, [new_text, "-q", "best", "-f", "mp3", "-o", OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded", "-g", "%artist%/%album%"], false)
+	#print(result1)
+	
+	# Resets output variable
+	savify_output = []
+	%downloadingResultCodeEdit.text = ""
+	
+	var result2 := OS.execute(SavifyPath, [new_text, "--threads", 8, "--bitrate", "320k", "--output", OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded"], savify_output, true, false)
+	#print(savify_output[0])
+	
+	dirSelectedImportSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
+	
+	for line: String in savify_output:
+		%downloadingResultCodeEdit.text += line
 
 func _on_import_spotify_button_pressed() -> void:
 	_on_spotify_line_edit_text_submitted(%SpotifyLineEdit.text)

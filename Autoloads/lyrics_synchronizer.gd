@@ -47,6 +47,28 @@ func parseSongDuration(duration_str : String) -> float:
 	else:
 		return 0.0
 
+func animationHoverIn(text: Label) -> void:
+	text.pivot_offset = text.size / 2.0
+	
+	var animationHoverInTween: Tween = create_tween()
+	
+	animationHoverInTween.set_ease(Tween.EASE_IN_OUT)
+	animationHoverInTween.set_trans(Tween.TRANS_SINE)
+	
+	#animationHoverInTween.tween_property(text, "modulate", Color(1.25, 1.25, 1.25), 0.15).from_current()
+	animationHoverInTween.tween_property(text, "scale", Vector2(1.125, 1.125), 0.15).from_current()
+
+func animationHoverOut(text: Label) -> void:
+	text.pivot_offset = text.size / 2.0
+	
+	var animationHoverOutTween: Tween = create_tween()
+	
+	animationHoverOutTween.set_ease(Tween.EASE_IN_OUT)
+	animationHoverOutTween.set_trans(Tween.TRANS_SINE)
+	
+	#animationHoverOutTween.tween_property(text, "modulate", Color.WHITE, 0.15).from_current()
+	animationHoverOutTween.tween_property(text, "scale", Vector2.ONE, 0.15).from_current()
+
 func animationFocus(text: Label) -> void:
 	var animationFocusTween: Tween = create_tween()
 	
@@ -54,7 +76,7 @@ func animationFocus(text: Label) -> void:
 	animationFocusTween.set_trans(Tween.TRANS_SINE)
 	
 	animationFocusTween.tween_property(text, "modulate", Color(1.5, 1.5, 1.5), 0.15).from_current()
-	animationFocusTween.tween_property(text, "scale", Vector2(1.25, 1.25), 0.15).from_current()
+	animationFocusTween.parallel().tween_property(text, "scale", Vector2(1.25, 1.25), 0.15).from_current()
 
 func animationUnfocus(text: Label) -> void:
 	var animationUnfocusTween: Tween = create_tween()
@@ -63,9 +85,17 @@ func animationUnfocus(text: Label) -> void:
 	animationUnfocusTween.set_trans(Tween.TRANS_SINE)
 	
 	animationUnfocusTween.tween_property(text, "modulate", Color(0.75, 0.75, 0.75), 0.15).from_current()
-	animationUnfocusTween.tween_property(text, "scale", Vector2(1.0, 1.0), 0.15).from_current()
+	animationUnfocusTween.parallel().tween_property(text, "scale", Vector2(1.0, 1.0), 0.15).from_current()
 
-func lyrics_line_double_click(event: InputEvent, lyrics_line_label: Label) -> void:
+func lyrics_line_mouse_entered(lyrics_line_label: Label) -> void:
+	if lineCounter != lyrics_line_label.get_index() + 1:
+		animationHoverIn(lyrics_line_label)
+
+func lyrics_line_mouse_exited(lyrics_line_label: Label) -> void:
+	if lineCounter != lyrics_line_label.get_index() + 1:
+		animationHoverOut(lyrics_line_label)
+
+func lyrics_line_GUI_input_event(event: InputEvent, lyrics_line_label: Label) -> void:
 	if (event is InputEventMouseButton and event.is_action_pressed("mouse_left") and !lyricsScrollContainer.is_scrolling) or (event is InputEventScreenTouch and !lyricsScrollContainer.is_scrolling):
 		clicked_label = lyrics_line_label
 		click_timer.start(click_delay)

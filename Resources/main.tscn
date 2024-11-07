@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=3 uid="uid://bu7dco3gq5etw"]
+[gd_scene load_steps=102 format=3 uid="uid://bu7dco3gq5etw"]
 
 [ext_resource type="Script" path="res://Resources/main.gd" id="1_oad5e"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_d0112"]
@@ -249,6 +249,12 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 anti_aliasing_size = 2.0
 
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_dq0vg"]
+number_color = Color(0, 1, 0, 1)
+symbol_color = Color(1, 1, 0, 1)
+function_color = Color(1, 0, 0, 1)
+member_variable_color = Color(0.576471, 0, 1, 1)
+
 [sub_resource type="LabelSettings" id="LabelSettings_ku8x2"]
 line_spacing = 0.0
 font_size = 32
@@ -309,16 +315,16 @@ shader_parameter/wave_time_mul = 0.5
 shader_parameter/total_phases = 18
 
 [sub_resource type="Gradient" id="Gradient_r3xo5"]
-offsets = PackedFloat32Array(0.1, 0.3)
-colors = PackedColorArray(0, 0, 0, 0, 0.419608, 0.333333, 0.686275, 1)
+offsets = PackedFloat32Array(0, 0.3)
+colors = PackedColorArray(0, 0, 0, 0, 0.42, 0.333, 0.686, 0.475)
 metadata/_snap_enabled = true
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_l3dx1"]
 gradient = SubResource("Gradient_r3xo5")
-width = 539
 use_hdr = true
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.5, 0)
+repeat = 2
 metadata/_snap_enabled = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_megpm"]
@@ -770,10 +776,6 @@ script = ExtResource("1_oad5e")
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
-process_thread_group = 2
-process_thread_group_order = 0
-process_thread_messages = 1
-mix_target = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_b1qu4")
@@ -990,7 +992,7 @@ theme_override_styles/tab_selected = SubResource("StyleBoxFlat_hdwky")
 theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_5l4kh")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_ll108")
 tab_alignment = 1
-current_tab = 2
+current_tab = 1
 drag_to_rearrange_enabled = true
 
 [node name="Manage Songs" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
@@ -1071,7 +1073,6 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="Import" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_d0112")
@@ -1124,6 +1125,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
 texture = ExtResource("3_txr0t")
@@ -1133,7 +1135,7 @@ stretch_mode = 5
 [node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
-text = "Spotify Download and Import"
+text = "Spotify Download( <-- WIP ) and Import"
 label_settings = SubResource("LabelSettings_oxnie")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1204,6 +1206,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer2"]
+visible = false
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
 texture = ExtResource("4_mawki")
@@ -1211,6 +1214,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer2"]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 text = "Youtube Download and Import"
@@ -1219,6 +1223,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="YTLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer2"]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 placeholder_text = "Paste here the song/playlist link or search..."
@@ -1226,12 +1231,14 @@ alignment = 1
 clear_button_enabled = true
 
 [node name="VSeparator" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer2"]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 theme_override_constants/separation = 0
 theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer2"]
+visible = false
 layout_mode = 2
 alignment = 1
 
@@ -1257,7 +1264,27 @@ mouse_filter = 1
 theme_override_constants/separation = 4
 theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
 
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 11.9
+
+[node name="downloadingResultCodeEdit" type="CodeEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+editable = false
+scroll_smooth = true
+minimap_draw = true
+caret_blink = true
+syntax_highlighter = SubResource("CodeHighlighter_dq0vg")
+draw_tabs = true
+draw_spaces = true
+symbol_lookup_on_click = true
+line_folding = true
+
 [node name="Song Info" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_d0112")
@@ -1478,12 +1505,11 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/PanelContainer"]
-custom_minimum_size = Vector2(0, 68)
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
 size_flags_vertical = 0
 texture = SubResource("GradientTexture2D_l3dx1")
 expand_mode = 1
-stretch_mode = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel"]
 layout_mode = 2
