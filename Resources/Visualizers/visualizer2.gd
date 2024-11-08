@@ -4,12 +4,12 @@ var spectrum_shader: ShaderMaterial = get_material()
 
 var analyzer: AudioEffectSpectrumAnalyzerInstance = AudioServer.get_bus_effect_instance(0, 0)
 
-@export var VU_COUNT : int = 1024
-@export var FREQ_MAX : float =  3000.0
+@export var VU_COUNT: int = 1024
+@export var FREQ_MAX: float =  3000.0
 
-@export var WIDTH : int = 400
+@export var WIDTH: int = 400
 
-@export var MIN_DB : float = 85.0
+@export var MIN_DB: float = 85.0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:

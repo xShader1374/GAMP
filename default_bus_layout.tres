@@ -2,7 +2,7 @@
 
 [sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_3p88a"]
 resource_name = "SpectrumAnalyzer"
-buffer_length = 4.0
+buffer_length = 0.2
 fft_size = 0
 
 [sub_resource type="AudioEffectEQ21" id="AudioEffectEQ21_2d7ue"]

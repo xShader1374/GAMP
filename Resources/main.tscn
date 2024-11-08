@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3 uid="uid://bu7dco3gq5etw"]
+[gd_scene load_steps=106 format=3 uid="uid://bu7dco3gq5etw"]
 
 [ext_resource type="Script" path="res://Resources/main.gd" id="1_oad5e"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_d0112"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://bxo1o37an65xe" path="res://Resources/YouTube_Logo_2017.svg" id="4_mawki"]
 [ext_resource type="Script" path="res://addons/tattomoosa.network-texture-rect/network_texture_rect.gd" id="7_8qp3f"]
 [ext_resource type="Shader" path="res://Resources/BGShader.gdshader" id="8_fn18o"]
+[ext_resource type="Script" path="res://Resources/visualizer3.gd" id="12_jrqka"]
+[ext_resource type="Shader" path="res://Resources/visualizer3.gdshader" id="12_ptd8x"]
 
 [sub_resource type="Environment" id="Environment_b1qu4"]
 background_mode = 3
@@ -541,6 +543,10 @@ gradient = SubResource("Gradient_37oi8")
 fill_from = Vector2(1, 0)
 fill_to = Vector2(0, 1)
 metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hsqm0"]
+shader = ExtResource("12_ptd8x")
+shader_parameter/freq_data = PackedFloat32Array()
 
 [sub_resource type="LabelSettings" id="LabelSettings_ilapy"]
 line_spacing = 0.0
@@ -3189,7 +3195,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ntnih")
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel"]
 layout_mode = 2
 
-[node name="TextureRect2" type="Panel" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer"]
+[node name="TextureRect2" type="PanelContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer"]
 clip_children = 2
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
@@ -3200,19 +3206,24 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_dvjf3")
 physics_interpolation_mode = 1
 texture_filter = 6
 material = SubResource("ShaderMaterial_bml47")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 texture = SubResource("GradientTexture2D_th261")
 expand_mode = 3
 stretch_mode = 5
 script = ExtResource("4_ama8h")
-VU_COUNT = 45
+VU_COUNT = 48
 FREQ_MAX = 62000.0
 MIN_DB = 75.0
+
+[node name="visualizer3" type="ColorRect" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/TextureRect2"]
+physics_interpolation_mode = 1
+texture_filter = 6
+material = SubResource("ShaderMaterial_hsqm0")
+layout_mode = 2
+script = ExtResource("12_jrqka")
+VU_COUNT = 20
+MIN_DB = 75.0
+ANIMATION_SPEED = 0.14
 
 [node name="HBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer"]
 layout_mode = 2
