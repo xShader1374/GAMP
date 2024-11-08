@@ -22,7 +22,6 @@ config/icon="res://GAMP_Icon.svg"
 
 LyricsSynchronizer="*res://Autoloads/lyrics_synchronizer.gd"
 DropFilesHandler="*res://Autoloads/drop_files_handler.gd"
-YtDlp="*res://addons/godot-yt-dlp-master/src/yt_dlp.gd"
 
 [debug]
 
@@ -37,7 +36,7 @@ window/per_pixel_transparency/allowed=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ImportCleaner/plugin.cfg", "res://addons/MusicMetadata/plugin.cfg", "res://addons/SmoothScroll/plugin.cfg", "res://addons/godot-yt-dlp-master/plugin.cfg", "res://addons/tattomoosa.network-texture-rect/plugin.cfg")
+enabled=PackedStringArray("res://addons/ImportCleaner/plugin.cfg", "res://addons/MusicMetadata/plugin.cfg", "res://addons/SmoothScroll/plugin.cfg", "res://addons/tattomoosa.network-texture-rect/plugin.cfg")
 
 [file_customization]
 
@@ -55,9 +54,24 @@ theme/default_font_generate_mipmaps=true
 
 [input]
 
-asdf={
+play_pause_key={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194313,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194388,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+stop_key={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194389,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+prev_key={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194390,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+next_key={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194391,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 mouse_left={
@@ -76,12 +90,14 @@ buffering/agile_event_flushing=true
 common/physics_ticks_per_second=120
 common/max_physics_steps_per_frame=16
 common/physics_jitter_fix=0.0
+3d/physics_engine="Dummy"
 common/physics_interpolation=true
 
 [rendering]
 
 textures/canvas_textures/default_texture_filter=2
 renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 driver/threads/thread_model=2
 textures/default_filters/anisotropic_filtering_level=4
 anti_aliasing/quality/msaa_2d=3

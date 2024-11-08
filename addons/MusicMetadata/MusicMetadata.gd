@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/MusicMeta/icon.svg")
+@icon("res://addons/MusicMetadata/icon.svg")
 extends Resource
 class_name MusicMetadata
 

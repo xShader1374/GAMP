@@ -16,8 +16,13 @@ var hover : bool = false
 
 var songMetadataExtractor: MusicMetadata = MusicMetadata.new()
 
+var songFileData: PackedByteArray
+
+var setCardInfosThread: Thread = Thread.new()
+
 signal songElementSelected(songElementNode : Node, songFileName : String, songFileNamePath : String, songFileNameDir : String, songAuthor : String, songTitle : String, songTotalDuration : String, songCurrentTimestamp: float)
 
+signal infoImportCompleted()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -26,29 +31,41 @@ func _ready() -> void:
 	$Panel.pivot_offset = $Panel.size / 2.0
 	songElementButton.pivot_offset = songElementButton.size / 2.0
 	
-	var songFileData: PackedByteArray = FileAccess.get_file_as_bytes(songFileNamePath)
+	setCardInfosThread.start(setCardInfosThreaded, Thread.PRIORITY_HIGH)
+
+func setCardInfosThreaded() -> void:
+	songFileData = FileAccess.get_file_as_bytes(songFileNamePath)
 	
 	songMetadataExtractor.set_from_data(songFileData)
 	
 	var original_image: Image = songMetadataExtractor.cover.get_image()
-	original_image.resize(256, 256, Image.INTERPOLATE_LANCZOS)
+	original_image.resize(300, 300, Image.INTERPOLATE_LANCZOS)
 	original_image.compress(Image.COMPRESS_BPTC, Image.COMPRESS_SOURCE_GENERIC)
 	var compressed_image: Image = original_image
 	
 	var texture: Texture2D = ImageTexture.create_from_image(compressed_image)
-	song_thumbnail_texture_rect.texture = texture
+	song_thumbnail_texture_rect.set_deferred("texture", texture)
 	
-	%SongTitle.text = songMetadataExtractor.title.strip_edges(true, true)
-	%Author.text = songMetadataExtractor.artist.strip_edges(true, true)
+	var title: String = songMetadataExtractor.title.strip_edges(true, true)
+	var artist: String = songMetadataExtractor.artist.strip_edges(true, true)
+	
+	call_deferred("setTitle", title)
+	call_deferred("setAuthor", artist)
 	
 	songFileData.clear()
 	songMetadataExtractor = null
+	
+	call_deferred("thread_completed_info_import")
+
+func thread_completed_info_import() -> void:
+	setCardInfosThread.wait_to_finish()
+	infoImportCompleted.emit()
 
 func songElementPressed() -> void:
 	songElementButton.grab_focus()
 	emit_signal("songElementSelected", self, songFileName, songFileNamePath, songFileNameDir, %Author.text, %SongTitle.text, %TotalDuration.text, currentSongTimestamp)
 	
-	var tween : Tween = create_tween()
+	var tween: Tween = create_tween()
 	
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
@@ -60,7 +77,7 @@ func songElementPressed() -> void:
 func _on_song_element_button_mouse_entered() -> void:
 	hover = true
 	
-	var tween : Tween = create_tween()
+	var tween: Tween = create_tween()
 	
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)

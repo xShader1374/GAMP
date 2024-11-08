@@ -67,7 +67,52 @@ enum ImageLoadingStatus {
 var _http_request : HTTPRequest
 var _loading_placeholder : Control
 var _error_placeholder : Control
-var _image = Image.new()
+var _image: Image = Image.new()
+
+#region Download Optimization Region
+# Chunk size constants
+const MIN_CHUNK_SIZE: int = 65536  # 64KB (Godot default)
+const MAX_CHUNK_SIZE: int = 1048576  # 1MB
+const MEDIUM_FILE_SIZE: int = 10485760  # 10MB
+const LARGE_FILE_SIZE: int = 104857600  # 100MB
+
+var known_file_size: int = 0
+
+func calculate_optimal_chunk_size(file_size: int) -> int:
+	# Per file molto piccoli, usa il chunk size minimo
+	if file_size < MIN_CHUNK_SIZE:
+		return MIN_CHUNK_SIZE
+	
+	var chunk_size: int
+	
+	# Scala il chunk size in base alla dimensione del file
+	if file_size < MEDIUM_FILE_SIZE:
+		# Per file piccoli (<10MB), scala linearmente da 64KB a 256KB
+		chunk_size = lerp(MIN_CHUNK_SIZE, MIN_CHUNK_SIZE * 4, float(file_size) / MEDIUM_FILE_SIZE)
+	elif file_size < LARGE_FILE_SIZE:
+		# Per file medi (10MB-100MB), scala da 256KB a 512KB
+		chunk_size = lerp(MIN_CHUNK_SIZE * 4, MIN_CHUNK_SIZE * 8, float(file_size - MEDIUM_FILE_SIZE) / (LARGE_FILE_SIZE - MEDIUM_FILE_SIZE))
+	else:
+		# Per file grandi (>100MB), usa il chunk size massimo
+		chunk_size = MAX_CHUNK_SIZE
+	
+	# Arrotonda al multiplo di 4KB più vicino per ottimizzazione
+	chunk_size = floor(chunk_size / 4096.0) * 4096
+	
+	# Assicurati che il chunk size sia sempre tra MIN e MAX
+	return clampi(chunk_size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE)
+
+# Esempio di utilizzo con HTTPRequest
+func configure_http_request(http_request: HTTPRequest, file_size: int) -> void:
+	http_request.download_chunk_size = calculate_optimal_chunk_size(file_size)
+
+# Utility per ottenere la dimensione del file da un header Content-Length
+func get_file_size_from_headers(response_headers: PackedStringArray) -> int:
+	for header: String in response_headers:
+		if header.begins_with("Content-Length: "):
+			return header.substr(16).to_int()
+	return -1
+#endregion
 
 func request() -> void:
 	status = ImageLoadingStatus.LOADING
@@ -91,6 +136,8 @@ func _ready() -> void:
 	if !is_instance_valid(_http_request):
 		_http_request = HTTPRequest.new()
 		add_child(_http_request)
+	_http_request.download_chunk_size = MEDIUM_FILE_SIZE
+	_http_request.accept_gzip = true
 	_http_request.use_threads = use_threads
 	_http_request.request_completed.connect(_set_network_texture)
 	if !Engine.is_editor_hint():
@@ -134,7 +181,7 @@ func _set_network_texture(result: int, response_code: int, headers: PackedString
 		if header.begins_with(&"Content-Type: "):
 			image_type = header.replace(&"Content-Type: ", "")
 			break
-	var error = _attempt_load_buffer(_image, body, image_type)
+	var error: Error = _attempt_load_buffer(_image, body, image_type)
 	if error != OK:
 		_set_image_loading_errored(error)
 		return

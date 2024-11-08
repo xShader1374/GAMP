@@ -93,18 +93,10 @@ var savify_output: Array = []
 
 var lyricsFullscreen: bool = false
 
+var importerSongsThread: Thread
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
-	
-	YtDlp.setup()
-	await YtDlp.setup_completed
-	
-	if not YtDlp.is_setup():
-		YtDlp.setup()
-		await YtDlp.setup_completed
-	
-	print("Is YTDLP Started: " + str(YtDlp.is_setup()))
 	
 	for i: int in EQBands.size(): # EQ Part, sets the index to each band slider (0, 1, 2 etc.)
 		EQBands[i].setEQNumber(i)
@@ -133,6 +125,16 @@ func _process(_delta: float) -> void:
 		currentSongElement.get_node("Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/CurrentDuration").text = formatSongDuration($MusicPlayer.get_playback_position())
 		currentSongElement.currentSongTimestamp = %MusicPlayer.get_playback_position()
 
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed("play_pause_key"):
+		pauseAndResume()
+	elif event.is_action_pressed("stop_key"):
+		stop()
+	elif event.is_action_pressed("prev_key"):
+		prev()
+	elif event.is_action_pressed("next_key"):
+		next()
+
 #region Window Managament Section
 func _on_minimize_button_pressed() -> void:
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MINIMIZED)
@@ -147,7 +149,8 @@ func _on_maximize_button_pressed() -> void:
 		$MarginContainer["theme_override_constants/margin_right"] = 0
 		$MarginContainer["theme_override_constants/margin_bottom"] = 0
 		
-		song_lyrics_label.label_settings.font_size = 22
+		%loadingLyricsLabel.label_settings.font_size = 22
+		%songLyricsLabel.label_settings.font_size = 32
 		
 		fullscreen = true
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
@@ -161,7 +164,8 @@ func _on_maximize_button_pressed() -> void:
 		$MarginContainer["theme_override_constants/margin_right"] = 4
 		$MarginContainer["theme_override_constants/margin_bottom"] = 4
 		
-		song_lyrics_label.label_settings.font_size = 16
+		%loadingLyricsLabel.label_settings.font_size = 16
+		%songLyricsLabel.label_settings.font_size = 26
 		
 		fullscreen = false
 
@@ -192,27 +196,29 @@ func _on_panel_gui_input(event: InputEvent) -> void:
 
 #region Importing Section
 func _on_import_dir_button_pressed() -> void:
-	var filters : PackedStringArray = [".wav", ".mp3", ".ogg"]
+	var filters: PackedStringArray = ["*.mp3", "*.wav", "*.ogg"]
 	DisplayServer.file_dialog_show("Import Directory", OS.get_system_dir(OS.SYSTEM_DIR_MUSIC), "", true, DisplayServer.FILE_DIALOG_MODE_OPEN_DIR, filters, onNativeFileDialogDirSelected)
 
-func onNativeFileDialogDirSelected(status : int, selected_paths : PackedStringArray, something: int) -> void:
-	if status == 1:
-		printt(status, selected_paths, something)
+func onNativeFileDialogDirSelected(status: bool, selected_paths: PackedStringArray, selected_filter_index: int) -> void:
+	if status:
+		printt(status, selected_paths, selected_filter_index)
+		
 		dirSelectedImportSong(selected_paths[0])
 	else:
 		print("Failed to import folder")
+
+func hideEmptyListSongLabel() -> void:
+	%emptySongListLabel.hide()
 
 func dirSelectedImportSong(dir: String) -> void:
 	var diraccess: DirAccess = DirAccess.open(dir)
 	var filesInDir: PackedStringArray = diraccess.get_files()
 	
 	if filesInDir.size() != 0:
-		$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SmoothScrollContainer/HBoxContainer/VBoxContainer/Label.hide()
+		call_deferred("hideEmptyListSongLabel")
 		
-		var importSongsThread: Thread = Thread.new()
-		
-		importSongsThread.start(importSongsThreaded.bind(filesInDir, dir))
-		importSongsThread.wait_to_finish()
+		importerSongsThread = Thread.new()
+		importerSongsThread.start(importSongsThreaded.bind(filesInDir, dir))
 
 func importSongsThreaded(filesInDir: PackedStringArray, dir: String) -> void:
 	for i: int in filesInDir.size():
@@ -249,11 +255,11 @@ func importSongsThreaded(filesInDir: PackedStringArray, dir: String) -> void:
 				#SongElement.setTitle(songTitle)
 				#SongElement.setAuthor(songAuthor)
 				SongElement.setSongFileName(fileName)
-				SongElement.setSongFileNamePath(dir + "/" + fileName)
+				SongElement.setSongFileNamePath(dir.path_join(fileName))
 				SongElement.setSongFileNameDir(dir)
 				SongElement.setCurrentDuration("0:00")
 				
-				var fileCompletePath: String = dir + "/" + fileName
+				var fileCompletePath: String = dir.path_join(fileName)
 				var songTotalDuration: String
 				
 				match fileExtension:
@@ -274,16 +280,21 @@ func importSongsThreaded(filesInDir: PackedStringArray, dir: String) -> void:
 						songTotalDuration = formatSongDuration(tempStream.get_length())
 					
 					"ogg":
-						var tempStream : AudioStreamOggVorbis = AudioStreamOggVorbis.load_from_file(fileCompletePath)
+						var tempStream: AudioStreamOggVorbis = AudioStreamOggVorbis.load_from_file(fileCompletePath)
 						songTotalDuration = formatSongDuration(tempStream.get_length())
 						
 				
-				SongElement.setTotalDuration(songTotalDuration)
+				SongElement.call_deferred("setTotalDuration", songTotalDuration)
 				
 			else:
 				print("File: '", fileName, "' is not an .mp3/.wav/.ogg, skipping...")
 			
 			print(filesInDir[i])
+	
+	call_deferred("importer_Thread_Finished_Importing")
+
+func importer_Thread_Finished_Importing() -> void:
+	importerSongsThread.wait_to_finish()
 
 func importSingleSong(filePath: String) -> void:
 			var fileName: String = filePath.get_basename() + "." + filePath.get_extension()
@@ -389,7 +400,7 @@ func next() -> void: # skips to the next song (if there is one, if there is not,
 func pauseAndResume() -> void: # pauses if it's playing and resumes if it's not (but has started) a song 
 	if %MusicPlayer.stream_paused == true:
 		
-		%playButton.add_theme_font_size_override("font_size", 20)
+		%playButton.add_theme_font_size_override("font_size", 22)
 		%playButton.text = "ıı"
 		
 		%MusicPlayer.stream_paused = false
@@ -434,8 +445,13 @@ func play(stream: AudioStream = null, fromPosition: float = 0.0) -> void: # play
 		%MusicPlayer.stream = stream
 	%MusicPlayer.play(fromPosition)
 
-func stop() -> void: # resets the song to 0:00 and pauses it
+## Resets the song to 0:00 and pauses it
+func stop() -> void:
 	%MusicPlayer.play(0.0)
+	
+	%playButton.add_theme_font_size_override("font_size", 16)
+	%playButton.text = "▶"
+	
 	%MusicPlayer.stream_paused = true
 
 func loopOn() -> void:
@@ -567,22 +583,16 @@ func requestSongLyrics(Title: String, Author: String, Duration: String) -> void:
 	## This is the API we get the Lyrics from
 	var url_starting_part: String = "https://lrclib.net/api/get?artist_name="
 	
-	var songTitleURL: String = Title.replace(" ", "%20")
-	songTitleURL = songTitleURL.replace("?", "%3F")
+	var songTitleURL: String = Title.uri_encode()
 	
-	var songAuthorURL: String = Author.replace(" ", "%20")
-	songAuthorURL = songAuthorURL.replace("?", "%3F")
+	var songAuthorURL: String = Author.uri_encode()
 	
 	var final_url: String = url_starting_part + songAuthorURL + "&track_name=" + songTitleURL + "&duration=" + str(time_to_seconds(Duration))
 	
 	print("Searching lyrics with URL: ", final_url)
 	
 	var headers: PackedStringArray = [
-		#"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-		#"Accept-Encoding: true",
-		#"Accept: application/json",
-		#"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-		#"Accept-Language: en-US,en;q=0.5"
+		"User-Agent: GAMP v1.0 (https://github.com/xShader1374/GAMP)"
 	]
 	
 	LyricsSynchronizer.set_process(false)
@@ -605,22 +615,25 @@ func _on_song_lyrics_http_request_request_completed(result: int, response_code: 
 	printt(result, response_code, headers, body)
 	
 	var parsedBody: Dictionary = {}
+	parsedBody = JSON.parse_string(body.get_string_from_utf8())
 	
 	%loadingLyricsCenterContainer.hide()
 	
 	if response_code == 200:
-		%songLyricsLinesVBoxContainer.show()
-		%songLyricsLinesVBoxContainer.get_parent().scroll_to_top()
-		
-		song_lyrics_label.text = ""
-		
 		# Checks if body is not null
 		if body:
-			parsedBody = JSON.parse_string(body.get_string_from_utf8())
-			loadImportedSyncedLyrics(parsedBody.syncedLyrics)
-		
-		LyricsSynchronizer.set_process(true)
-	elif response_code == 404:
+			song_lyrics_label.text = ""
+			
+			if !parsedBody["instrumental"]:
+				%songLyricsLinesVBoxContainer.show()
+				%songLyricsLinesVBoxContainer.get_parent().scroll_to_top()
+				
+				loadImportedSyncedLyrics(parsedBody.syncedLyrics)
+				LyricsSynchronizer.set_process(true)
+			else:
+				%loadingLyricsCenterContainer.hide()
+				song_lyrics_label.text = "♪ Instrumental ♪"
+	else:
 		print(parsedBody)
 		song_lyrics_label.text = "Can't find lyrics for this song.\n(Using LRCLIB API)"
 
@@ -628,7 +641,7 @@ func stripEverythingBetweenSomethingFromString(string : String, symbol1 : String
 	var newString : String = ""
 	var insideDelimeters : bool = false
 	
-	for Char : String in string:
+	for Char: String in string:
 		
 		if Char == symbol1:
 			insideDelimeters = true
@@ -663,7 +676,7 @@ func loadImportedSyncedLyrics(fullLyrics : String) -> void:
 		
 		newLyricsLineNode.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		newLyricsLineNode.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		newLyricsLineNode.label_settings = song_lyrics_label.label_settings
+		newLyricsLineNode.label_settings = %loadingLyricsLabel.label_settings
 		
 		if lyricLineStripped == " ":
 			newLyricsLineNode.text = "♪"
@@ -704,9 +717,9 @@ func _on_author_cover_token_http_request_request_completed(_result: int, respons
 		
 		print("Token is: ", json.get_data().accessToken)
 		
-		var finalAuthorName: String = authorNameToRequestImage.replace(" ", "%20")
-		finalAuthorName = finalAuthorName.replace("?", "%3F")
+		var finalAuthorName: String = authorNameToRequestImage.uri_encode()
 		
+		%authorCoverHTTPRequest.cancel_request()
 		%authorCoverHTTPRequest.request("https://api.spotify.com/v1/search?type=artist&q=" + finalAuthorName + "&decorate_restrictions=false&best_match=true&include_external=audio&limit=3", ["Authorization: Bearer " + json.get_data().accessToken])
 	else:
 		printerr("Couldn't get TOKEN Author Image from Spotify API: ", response_code)
@@ -781,7 +794,7 @@ func EQBandSliderDragStarted() -> void:
 func EQBandSliderDragEnded(_value_changed: bool) -> void:
 	EQbandDragStarted = false
 
-func EQBandSliderValueChanged(body : Node, value: float) -> void:
+func EQBandSliderValueChanged(body: Node, value: float) -> void:
 	#if EQbandDragStarted:
 	EQ21Effect.set_band_gain_db(body.EQNumber, value)
 
@@ -920,24 +933,34 @@ func _on_spotify_line_edit_text_submitted(new_text: String) -> void:
 	#spotifyDownloaderThread.wait_to_finish()
 	#endregion
 	
-	var SavifyPath: String = OS.get_user_data_dir() + "/Spotdl.exe"
+	##var SavifyPath: String = OS.get_user_data_dir() + "/Spotdl.exe"
 	
-	%SpotifyLineEdit.text = "Downloading..."
+	##%SpotifyLineEdit.text = "Downloading..."
 	
 	#var result1: Dictionary = OS.execute_with_pipe(SavifyPath, [new_text, "-q", "best", "-f", "mp3", "-o", OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded", "-g", "%artist%/%album%"], false)
 	#print(result1)
 	
 	# Resets output variable
-	savify_output = []
-	%downloadingResultCodeEdit.text = ""
+	##savify_output = []
+	##%downloadingResultCodeEdit.text = ""
 	
-	var result2 := OS.execute(SavifyPath, [new_text, "--threads", 8, "--bitrate", "320k", "--output", OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded"], savify_output, true, false)
+	##var result2 := OS.execute(SavifyPath, [new_text, "--threads", 8, "--bitrate", "320k", "--output", OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded"], savify_output, true, false)
 	#print(savify_output[0])
 	
-	dirSelectedImportSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
+	##dirSelectedImportSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
 	
-	for line: String in savify_output:
-		%downloadingResultCodeEdit.text += line
+	##for line: String in savify_output:
+	##	%downloadingResultCodeEdit.text += line
+	
+	var headers: PackedStringArray = [
+		"authority: api.spotifydown.com",
+		"origin: https://spotifydown.com",
+		"referer: https://spotifydown.com/",
+	]
+	
+	print(get_track_part(new_text).erase(0, 6))
+	
+	%spotifyDownloadHTTPRequest.request("https://api.spotifydown.com/download".path_join(get_track_part(new_text).erase(0, 6)), headers)
 
 func _on_import_spotify_button_pressed() -> void:
 	_on_spotify_line_edit_text_submitted(%SpotifyLineEdit.text)
@@ -1018,15 +1041,15 @@ func _on_spotify_download_http_request_request_completed(_result: int, _response
 	print("Download finished!\n", body.get_string_from_utf8())
 	%SpotifyLineEdit.text = "Download finished!"
 	
-	if !DirAccess.dir_exists_absolute(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded"):
-		DirAccess.make_dir_absolute(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
+	##if !DirAccess.dir_exists_absolute(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded"):
+	##	DirAccess.make_dir_absolute(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
+	##
+	##var file: FileAccess = FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded/" + downloadingSongAuthorName + " - " + downloadingSongName + ".mp3", FileAccess.WRITE)
 	
-	var file: FileAccess = FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded/" + downloadingSongAuthorName + " - " + downloadingSongName + ".mp3", FileAccess.WRITE)
+	##file.store_buffer(body)
+	##file.close()
 	
-	file.store_buffer(body)
-	file.close()
-	
-	dirSelectedImportSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
+	##dirSelectedImportSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded")
 	
 	#importSingleSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC) + "/GAMP-Downloaded/DownloadedSong.mp3")
 	

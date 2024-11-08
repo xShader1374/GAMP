@@ -259,6 +259,7 @@ expand_margin_left = 4.0
 expand_margin_top = 4.0
 expand_margin_right = 4.0
 expand_margin_bottom = 4.0
+anti_aliasing_size = 1.555
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h01qo"]
 bg_color = Color(0.74902, 0.698039, 0.996078, 1)
@@ -271,6 +272,7 @@ expand_margin_left = 1.0
 expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
+anti_aliasing_size = 1.555
 
 [sub_resource type="LabelSettings" id="LabelSettings_ggj1i"]
 line_spacing = 0.0
@@ -301,9 +303,9 @@ shadow_size = 4
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ivbrx"]
 
 [node name="SongElement" type="MarginContainer"]
-process_thread_group = 1
-process_thread_group_order = 0
-process_thread_messages = 0
+process_thread_group = 2
+process_thread_group_order = 1
+process_thread_messages = 3
 custom_minimum_size = Vector2(20, 120)
 anchors_preset = -1
 anchor_right = 0.277778

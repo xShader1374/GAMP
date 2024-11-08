@@ -1,4 +1,4 @@
-[gd_scene load_steps=102 format=3 uid="uid://bu7dco3gq5etw"]
+[gd_scene load_steps=103 format=3 uid="uid://bu7dco3gq5etw"]
 
 [ext_resource type="Script" path="res://Resources/main.gd" id="1_oad5e"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_d0112"]
@@ -352,6 +352,13 @@ anti_aliasing_size = 2.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bylep"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee4vy"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vkr5k"]
+line_spacing = 0.0
+font_size = 26
+font_color = Color(0.772549, 0.721569, 1, 1)
+shadow_size = 0
+shadow_color = Color(0.592157, 0.501961, 1, 0.247059)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qlk6w"]
 bg_color = Color(0.176471, 0.14902, 0.301961, 1)
@@ -962,7 +969,8 @@ mouse_filter = 1
 theme_override_constants/separation = 0
 theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
 
-[node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SmoothScrollContainer/HBoxContainer/VBoxContainer"]
+[node name="emptySongListLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SmoothScrollContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -992,7 +1000,7 @@ theme_override_styles/tab_selected = SubResource("StyleBoxFlat_hdwky")
 theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_5l4kh")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_ll108")
 tab_alignment = 1
-current_tab = 1
+current_tab = 2
 drag_to_rearrange_enabled = true
 
 [node name="Manage Songs" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
@@ -1073,6 +1081,7 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="Import" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_d0112")
@@ -1284,7 +1293,6 @@ symbol_lookup_on_click = true
 line_folding = true
 
 [node name="Song Info" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_d0112")
@@ -1405,13 +1413,11 @@ vertical_alignment = 1
 
 [node name="authorCoverTokenHTTPRequest" type="HTTPRequest" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel/authorCoverTextureRect"]
 unique_name_in_owner = true
-download_chunk_size = 4096
 use_threads = true
 max_redirects = 16
 
 [node name="authorCoverHTTPRequest" type="HTTPRequest" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel/authorCoverTextureRect"]
 unique_name_in_owner = true
-download_chunk_size = 4096
 use_threads = true
 max_redirects = 16
 
@@ -1703,19 +1709,21 @@ size_flags_vertical = 3
 theme_override_constants/separation = 8
 
 [node name="songLyricsLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
 text = "Empty"
-label_settings = SubResource("LabelSettings_oxnie")
+label_settings = SubResource("LabelSettings_vkr5k")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="songLyricsHTTPRequest" type="HTTPRequest" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel"]
-download_chunk_size = 4096
+download_chunk_size = 2048
 use_threads = true
+timeout = 8.0
 
 [node name="loadingLyricsCenterContainer" type="CenterContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel"]
 unique_name_in_owner = true
@@ -1909,16 +1917,6 @@ layout_mode = 2
 mouse_filter = 1
 theme_override_constants/separation = 4
 theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
-
-[node name="Line2D" type="Line2D" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer/VSeparator"]
-visible = false
-position = Vector2(0, 7.99998)
-points = PackedVector2Array(7.17862, 35.3316, 69.4235, 5.73981, 131.668, 49.6174, 192.893, 34.3112, 255.138, 59.8214, 323.505, 48.597, 392.893, 32.2704, 466.362, 23.0867, 535.75, 21.0459, 606.158, 34.3112, 678.607, 7.78062)
-default_color = Color(0.74902, 0.698039, 0.996078, 1)
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2
-antialiased = true
 
 [node name="VSlider" type="VSlider" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -3199,6 +3197,7 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_dvjf3")
 
 [node name="visualizer2" type="TextureRect" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/TextureRect2"]
+physics_interpolation_mode = 1
 texture_filter = 6
 material = SubResource("ShaderMaterial_bml47")
 layout_mode = 1
@@ -3269,6 +3268,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 focus_mode = 0
 mouse_filter = 1
+mouse_default_cursor_shape = 2
 theme_override_icons/grabber = SubResource("GradientTexture2D_oogqf")
 theme_override_icons/grabber_highlight = SubResource("GradientTexture2D_ndvp4")
 theme_override_styles/slider = SubResource("StyleBoxFlat_tv8v7")
@@ -3427,6 +3427,7 @@ flat = true
 [node name="prevButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
 theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
@@ -3437,6 +3438,7 @@ flat = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.219608, 0.188235, 0.364706, 1)
@@ -3450,6 +3452,7 @@ icon_alignment = 1
 [node name="nextButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
 theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
@@ -3459,6 +3462,7 @@ flat = true
 [node name="LoopButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
 theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
@@ -3522,6 +3526,16 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_ri141")
 [connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer/VBoxContainer6/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
 [connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer/VBoxContainer7/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
 [connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer/VBoxContainer8/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer2/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer3/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer4/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer5/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer6/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer7/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer8/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer9/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer10/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
 [connection signal="drag_ended" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider" to="." method="_on_progress_bar_2_drag_ended"]
 [connection signal="drag_started" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider" to="." method="_on_progress_bar_2_drag_started"]
 [connection signal="value_changed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider" to="." method="_on_progress_bar_2_value_changed"]
