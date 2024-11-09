@@ -257,22 +257,28 @@ var preferred_newline: int = "\n".to_ascii_buffer()[0]
 ## The track's [i]Cover Image[/i].
 @export var cover: ImageTexture = null
 ## The track's [i]Genere[/i].
-@export var genere:String = ""
+@export var genere: String = ""
+## The track's [i]Mood[/i].
+@export var mood: String = ""
 ## The track's [i]Year[/i].
 @export var year: int = 0
 ## The track's [i]Date[/i].
-@export var date:String = ""
+@export var date: String = ""
 ## The track's [i]Comments[/i].
 @export_multiline var comments: String = ""
 ## The track's [i]User Defined Text[/i].
 @export_multiline var user_defined_text: String = ""
 ## The track's [i]Urls[/i].
 ## It's keys are of [String]s with the type of url, it's values are of [String]s with the url.
-@export var urls:Dictionary[String, String] = {}
+@export var urls: Dictionary[String, String] = {}
 ## The track's [i]Copyright Message[/i].
-@export var copyright:String = ""
+@export var copyright: String = ""
 ## The track's [i]Terms Of Use[/i].
-@export var terms_of_use:String = ""
+@export var terms_of_use: String = ""
+## The track's [i]International Standard Recording Code[/i].
+@export var ISRC: String = ""
+## The track's [i]Metadata Encoding[/i].
+@export var metadata_encoding: String = ""
 
 ## Create a [MusicMetadata] [Resource].
 ## If not [code] null [/code], [param source] will update the new [MusicMetadata] [Resource]
@@ -302,12 +308,12 @@ func set_from_stream(stream: AudioStream) -> void:
 		push_warning("Stream type not supported")
 
 ## Updates the metadata object's values from the data found in the [AudioStreamMP3] [param stream].
-func set_from_MP3_stream(stream:AudioStreamMP3) -> void:
+func set_from_MP3_stream(stream: AudioStreamMP3) -> void:
 	assert(stream != null and stream.data != null, "Stream must contain data")
 	set_from_data(stream.data)
 
 ## Updates the metadata object's values from the data found in the [AudioStreamOggVorbis] [param stream].
-func set_from_oggvorbis_stream(stream:AudioStreamOggVorbis) -> void:
+func set_from_oggvorbis_stream(stream: AudioStreamOggVorbis) -> void:
 	assert(stream != null and stream.data != null, "Stream must contain data")
 	set_from_data(stream.data)
 
@@ -331,8 +337,8 @@ func set_from_data(data: PackedByteArray):
 	var id3_id: String = header.slice(0, 3).get_string_from_ascii()
 	
 	if id3_id == "ID3":
-		var v: String = "ID3v2.%d.%d" % [header[3], header[4]]
-		set_from_ID3_data(data, v)
+		var version: String = "ID3v2.%d.%d" % [header[3], header[4]]
+		set_from_ID3_data(data, version)
 	elif data.slice(-32, -28).get_string_from_ascii() == "APETAGEX":
 		set_from_APEv2_data(data)
 	elif data.slice(0, 4).get_string_from_ascii() == "OggS":
@@ -341,7 +347,7 @@ func set_from_data(data: PackedByteArray):
 		set_from_riff_info(data)
 	else:
 		# Prova a cercare un tag ID3v1 alla fine del file
-		var id3v1_tag = data.slice(-128)
+		var id3v1_tag: = data.slice(-128)
 		if id3v1_tag.slice(0, 3).get_string_from_ascii() == "TAG":
 			set_from_ID3v1_data(id3v1_tag)
 		else:
@@ -379,25 +385,27 @@ func set_from_ID3_data(data: PackedByteArray, ver: String) -> void:
 	var has_footer: bool = flags & 0x10 > 0
 	var idx: int = 10
 	var end: int = idx + _bytes_to_int(header.slice(6, 10))
-
+	
 	if extended:
 		idx += _bytes_to_int(data.slice(idx, idx + 4))
-
+	
 	while idx < end:
 		var frame_id: String = data.slice(idx, idx + 4).get_string_from_ascii()
 		var size: int = _bytes_to_int(data.slice(idx + 4, idx + 8), frame_id != "APIC")
-
+		
+		print(frame_id)
+		
 		# Se maggiore di byte, non è un numero sync safe (0b0111_1111 -> 0x7f)
 		if size > 0x7f:
 			size = _bytes_to_int(data.slice(idx + 4, idx + 8), false)
 		idx += 10
-
+	
 		var frame_data: PackedByteArray = data.slice(idx, idx + size)
 		if frame_data.size() > 0:
 			if unsync:
 				frame_data = _unsynchronize(frame_data)
 			set_value_from_ID3_frame(frame_id, frame_data, null_as_separator)
-
+	
 		idx += size
 
 ## Imposta i valori dei metadati dai dati APEv2 trovati nel [PackedByteArray] [param data].
@@ -530,8 +538,10 @@ func set_value_from_ID3_frame(frame_name: String, sliced_frame_data: PackedByteA
 		return
 	
 	match frame_name:
-		"TBPM", 'TBP':
+		"TBP", "TBPM", "TMPO", "BPM":
 			bpm = int(_get_string_from_ID3data(sliced_frame_data))
+		"TMOO":
+			mood = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
 		"TIT2", 'TT2':
 			title = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
 		"TALB", 'TAL':
@@ -542,9 +552,9 @@ func set_value_from_ID3_frame(frame_name: String, sliced_frame_data: PackedByteA
 			user_defined_text += _get_string_from_ID3data(sliced_frame_data, null_as_sep)
 		"TCOP", "TCR":
 			copyright += _get_string_from_ID3data(sliced_frame_data, null_as_sep)
-		"TDAT", "TDA":
+		"TDAT", "TDA", "TDRC", "TDRV", "TXXX:DISCOGS_RELEASED":
 			date = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
-		"TYER", "TYE":
+		"year", "TYE", "TYER":
 			year = int(_get_string_from_ID3data(sliced_frame_data))
 		"TPE1", 'TP1':
 			artist = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
@@ -552,36 +562,26 @@ func set_value_from_ID3_frame(frame_name: String, sliced_frame_data: PackedByteA
 			album_artist = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
 		"TRCK", 'TRK':
 			track_no = int(_get_string_from_ID3data(sliced_frame_data))
+		"TXXX:ARTISTS", "TXXX:DISCOGS_ARTISTS", "TXXX:DISCOGS_ARTIST_NAME":
+			print("ARTISTS: ", _get_string_from_ID3data(sliced_frame_data, null_as_sep))
+		"TPOS":
+			print("TPOS: ", _get_string_from_ID3data(sliced_frame_data, null_as_sep))
+		"TDRC":
+			print("TDRC: ", _get_string_from_ID3data(sliced_frame_data, null_as_sep))
+		"POPM", "RATE", "RATING":
+			print("POPM: ", int(_get_string_from_ID3data(sliced_frame_data)))
+		"TSRC":
+			ISRC = _get_string_from_ID3data(sliced_frame_data)
+		"TSSE":
+			metadata_encoding = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
+		"TENC":
+			print("TENC: ", _get_string_from_ID3data(sliced_frame_data, null_as_sep))
+		"WOAS":
+			print("WOAS: ", _get_string_from_ID3data(sliced_frame_data, null_as_sep))
 		"USER":
 			terms_of_use = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
-		"TCON", 'TCO':
-
-			var gen_key: String = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
-
-			gen_key = gen_key.strip_escapes().strip_edges()
-
-			
-			if gen_key.is_empty():
-				print("DEBUG: Empty genre value, skipping further processing")
-				return
-			
-
-			
-			while gen_key.length() >= 2 and gen_key[0] == "(" and gen_key[-1] == ")":
-
-				gen_key = gen_key.substr(1, gen_key.length() - 2)
-
-			
-			if gen_key.is_valid_int():
-
-				gen_key = str(int(gen_key))
-			
-			if gen_key in ID3_GENERE_IDS:
-				genere = ID3_GENERE_IDS[gen_key]
-
-			else:
-				genere = gen_key
-
+		"genre", "GENRE", "STYLE", "TCO", "TCON", "TXXX:STYLE", "GNRE", "IGNR", "TRACK:GENRE":
+			genere = _get_string_from_ID3data(sliced_frame_data, null_as_sep)
 		"APIC", 'PIC':
 			sliced_frame_data = sliced_frame_data.slice(1)
 			var zero1: float = sliced_frame_data.find(0)
@@ -620,7 +620,7 @@ func set_value_from_ID3_frame(frame_name: String, sliced_frame_data: PackedByteA
 
 # ## This is intended to be private.
 # ## The hash of a USC string declaration. Used for compairson.
-var _USC_STRING_DECLARATION_HASH:int = [1, 0xff, 0xfe].hash()
+var _USC_STRING_DECLARATION_HASH: int = [1, 0xff, 0xfe].hash()
 # ## This method is intended to be private.
 # ## Gets a string from the given ID3 formated [param data]. Accounts for USC formated strings.
 func _get_string_from_ID3data(data: PackedByteArray, null_to_newline:bool = false) -> String:

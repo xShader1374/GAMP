@@ -26,7 +26,7 @@ func _ready() -> void:
 	
 	click_timer = Timer.new()
 	click_timer.one_shot = true
-	click_timer.connect("timeout", Callable(self, "_on_click_timer_timeout"))
+	click_timer.timeout.connect(_on_click_timer_timeout)
 	add_child(click_timer)
 
 func parseSongDuration(duration_str : String) -> float:

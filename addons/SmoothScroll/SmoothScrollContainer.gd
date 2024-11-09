@@ -41,7 +41,7 @@ var friction_scroll := 0.9
 var friction_drag := 0.9
 ## Hides scrollbar as long as not hovered or interacted with
 @export
-var hide_scrollbar_over_time:= false:
+var hide_scrollbar_over_time := false:
 	set(val): hide_scrollbar_over_time = _set_hide_scrollbar_over_time(val)
 ## Time after scrollbar starts to fade out when 'hide_scrollbar_over_time' is true
 @export

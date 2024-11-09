@@ -11,6 +11,10 @@ var analyzer: AudioEffectSpectrumAnalyzerInstance = AudioServer.get_bus_effect_i
 
 @export var MIN_DB: float = 85.0
 
+func _ready() -> void:
+	if !visible:
+		set_physics_process(false)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
 	var prev_hz: float = 0.0
