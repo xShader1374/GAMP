@@ -420,6 +420,7 @@ func prev() -> void: # goes to the previous song (if there is one)
 			nextChild._on_song_element_button_pressed()
 			#region end #   # nextChild._on_song_element_button_pressed()
 
+
 func next() -> void: # skips to the next song (if there is one, if there is not, it goes to the first one)
 	if % MusicPlayer.stream != null: #
 		var parentChildCount: int = songElementsContainer.get_child_count()
@@ -432,10 +433,10 @@ func next() -> void: # skips to the next song (if there is one, if there is not,
 
 		else:
 			var nextChild: MarginContainer = songElementsContainer.get_child(2)
-			
+
 			nextChild._on_song_element_button_pressed()
 
-			#region end #   # nextChild._on_song_element_button_pressed()  
+			#region end #   # nextChild._on_song_element_button_pressed()
 
 
 func pauseAndResume() -> void: # pauses if it's playing and resumes if it's not (but has started) a song
@@ -1087,9 +1088,7 @@ func _on_final_manual_search_button_pressed() -> void:
 		manual_search_popup_control.show()
 	else:
 		manual_search_popup_control.hide()
-
 	# Search Lyrics with Name, Author, Duration inputs
-
 	print("\n--- User asked to search for Lyrics: ---\n",
 	"Song Name: " + %manualLyricsSearchSongNameLineEdit.text + "\n",
 	"Song Author: " + %manualLyricsSearchSongNameAuthorLineEdit.text + "\n",
@@ -1102,13 +1101,9 @@ func _on_final_manual_search_button_pressed() -> void:
 func _on_song_cover_http_request_request_completed(_result: int, _response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 
 	var json: JSON = JSON.new()
-
 	json.parse(body.get_string_from_utf8())
-
 	var imageURL : String = json.get_data().thumbnail_url
-
 	print("Song Thumbnail Found: ", imageURL)
-
 	%songCoverActualHTTPRequest.cancel_request()
 	%songCoverActualHTTPRequest.request(imageURL)
 
@@ -1116,12 +1111,9 @@ func _on_song_cover_http_request_request_completed(_result: int, _response_code:
 func _on_song_cover_actual_http_request_request_completed(_result: int, _response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var image : Image = Image.new()
 	var error : Error = image.load_jpg_from_buffer(body)
-
 	if error != OK:
 		push_error("Couldn't load the image.")
-
 	var texture : ImageTexture = ImageTexture.create_from_image(image)
-
 	%songCoverTextureRect.texture = texture
 
 
@@ -1132,11 +1124,17 @@ func _on_check_for_text_file_timer_timeout() -> void:
 func _on_lyrics_full_screen_button_pressed() -> void:
 	if !lyricsFullscreen:
 		lyricsFullscreen = true
-
 		$"MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / TabContainer / Song Info / HBoxContainer / HBoxContainer / VBoxContainer".hide()
 		$"MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / TabContainer / Song Info / HBoxContainer / HBoxContainer / VSeparator2".hide()
 	else:
 		lyricsFullscreen = false
-
 		$"MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / TabContainer / Song Info / HBoxContainer / HBoxContainer / VBoxContainer".show()
 		$"MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / TabContainer / Song Info / HBoxContainer / HBoxContainer / VSeparator2".show()
+
+
+func _on_stop_pressed() -> void:
+	%MusicPlayer.play(0.0)
+	%playButton.add_theme_font_size_override("font_size", 16)
+	%playButton.text = "▶"
+	%MusicPlayer.stream_paused = true
+	pass # Replace with function body.

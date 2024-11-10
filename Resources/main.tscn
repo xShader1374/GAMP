@@ -3604,6 +3604,41 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="stop" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
+theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_fonts/font = SubResource("FontVariation_5haam")
+theme_override_font_sizes/font_size = 20
+toggle_mode = true
+text = "█"
+flat = true
+
+[node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/stop"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.162222
+anchor_top = 0.164722
+anchor_right = 0.847222
+anchor_bottom = 0.849722
+offset_left = -4.84
+offset_top = -5.805
+offset_right = 6.5
+offset_bottom = 5.535
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.685, 0.685)
+pivot_offset = Vector2(18, 18)
+text = "1"
+label_settings = SubResource("LabelSettings_nf070")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 6
@@ -3666,3 +3701,4 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_ri141")
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/playButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/nextButton" to="." method="next"]
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LoopButton" to="." method="loopButton"]
+[connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/stop" to="." method="_on_stop_pressed"]
