@@ -1,14 +1,14 @@
 extends Control
 
 #region Onready Vars
-@onready var songTitleLabel: Label = $MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / MarginContainer / Panel / HBoxContainer / HBoxContainer / VBoxContainer / SongTitle
-@onready var songAuthorLabel: Label = $MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / MarginContainer / Panel / HBoxContainer / HBoxContainer / VBoxContainer / Author
-@onready var currentDurationLabel: Label = $MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / MarginContainer / Panel / HBoxContainer / HBoxContainer / VBoxContainer / HBoxContainer / CurrentDuration
-@onready var progressBar: HSlider = $MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / MarginContainer / Panel / HBoxContainer / HBoxContainer / VBoxContainer / HBoxContainer / ProgressSlider
-@onready var totalDurationLabel: Label = $MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / MarginContainer / Panel / HBoxContainer / HBoxContainer / VBoxContainer / HBoxContainer / TotalDuration
-@onready var volumeSlider: VSlider = $MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / MarginContainer / Panel / HBoxContainer / HBoxContainer / VBoxContainer / HBoxContainer / volumeButton / Panel / VolumeSlider
-@onready var smooth_scroll_container: ScrollContainer = $MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / SmoothScrollContainer
-@onready var songElementsContainer: VBoxContainer = $MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / SmoothScrollContainer / HBoxContainer / VBoxContainer
+@onready var songTitleLabel : Label = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/SongTitle
+@onready var songAuthorLabel : Label = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/Author
+@onready var currentDurationLabel : Label = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/CurrentDuration
+@onready var progressBar : HSlider = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider
+@onready var totalDurationLabel : Label = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/TotalDuration
+@onready var volumeSlider : VSlider = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/volumeButton/Panel/VolumeSlider
+@onready var smooth_scroll_container: ScrollContainer = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SmoothScrollContainer
+@onready var songElementsContainer : VBoxContainer = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SmoothScrollContainer/HBoxContainer/VBoxContainer
 
 @onready var song_lyrics_label: Label = $"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel"
 @onready var song_lyrics_http_request: HTTPRequest = $"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel/songLyricsHTTPRequest"
@@ -1124,12 +1124,12 @@ func _on_check_for_text_file_timer_timeout() -> void:
 func _on_lyrics_full_screen_button_pressed() -> void:
 	if !lyricsFullscreen:
 		lyricsFullscreen = true
-		$"MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / TabContainer / Song Info / HBoxContainer / HBoxContainer / VBoxContainer".hide()
-		$"MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / TabContainer / Song Info / HBoxContainer / HBoxContainer / VSeparator2".hide()
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer".hide()
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VSeparator2".hide()
 	else:
 		lyricsFullscreen = false
-		$"MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / TabContainer / Song Info / HBoxContainer / HBoxContainer / VBoxContainer".show()
-		$"MarginContainer / Panel / MarginContainer / VBoxContainer / PanelContainer / VBoxContainer / HBoxContainer / TabContainer / Song Info / HBoxContainer / HBoxContainer / VSeparator2".show()
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer".show()
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VSeparator2".show()
 
 
 func _on_stop_pressed() -> void:
