@@ -918,7 +918,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
 theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
-text = "-"
+text = "="
 
 [node name="MaximizeButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(36, 36)
