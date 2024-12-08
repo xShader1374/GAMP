@@ -15,6 +15,8 @@ extends Control
 
 @onready var manual_search_popup_control: Control = $"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer/manuallySearchLyricsButton/manualSearchPopupControl"
 
+@onready var addEffectButtonPopup: PopupMenu = %AddEffectButton.get_popup()
+
 #endregion
 
 var SongElementScene: PackedScene = preload("res://Resources/songElement.tscn")
@@ -46,14 +48,33 @@ var globalUserDataPath : String = OS.get_user_data_dir()
 ]
 
 #region Presets
-var defaultPreset : PackedFloat32Array = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-var bassBoostedPreset : PackedFloat32Array = [13.586, 16.237, 18.888, 13.586, 14.47, -0.552, 13.586, 14.47, -4.971, 2.982, 13.586, 9.074, 10.824, 3.827, -0.547, 8.2, -8.418, -21.538, -32.034, -39.905, -47.777]
-var enhanchedVocalsPreset : PackedFloat32Array = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.952, 10.824, 7.325, 9.949, 13.586, 6.45, -1.421, -2.296, -0.552]
-var powerfulPreset : PackedFloat32Array = [13.586, 16.237, 18.888, 13.586, 14.47, -0.552, 13.586, 14.47, 7.214, 3.5, 0.0, 0.0, 2.952, 10.824, 7.325, 9.949, 13.586, 6.45, -1.421, -2.296, -0.552]
-var powerful2Preset : PackedFloat32Array = [13.586, 16.237, 18.888, 13.586, 14.47, -0.552, 13.586, 14.47, 7.214, 3.5, 0.0, -5.875, 4.198, 9.666, 16.572, 16.285, 13.586, 12.543, 12.256, 11.392, 7.363]
-var powerful3Preset : PackedFloat32Array = [13.586, 16.237, 18.098, 20.112, 18.961, 18.385, 17.522, -1.759, 8.025, 10.615, 10.903, -5.875, 4.198, 9.666, 16.572, 16.285, 13.586, 12.543, 12.256, 11.392, 7.363]
-var powerful4Preset : PackedFloat32Array = [13.586, 16.237, 18.098, 20.112, 18.961, 18.385, 17.522, -1.759, 8.025, 10.615, 10.903, 7.651, 12.543, 11.392, 11.392, 16.285, 14.408, 19.45, 20.221, 21.675, 21.752]
-var customPreset1 : PackedFloat32Array = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+var defaultPreset: PackedFloat32Array = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+var bassBoostedPreset: PackedFloat32Array = [13.586, 16.237, 18.888, 13.586, 14.47, -0.552, 13.586, 14.47, -4.971, 2.982, 13.586, 9.074, 10.824, 3.827, -0.547, 8.2, -8.418, -21.538, -32.034, -39.905, -47.777]
+var bassBoostedPreset2: PackedFloat32Array = [13.586, 16.237, 18.888, 13.586, 14.47, -0.552, 13.586, 14.47, -4.971, 2.982, 13.586, 9.074, 10.824, 3.827, 12.137, 18.229, 19.511, 16.626, 15.664, 15.985, 10.855]
+var enhanchedVocalsPreset: PackedFloat32Array = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.952, 10.824, 7.325, 9.949, 13.586, 6.45, -1.421, -2.296, -0.552]
+var enhanchedVocalsPreset2: PackedFloat32Array = [6.046, 8.611, 9.573, 9.252, 8.931, 8.611, 7.328, 2.198, -2.29, -8.702, -2.611, 6.366, 3.802, 10.855, 18.229, 24.0, 24.0, 24.0, 24.0, 24.0, 24.0]
+var enhanchedVocalsPreset3: PackedFloat32Array  = [22.244, 20.195, 16.976, 17.561, 17.072, 16.206, 15.34, 17.854, 18.732, 14.927, 8.412, 6.366, 3.802, 10.855, 18.229, 24.0, 24.0, 24.0, 24.0, 24.0, 24.0]
+var powerfulPreset: PackedFloat32Array = [13.586, 16.237, 18.888, 13.586, 14.47, -0.552, 13.586, 14.47, 7.214, 3.5, 0.0, 0.0, 2.952, 10.824, 7.325, 9.949, 13.586, 6.45, -1.421, -2.296, -0.552]
+var powerful2Preset: PackedFloat32Array = [13.586, 16.237, 18.888, 13.586, 14.47, -0.552, 13.586, 14.47, 7.214, 3.5, 0.0, -5.875, 4.198, 9.666, 16.572, 16.285, 13.586, 12.543, 12.256, 11.392, 7.363]
+var powerful3Preset: PackedFloat32Array = [13.586, 16.237, 18.098, 20.112, 18.961, 18.385, 17.522, -1.759, 8.025, 10.615, 10.903, -5.875, 4.198, 9.666, 16.572, 16.285, 13.586, 12.543, 12.256, 11.392, 7.363]
+var powerful4Preset: PackedFloat32Array = [13.586, 16.237, 18.098, 20.112, 18.961, 18.385, 17.522, -1.759, 8.025, 10.615, 10.903, 7.651, 12.543, 11.392, 11.392, 16.285, 14.408, 19.45, 20.221, 21.675, 21.752]
+var powerful5Preset: PackedFloat32Array = [24, 24, 24, 24, 20.473, 11.496, 6.687, 15.023, 20.794, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24]
+var customPreset1: PackedFloat32Array = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+var EQpresets: Array[PackedFloat32Array] = [
+	defaultPreset,
+	bassBoostedPreset,
+	bassBoostedPreset2,
+	enhanchedVocalsPreset,
+	enhanchedVocalsPreset2,
+	enhanchedVocalsPreset3,
+	powerfulPreset,
+	powerful2Preset,
+	powerful3Preset,
+	powerful4Preset,
+	powerful5Preset,
+	customPreset1
+]
 #endregion
 
 @onready var EQ21Effect : AudioEffectEQ21 = AudioServer.get_bus_effect(0, 1)
@@ -61,11 +82,14 @@ var EQbandDragStarted : bool = false
 
 #endregion
 
+#region Effects Vars Region
+const EFFECT_PANEL: PackedScene = preload("res://Resources/effect_panel.tscn")
+#endregion
+
 var currentSongElement : Node
 
 var location : String = ""
 
-var fullscreen : bool = false
 var playing : bool = false
 var loop : bool = false
 
@@ -80,9 +104,12 @@ var volumeSliderPanelHover : bool = false
 #endregion
 
 #region Window Management
-var dragging : bool = false
-var mouse_pos : Vector2 = Vector2.ZERO
-var drag_from : Vector2 = Vector2.ZERO
+var dragging: bool = false
+var mouse_pos: Vector2 = Vector2.ZERO
+var drag_from: Vector2 = Vector2.ZERO
+var border_threshold: int = 20  # Tollerance zone of the screen's border
+var fullscreen: bool = false
+var near_border_last_frame: bool = false  # Nuovo flag per tracciare lo stato del bordo
 #endregion
 
 var authorNameToRequestImage: String = ""
@@ -96,11 +123,27 @@ var savify_output: Array = []
 
 var lyricsFullscreen: bool = false
 
+var initialImporterThread: Thread
 var importerSongsThread: Thread
+
+#region Preferences Region
+@export var default_songs_folder: String = OS.get_system_dir(OS.SYSTEM_DIR_MUSIC).path_join("GAMP-Downloaded")
+@export var auto_import_at_start: bool = true
+#endregion
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if OS.get_name() == "Android":
+		OS.request_permissions()
+		$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer2.hide()
+		$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer.tabs_position = 1
+	
 	check_songs_dir_exists()
+	
+	AudioServer.set_enable_tagging_used_audio_streams(true)
+	
+	%borderTimer.one_shot = true
+	%borderTimer.wait_time = 0.25  # un quarto di secondo di tolleranza
 	
 	for i: int in EQBands.size(): # EQ Part, sets the index to each band slider (0, 1, 2 etc.)
 		EQBands[i].setEQNumber(i)
@@ -113,16 +156,38 @@ func _ready() -> void:
 	else:
 		print("Location isn't void!")
 	
+	addEffectButtonPopup.index_pressed.connect(add_effect_button_pressed)
+	
 	$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel".mouse_filter = MOUSE_FILTER_IGNORE
 	%loadingLyricsCenterContainer.mouse_filter = MOUSE_FILTER_IGNORE
 	$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/Panel/VBoxContainer/PanelContainer/songLyricsLabel/loadingLyricsCenterContainer/MarginContainer".mouse_filter = MOUSE_FILTER_IGNORE
 	%loadingLyricsLabel.mouse_filter = MOUSE_FILTER_IGNORE
 	%loadingLyricsBytesLabel.mouse_filter = MOUSE_FILTER_IGNORE
 	%loadingLyricsProgressBar.mouse_filter = MOUSE_FILTER_IGNORE
+	
+	if auto_import_at_start:
+		initialImporterThread = Thread.new()
+		initialImporterThread.start(dirSelectedImportSong.bind(default_songs_folder))
 
 func check_songs_dir_exists() -> void:
-	if !DirAccess.dir_exists_absolute(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC).path_join("GAMP-Downloaded")):
-		DirAccess.make_dir_absolute(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC).path_join("GAMP-Downloaded"))
+	if !DirAccess.dir_exists_absolute(default_songs_folder):
+		DirAccess.make_dir_absolute(default_songs_folder)
+
+func initially_import_songs(dir: String) -> void:
+	var diraccess: DirAccess = DirAccess.open(dir)
+	var filesInDir: PackedStringArray = diraccess.get_files()
+	
+	if filesInDir.size() != 0:
+		call_deferred("hideEmptyListSongLabel")
+		
+		importerSongsThread = Thread.new()
+		importerSongsThread.start(importSongsThreaded.bind(filesInDir, dir))
+	
+	call_deferred("finished_initial_song_importing")
+
+func finished_initial_song_importing() -> void:
+	initialImporterThread.wait_to_finish()
+	print("\n--- FINISHED STARTING SONGS IMPORTING ---")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -180,26 +245,60 @@ func _on_maximize_button_pressed() -> void:
 func _on_close_button_pressed() -> void:
 	get_tree().quit()
 
+func _on_border_timer_timeout() -> void:
+	if dragging and near_border_last_frame:  # Controlla se siamo ancora vicino al bordo
+		_on_maximize_button_pressed()  # Passa a fullscreen
+		dragging = false  # Importante: resetta il dragging dopo il fullscreen
+
+func check_window_borders() -> void:
+	var screen_size: Vector2i = DisplayServer.screen_get_size()
+	var window_pos: Vector2i = DisplayServer.window_get_position()  # Posizione attuale della finestra
+	var window_size: Vector2i = DisplayServer.window_get_size()  # Dimensione attuale della finestra
+	var mouse_pos: Vector2i = DisplayServer.mouse_get_position()  # Posizione globale del mouse
+	
+	# Calcola la posizione relativa del mouse rispetto allo schermo
+	var relative_mouse_x: int = mouse_pos.x - window_pos.x
+	var relative_mouse_y: int = mouse_pos.y - window_pos.y
+	
+	# Controlla se il mouse è vicino ai bordi dello schermo (non della finestra)
+	var near_border: bool = (
+		mouse_pos.x <= border_threshold or  # Bordo sinistro dello schermo
+		mouse_pos.x >= screen_size.x - border_threshold or  # Bordo destro dello schermo
+		mouse_pos.y <= border_threshold or  # Bordo superiore dello schermo
+		mouse_pos.y >= screen_size.y - border_threshold  # Bordo inferiore dello schermo
+	)
+	
+	# Aggiorna lo stato solo se è cambiato
+	if near_border != near_border_last_frame:
+		if near_border and dragging:
+			print("Fullscreen")
+			%borderTimer.start()
+		else:
+			print("NOT Fullscreen")
+			%borderTimer.stop()
+		
+		near_border_last_frame = near_border
+
 func _on_panel_gui_input(event: InputEvent) -> void:
 	if !fullscreen:
 		if event is InputEventMouseButton:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if event.pressed and !dragging:
-					#DisplayServer.cursor_set_shape(DisplayServer.CURSOR_DRAG)
 					$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer2.mouse_default_cursor_shape = CURSOR_DRAG
 					dragging = true
 					drag_from = get_global_mouse_position()
 				else:
-					#DisplayServer.cursor_set_shape(DisplayServer.CURSOR_ARROW)
 					$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer2.mouse_default_cursor_shape = CURSOR_ARROW
 					dragging = false
+					%borderTimer.stop()
+		
 		if event is InputEventMouseMotion:
 			if dragging:
-				#DisplayServer.cursor_set_shape(DisplayServer.CURSOR_CAN_DROP)
-				var window: Window = self.get_window()
+				var window: Window = get_window()
 				var real_mouse_pos: Vector2 = get_global_mouse_position() - drag_from
 				@warning_ignore("narrowing_conversion")
 				window.position += Vector2i(real_mouse_pos.x, real_mouse_pos.y)
+				check_window_borders()  # Checks borders during dragging
 	else:
 		if event is InputEventMouseButton:
 			if event.button_index == MOUSE_BUTTON_LEFT:
@@ -213,7 +312,7 @@ func _on_panel_gui_input(event: InputEvent) -> void:
 func _on_import_dir_button_pressed() -> void:
 	check_songs_dir_exists()
 	var filters: PackedStringArray = ["*.mp3", "*.wav", "*.ogg"]
-	DisplayServer.file_dialog_show("Import Directory", OS.get_system_dir(OS.SYSTEM_DIR_MUSIC).path_join("GAMP-Downloaded"), "", true, DisplayServer.FILE_DIALOG_MODE_OPEN_DIR, filters, onNativeFileDialogDirSelected)
+	DisplayServer.file_dialog_show("Import Directory", default_songs_folder, "", true, DisplayServer.FILE_DIALOG_MODE_OPEN_DIR, filters, onNativeFileDialogDirSelected)
 
 func onNativeFileDialogDirSelected(status: bool, selected_paths: PackedStringArray, selected_filter_index: int) -> void:
 	if status:
@@ -381,8 +480,9 @@ func importSingleSong(filePath: String) -> void:
 
 func load_song_data(path: String) -> PackedByteArray:
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
-	
-	return file.get_buffer(file.get_length())
+	var buffer: PackedByteArray = file.get_buffer(file.get_length())
+	file.close()
+	return buffer
 
 #endregion
 
@@ -394,6 +494,7 @@ func prev() -> void: # goes to the previous song (if there is one)
 		var parentChildCount: int = songElementsContainer.get_child_count()
 		var currentSongElementPosition: int = currentSongElement.get_index()
 		var prevChildIndex: int = currentSongElementPosition - 1
+		
 		if prevChildIndex > 2:
 			var nextChild: MarginContainer = songElementsContainer.get_child(prevChildIndex)
 			nextChild.songElementPressed()
@@ -406,6 +507,7 @@ func next() -> void: # skips to the next song (if there is one, if there is not,
 		var parentChildCount: int = songElementsContainer.get_child_count()
 		var currentSongElementPosition: int = currentSongElement.get_index()
 		var nextChildIndex: int = currentSongElementPosition + 1
+		
 		if nextChildIndex < parentChildCount:
 			var nextChild: MarginContainer = songElementsContainer.get_child(nextChildIndex)
 			nextChild.songElementPressed()
@@ -518,7 +620,7 @@ func loadSongFile(filepath : String) -> AudioStream: # loads the song file (supp
 		_:
 			return null
 
-func songElementSelectedFunction(songElementNode : Node, songFileName : String, songFileNamePath : String, songFileNameDir : String, songAuthor : String, songTitle : String, songTotalDuration : String, songCurrentTimestamp: float) -> void:
+func songElementSelectedFunction(songElementNode : Node, songFileName : String, songFileNamePath : String, songFileNameDir : String, songAuthor : String, songTitle : String, songTotalDuration : String, songCurrentTimestamp: float, songMetadata: Dictionary[String, Variant]) -> void:
 	if currentSongElement != null and currentSongElement.playing :
 		currentSongElement.stopPlayingAnimation()
 		currentSongElement.playing = false
@@ -545,7 +647,24 @@ func songElementSelectedFunction(songElementNode : Node, songFileName : String, 
 	#requestSongImage(songAuthor, songTitle)
 	requestAuthorImage(songAuthor, songTitle)
 	changeSongCoverImage(currentSongElement.song_thumbnail_texture_rect.texture)
+	changeMetadataSongCoverImage(currentSongElement.song_thumbnail_texture_rect.texture)
 	changeBGImage(currentSongElement.song_thumbnail_texture_rect.texture)
+	
+	%metaTitleLineEdit.text = songMetadata["title"]
+	%metaArtistLineEdit.text = songMetadata["artist"]
+	%metaAlbumLineEdit.text = songMetadata["album"]
+	%metaAlbumArtistLineEdit.text = songMetadata["album_artist"]
+	%metaLyricistLineEdit.text = songMetadata["lyricist"]
+	%metaGenreLineEdit.text = songMetadata["genre"]
+	%metaYearLineEdit.text = str(songMetadata["year"])
+	%metaDateLineEdit.text = songMetadata["date"]
+	%metaReleaseLabelLineEdit.text = songMetadata["release_label"]
+	%metaCopyrightLineEdit.text = songMetadata["copyright"]
+	%metaIsrcLineEdit.text = songMetadata["isrc"]
+	%metaCommentsLineEdit.text = songMetadata["comments"]
+	%metaUserLineEdit.text = songMetadata["user"]
+	%metaMoodLineEdit.text = songMetadata["mood"]
+	
 	
 	$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer.current_tab = 2
 
@@ -573,7 +692,7 @@ func changeAuthorImage() -> void:
 	changeAuthorImageTween.chain().tween_property(%authorCoverTextureRect, "self_modulate", Color.WHITE, 0.2).set_delay(0.2)
 
 func changeSongCoverImage(newSongCoverImage: ImageTexture) -> void:
-	var changeSongCoverImageTween : Tween = create_tween()
+	var changeSongCoverImageTween: Tween = create_tween()
 	
 	changeSongCoverImageTween.set_ease(Tween.EASE_IN_OUT)
 	changeSongCoverImageTween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
@@ -582,6 +701,18 @@ func changeSongCoverImage(newSongCoverImage: ImageTexture) -> void:
 	changeSongCoverImageTween.tween_property(%songCoverTextureRect, "self_modulate", Color.BLACK, 0.2)
 	changeSongCoverImageTween.chain().tween_callback(%songCoverTextureRect.set_texture.bind(newSongCoverImage)) #(%songCoverTextureRect, "texture", newSongCoverImage, 0)
 	changeSongCoverImageTween.chain().tween_property(%songCoverTextureRect, "self_modulate", Color.WHITE, 0.2)
+
+func changeMetadataSongCoverImage(newSongCoverImage: ImageTexture) -> void:
+	var changeMetadataSongCoverImageTween: Tween = create_tween()
+	
+	changeMetadataSongCoverImageTween.set_ease(Tween.EASE_IN_OUT)
+	changeMetadataSongCoverImageTween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	changeMetadataSongCoverImageTween.set_trans(Tween.TRANS_QUAD)
+	
+	changeMetadataSongCoverImageTween.tween_property(%metadataSongCoverTextureRect, "self_modulate", Color.BLACK, 0.2)
+	changeMetadataSongCoverImageTween.chain().tween_callback(%metadataSongCoverTextureRect.set_texture.bind(newSongCoverImage)) #(%metadataSongCoverTextureRect, "texture", newSongCoverImage, 0)
+	changeMetadataSongCoverImageTween.chain().tween_property(%metadataSongCoverTextureRect, "self_modulate", Color.WHITE, 0.2)
+
 
 func time_to_seconds(time_string: String) -> int:
 	var parts: PackedStringArray = time_string.split(":")
@@ -600,8 +731,9 @@ func requestSongLyrics(Title: String, Author: String, Duration: String) -> void:
 	var url_starting_part: String = "https://lrclib.net/api/get?artist_name="
 	
 	var songTitleURL: String = Title.uri_encode()
-	
 	var songAuthorURL: String = Author.uri_encode()
+	var moreAuthors: PackedStringArray = Author.split(", ")
+	songAuthorURL = moreAuthors[0].uri_encode() # Always choose the first author
 	
 	var final_url: String = url_starting_part + songAuthorURL + "&track_name=" + songTitleURL + "&duration=" + str(time_to_seconds(Duration))
 	
@@ -628,7 +760,7 @@ func requestSongLyrics(Title: String, Author: String, Duration: String) -> void:
 func _on_song_lyrics_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	# stop and hide the loading thingy
 	
-	printt(result, response_code, headers, body)
+	#printt(result, response_code, headers, body)
 	
 	var parsedBody: Dictionary = {}
 	parsedBody = JSON.parse_string(body.get_string_from_utf8())
@@ -729,10 +861,11 @@ func requestAuthorImage(Author: String, Title: String) -> void:
 func _on_author_cover_token_http_request_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	if response_code == 200:
 		var parsedBody: Dictionary = JSON.parse_string(body.get_string_from_ascii())
-		print(parsedBody)
+		#print(parsedBody)
 		print("Token is: ", parsedBody["accessToken"])
 		
-		var finalAuthorName: String = authorNameToRequestImage.uri_encode()
+		# Se ci sono più di 1 autore, prende sempre il primo + codifica in uri
+		var finalAuthorName: String = authorNameToRequestImage.split(", ")[0].uri_encode()
 		var finalTrackName: String = songTitleToRequestImage.uri_encode()
 		
 		%authorCoverHTTPRequest.cancel_request()
@@ -890,44 +1023,24 @@ func _on_volume_slider_value_changed(value: float) -> void:
 
 
 func _on_total_duration_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
 		if event.pressed:
 			print("premuto")
 		#else:
 		#	print("rilasciato")
 	#TODO: make a "-2:39" or 4:20, essentially adding the option to view the remaining time or the total duration
 
+func animatePresetChangingValues(index: int, value: float) -> void:
+	var tween: Tween = create_tween()
+	
+	tween.set_trans(Tween.TRANS_QUAD)
+	tween.set_ease(Tween.EASE_IN_OUT)
+	
+	tween.tween_property(EQBands[index], "value", value, 0.15).from_current()
 
 func _on_presets_option_button_item_selected(index: int) -> void:
-	match index:
-		0:
-			for i: int in EQ21Effect.get_band_count():
-				EQ21Effect.set_band_gain_db(i, defaultPreset[i])
-				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
-		1:
-			for i: int in EQ21Effect.get_band_count():
-				EQ21Effect.set_band_gain_db(i, bassBoostedPreset[i])
-				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
-		2:
-			for i: int in EQ21Effect.get_band_count():
-				EQ21Effect.set_band_gain_db(i, enhanchedVocalsPreset[i])
-				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
-		3:
-			for i: int in EQ21Effect.get_band_count():
-				EQ21Effect.set_band_gain_db(i, powerfulPreset[i])
-				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
-		4:
-			for i: int in EQ21Effect.get_band_count():
-				EQ21Effect.set_band_gain_db(i, powerful2Preset[i])
-				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
-		5:
-			for i: int in EQ21Effect.get_band_count():
-				EQ21Effect.set_band_gain_db(i, powerful3Preset[i])
-				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
-		6:
-			for i: int in EQ21Effect.get_band_count():
-				EQ21Effect.set_band_gain_db(i, powerful4Preset[i])
-				EQBands[i].value = EQ21Effect.get_band_gain_db(i)
+	for i: int in EQ21Effect.get_band_count():
+		animatePresetChangingValues(i, EQpresets[index][i])
 
 func _on_music_player_finished() -> void:
 	if loop:
@@ -950,21 +1063,20 @@ func _on_spotify_line_edit_text_submitted(new_text: String) -> void:
 	
 	%SpotifyLineEdit.editable = false
 	%ImportSpotifyButton.disabled = true
+	%ImportDirButton.disabled = true
 	%downloadingLabel.text = "Downloading..."
 	$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/MarginContainer.show()
 	
 	%"TOKENsongTitle&AuthorRetriever".cancel_request()
 	%"TOKENsongTitle&AuthorRetriever".request("https://open.spotify.com/get_access_token?reason=transport&productType=web_player")
 
-func _on_toke_nsong_title_author_retriever_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_toke_nsong_title_author_retriever_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	if response_code == 200:
 		var json: JSON = JSON.new()
 		
 		json.parse(body.get_string_from_utf8())
 		
 		print("Requested TOKEN is: ", json.get_data().accessToken)
-		
-		var finalAuthorName: String = authorNameToRequestImage.uri_encode()
 		
 		%"songTitle&AuthorRetriever".cancel_request()
 		%"songTitle&AuthorRetriever".request("https://api.spotify.com/v1/tracks/".path_join(downloadingTrackID), ["Authorization: Bearer " + json.get_data().accessToken])
@@ -984,6 +1096,7 @@ func _on_song_title_author_retriever_request_completed(_result: int, response_co
 		
 		%downloadingProgress.start_checking()
 		
+		%spotifyDownloadHTTPRequest.cancel_request()
 		%spotifyDownloadHTTPRequest.request("https://yank.g3v.co.uk/track/".path_join(downloadingTrackID))
 		print("Downloading song with URL: ", "https://yank.g3v.co.uk/track/".path_join(downloadingTrackID))
 	else:
@@ -993,22 +1106,81 @@ func _on_song_title_author_retriever_request_completed(_result: int, response_co
 func _on_spotify_download_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	%SpotifyLineEdit.editable = true
 	%ImportSpotifyButton.disabled = false
+	%ImportDirButton.disabled = false
 	%downloadingProgress.stop_checking()
-	%downloadingLabel.text = "Song Downloaded!"
 	
-	printt("Download finished!\n", result, response_code, headers, body.get_string_from_utf8())
-	%SpotifyLineEdit.text = "Download finished!"
+	var result_name: PackedStringArray = [
+		"RESULT_SUCCESS",
+		"RESULT_CHUNKED_BODY_SIZE_MISMATCH",
+		"RESULT_CANT_CONNECT",
+		"RESULT_CANT_RESOLVE",
+		"RESULT_CONNECTION_ERROR",
+		"RESULT_TLS_HANDSHAKE_ERROR",
+		"RESULT_NO_RESPONSE",
+		"RESULT_BODY_SIZE_LIMIT_EXCEEDED",
+		"RESULT_BODY_DECOMPRESS_FAILED",
+		"RESULT_REQUEST_FAILED",
+		"RESULT_DOWNLOAD_FILE_CANT_OPEN",
+		"RESULT_DOWNLOAD_FILE_WRITE_ERROR",
+		"RESULT_REDIRECT_LIMIT_REACHED",
+		"RESULT_TIMEOUT"
+	]
 	
-	check_songs_dir_exists()
-	
-	var file: FileAccess = FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC).path_join("GAMP-Downloaded").path_join(downloadingSongAuthorName + " - " + downloadingSongName + ".mp3"), FileAccess.WRITE)
-	
-	file.store_buffer(body)
-	file.close()
-	
-	#dirSelectedImportSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC).path_join("GAMP-Downloaded")
-	
-	importSingleSong(OS.get_system_dir(OS.SYSTEM_DIR_MUSIC).path_join("GAMP-Downloaded").path_join(downloadingSongAuthorName + " - " + downloadingSongName + ".mp3"))
+	if body.size() > 1:
+		if result == HTTPRequest.Result.RESULT_SUCCESS:
+			if response_code == 200:
+				%downloadingLabel.text = "Song Downloaded!"
+				
+				printt("Download finished!\n", result_name[result], response_code, headers, body.get_string_from_utf8())
+				%SpotifyLineEdit.text = "Download finished!"
+				
+				check_songs_dir_exists()
+				
+				# Sanitizza i nomi del file
+				var safe_author: String = downloadingSongAuthorName.uri_decode().strip_edges().replace("/", "-").replace("\\", "-").replace("?", "_")
+				var safe_name: String = downloadingSongName.uri_decode().strip_edges().replace("/", "-").replace("\\", "-").replace("?", "_")
+				var file_path: String = default_songs_folder.path_join(safe_author + " - " + safe_name + ".mp3")
+				
+				print("\n", file_path)
+				
+				# Verifica se il file esiste già
+				if FileAccess.file_exists(file_path):
+					printerr("File already exists:", file_path)
+					%downloadingLabel.text = "Error: File already exists"
+					return
+				
+				# Prova ad aprire il file e gestisci gli errori
+				var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
+				var error: Error = FileAccess.get_open_error()
+				
+				if error != OK:
+					printerr("Failed to open file. Error code:", error)
+					%downloadingLabel.text = "Error saving file: " + str(error)
+					return
+				
+				# Scrivi il file e gestisci eventuali errori
+				file.store_buffer(body)
+				file.close()
+				
+				# Verifica che il file sia stato effettivamente creato
+				if not FileAccess.file_exists(file_path):
+					printerr("File was not created successfully")
+					%downloadingLabel.text = "Error: File not saved"
+					return
+				
+				importSingleSong(file_path)
+			else:
+				%downloadingLabel.text = "HTTP Error " + str(response_code)
+				var parsedBody: Dictionary = JSON.parse_string(body.get_string_from_ascii())
+				if parsedBody.has("message"):
+					%downloadingLabel.text += ": " + parsedBody["message"]
+				printerr("HTTP Error: ", response_code, "Result:", result_name[result])
+		else:
+			%downloadingLabel.text = "Download Error: " + result_name[result]
+			printerr("Download Error: ", result_name[result])
+	else:
+		%downloadingLabel.text = "Download Error:\n" + "content too small(corrupted?)"
+		printerr("Download Error: ", "Body was too small(corrupted?)")
 	
 	downloadingTrackID = ""
 	downloadingSongAuthorName = ""
@@ -1023,6 +1195,18 @@ func _on_manually_search_lyrics_button_pressed() -> void:
 		manual_search_popup_control.show()
 	else:
 		manual_search_popup_control.hide()
+
+func _on_lyrics_full_screen_button_pressed() -> void:
+	if !lyricsFullscreen:
+		lyricsFullscreen = true
+		
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer".hide()
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VSeparator2".hide()
+	else:
+		lyricsFullscreen = false
+		
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer".show()
+		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VSeparator2".show()
 
 
 func _on_final_manual_search_button_pressed() -> void:
@@ -1072,14 +1256,44 @@ func _on_song_cover_actual_http_request_request_completed(_result: int, _respons
 func _on_check_for_text_file_timer_timeout() -> void:
 	pass # Replace with function body.
 
-func _on_lyrics_full_screen_button_pressed() -> void:
-	if !lyricsFullscreen:
-		lyricsFullscreen = true
-		
-		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer".hide()
-		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VSeparator2".hide()
+
+func add_effect_button_pressed(index: int) -> void:
+	print("requested adding effect: ", addEffectButtonPopup.get_item_text(index), " (", index, ")")
+	var newEffectPanel: PanelContainer = EFFECT_PANEL.instantiate()
+	newEffectPanel.choosed_effect_index = index
+	newEffectPanel.effect_name = addEffectButtonPopup.get_item_text(index)
+	%EffectsHBoxContainer.get_child(%EffectsHBoxContainer.get_child_count() - 2).add_sibling(newEffectPanel)
+
+
+func _on_playback_tempo_h_slider_value_changed(value: float) -> void:
+	AudioServer.set_playback_speed_scale(value)
+	if value != 1.0:
+		%resetPlaybackTempoButton.show()
 	else:
-		lyricsFullscreen = false
-		
-		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VBoxContainer".show()
-		$"MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Song Info/HBoxContainer/HBoxContainer/VSeparator2".show()
+		%resetPlaybackTempoButton.hide()
+
+
+func _on_reset_playback_tempo_button_pressed() -> void:
+	AudioServer.set_playback_speed_scale(1.0)
+	%playbackTempoHSlider.value = 1.0
+	%resetPlaybackTempoButton.hide()
+
+
+func _on_playback_pitch_h_slider_value_changed(value: float) -> void:
+	%MusicPlayer.pitch_scale = value
+	if value != 1.0:
+		%resetPlaybackPitchButton.show()
+	else:
+		%resetPlaybackPitchButton.hide()
+
+
+func _on_reset_playback_pitch_button_pressed() -> void:
+	%MusicPlayer.pitch_scale = 1.0
+	%playbackPitchHSlider.value = 1.0
+	%resetPlaybackPitchButton.hide()
+
+
+func _on_effects_h_box_container_child_exiting_tree(_node: Node) -> void:
+	for child: Control in %EffectsHBoxContainer.get_children():
+		if child is PanelContainer:
+			child.update_index()

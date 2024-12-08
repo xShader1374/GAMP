@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=4 format=3 uid="uid://chy1k4jfm3gco"]
+[gd_resource type="AudioBusLayout" load_steps=3 format=3 uid="uid://chy1k4jfm3gco"]
 
 [sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_3p88a"]
 resource_name = "SpectrumAnalyzer"
@@ -8,17 +8,14 @@ fft_size = 0
 [sub_resource type="AudioEffectEQ21" id="AudioEffectEQ21_2d7ue"]
 resource_name = "EQ21"
 
-[sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_3ybbs"]
-resource_name = "Compressor"
-ratio = 2.0
-gain = 2.0
-release_ms = 45.0
-sidechain = &"Master"
-
 [resource]
 bus/0/effect/0/effect = SubResource("AudioEffectSpectrumAnalyzer_3p88a")
 bus/0/effect/0/enabled = true
 bus/0/effect/1/effect = SubResource("AudioEffectEQ21_2d7ue")
 bus/0/effect/1/enabled = true
-bus/0/effect/2/effect = SubResource("AudioEffectCompressor_3ybbs")
-bus/0/effect/2/enabled = false
+bus/1/name = &"Effects"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = 0.0
+bus/1/send = &"Master"

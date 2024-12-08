@@ -1,7 +1,7 @@
-[gd_scene load_steps=23 format=3 uid="uid://c6xmr7thb3j54"]
+[gd_scene load_steps=24 format=3 uid="uid://baip17sq60j38"]
 
-[ext_resource type="Script" path="res://Resources/SongElement.gd" id="1_8hvke"]
-[ext_resource type="Texture2D" uid="uid://bqr6dex5q3fyu" path="res://Resources/Bg.png" id="2_dcy72"]
+[ext_resource type="Script" uid="uid://crw8wj8hmyxpp" path="res://Resources/SongElement.gd" id="1_afoy2"]
+[ext_resource type="Texture2D" uid="uid://bqr6dex5q3fyu" path="res://Resources/Bg.png" id="2_6bst2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ntnih"]
 bg_color = Color(0.338747, 0.291508, 0.540155, 0.498039)
@@ -18,6 +18,13 @@ corner_radius_bottom_left = 18
 corner_detail = 20
 shadow_color = Color(0.592157, 0.501961, 1, 0.980392)
 anti_aliasing_size = 1.555
+
+[sub_resource type="LabelSettings" id="LabelSettings_ggj1i"]
+line_spacing = 0.0
+font_size = 14
+font_color = Color(0.772549, 0.721569, 1, 1)
+outline_size = 16
+outline_color = Color(0.772549, 0.721569, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vj2a4"]
 bg_color = Color(0, 0, 0, 1)
@@ -232,7 +239,7 @@ _data = {
 
 [sub_resource type="LabelSettings" id="LabelSettings_5ii8i"]
 line_spacing = 0.0
-font_size = 20
+font_size = 18
 font_color = Color(0.772549, 0.721569, 1, 1)
 shadow_size = 0
 shadow_color = Color(0.592157, 0.501961, 1, 1)
@@ -240,7 +247,7 @@ shadow_offset = Vector2(0, 0)
 
 [sub_resource type="LabelSettings" id="LabelSettings_os0jo"]
 line_spacing = 0.0
-font_size = 12
+font_size = 10
 font_color = Color(0.772549, 0.721569, 1, 1)
 shadow_size = 0
 shadow_color = Color(0.592157, 0.501961, 1, 1)
@@ -274,12 +281,7 @@ expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 anti_aliasing_size = 1.555
 
-[sub_resource type="LabelSettings" id="LabelSettings_ggj1i"]
-line_spacing = 0.0
-font_size = 14
-font_color = Color(0.772549, 0.721569, 1, 1)
-outline_size = 16
-outline_color = Color(0.772549, 0.721569, 1, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_afoy2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_umtcj"]
 bg_color = Color(0.176471, 0.14902, 0.301961, 0.941176)
@@ -302,68 +304,78 @@ shadow_size = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ivbrx"]
 
-[node name="SongElement" type="MarginContainer"]
+[node name="SongElementMini" type="MarginContainer"]
 process_thread_group = 2
 process_thread_group_order = 1
 process_thread_messages = 3
-custom_minimum_size = Vector2(20, 120)
 anchors_preset = -1
-anchor_right = 0.277778
-anchor_bottom = 0.185185
-offset_bottom = 0.00012207
-pivot_offset = Vector2(160, 60)
-theme_override_constants/margin_right = 10
-script = ExtResource("1_8hvke")
-metadata/mini = false
+anchor_right = 0.111111
+anchor_bottom = 0.259259
+pivot_offset = Vector2(64, 84)
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+script = ExtResource("1_afoy2")
+metadata/_edit_use_anchors_ = true
+metadata/mini = true
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_ntnih")
 
+[node name="Label" type="Label" parent="Panel"]
+visible = false
+layout_mode = 2
+text = "▶"
+label_settings = SubResource("LabelSettings_ggj1i")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.5
 theme_override_constants/margin_left = -1
 theme_override_constants/margin_top = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_vj2a4")
 
-[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer"]
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer"]
 clip_children = 1
-custom_minimum_size = Vector2(106, 106)
+custom_minimum_size = Vector2(110, 82)
 layout_mode = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_q762y")
 
-[node name="songThumbnailTextureRect" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel"]
+[node name="songThumbnailTextureRect" type="TextureRect" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_dcy72")
-expand_mode = 3
-stretch_mode = 5
+texture = ExtResource("2_6bst2")
+expand_mode = 2
+stretch_mode = 6
 
-[node name="songThumbnailPanelContainer" type="PanelContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/songThumbnailTextureRect"]
+[node name="songThumbnailPanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/songThumbnailTextureRect"]
 self_modulate = Color(0, 0, 0, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -373,7 +385,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_51tcj")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel"]
 visible = false
 layout_mode = 2
 anchor_left = 0.180952
@@ -387,70 +399,70 @@ grow_vertical = 2
 theme_override_constants/separation = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="line1" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer"]
+[node name="line1" type="Panel" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(6, 10)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="line2" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer2"]
+[node name="line2" type="Panel" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(6, 32)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="line3" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer3"]
+[node name="line3" type="Panel" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer3"]
 custom_minimum_size = Vector2(6, 64)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
 
-[node name="VBoxContainer4" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
+[node name="VBoxContainer4" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="line4" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer4"]
+[node name="line4" type="Panel" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer4"]
 custom_minimum_size = Vector2(6, 42)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
 
-[node name="VBoxContainer5" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
+[node name="VBoxContainer5" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="line5" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer5"]
+[node name="line5" type="Panel" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer5"]
 custom_minimum_size = Vector2(6, 21)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
 
-[node name="VBoxContainer6" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
+[node name="VBoxContainer6" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="line6" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer6"]
+[node name="line6" type="Panel" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer6"]
 custom_minimum_size = Vector2(6, 43)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
 
-[node name="VBoxContainer7" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
+[node name="VBoxContainer7" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="line7" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer7"]
+[node name="line7" type="Panel" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer/VBoxContainer7"]
 custom_minimum_size = Vector2(6, 10)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8liqx")
 
-[node name="linesAnimationPlayer" type="AnimationPlayer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
+[node name="linesAnimationPlayer" type="AnimationPlayer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer"]
 unique_name_in_owner = true
 process_thread_group = 1
 process_thread_group_order = 0
@@ -461,15 +473,19 @@ libraries = {
 playback_default_blend_time = 0.1
 speed_scale = 2.0
 
-[node name="HBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+alignment = 1
 
-[node name="SongTitle" type="Label" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="SongTitle" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
@@ -479,7 +495,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="Author" type="Label" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="Author" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
@@ -489,17 +505,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
 theme_override_styles/separator = SubResource("StyleBoxEmpty_ikxkc")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 alignment = 1
 
-[node name="CurrentDuration" type="Label" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="CurrentDuration" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
@@ -510,7 +526,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="songProgressBar" type="ProgressBar" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="songProgressBar" type="ProgressBar" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -521,7 +537,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_h01qo")
 step = 0.0
 show_percentage = false
 
-[node name="TotalDuration" type="Label" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="TotalDuration" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
@@ -532,41 +548,28 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+theme_override_constants/separation = 0
+alignment = 1
 
-[node name="Label" type="Label" parent="Panel"]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.89
-anchor_top = 0.098
-anchor_right = 0.89
-anchor_bottom = 0.098
-offset_left = 0.0699768
-offset_top = -0.0540009
-offset_right = 24.07
-offset_bottom = 23.946
-text = "▶"
-label_settings = SubResource("LabelSettings_ggj1i")
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxEmpty_afoy2")
 
-[node name="HoverPanel" type="Panel" parent="Panel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="HoverPanel" type="Panel" parent="Panel/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(32, 6)
 layout_mode = 2
-anchor_left = 0.614
-anchor_top = 0.855
-anchor_right = 0.614
-anchor_bottom = 0.855
-offset_left = 0.0583038
-offset_top = 0.0350037
-offset_right = 32.0583
-offset_bottom = 6.035
+size_flags_horizontal = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_umtcj")
 
 [node name="SongElementButton" type="Button" parent="."]

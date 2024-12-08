@@ -16,13 +16,30 @@ var hover : bool = false
 
 var songMetadataExtractor: MusicMetadata = MusicMetadata.new()
 
-var songFileData: PackedByteArray
+var songFileData: PackedByteArray = []
 
 var setCardInfosThread: Thread = Thread.new()
 
-signal songElementSelected(songElementNode : Node, songFileName : String, songFileNamePath : String, songFileNameDir : String, songAuthor : String, songTitle : String, songTotalDuration : String, songCurrentTimestamp: float)
+signal songElementSelected(songElementNode : Node, songFileName : String, songFileNamePath : String, songFileNameDir : String, songAuthor : String, songTitle : String, songTotalDuration : String, songCurrentTimestamp: float, songMetadata: Dictionary[String, Variant])
 
 signal infoImportCompleted()
+
+var songInfo: Dictionary[String, Variant] = {
+	"title": "",
+	"artist": "",
+	"album": "",
+	"album_artist": "",
+	"lyricist": "",
+	"genre": "",
+	"year": 0,
+	"date": "",
+	"release_label": "",
+	"copyright": "",
+	"isrc": "",
+	"comments": "",
+	"user": "",
+	"mood": "",
+}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -38,13 +55,23 @@ func setCardInfosThreaded() -> void:
 	songFileData = FileAccess.get_file_as_bytes(songFileNamePath)
 	
 	# Estraiamo i metadati
-	var title: String = get_title(songFileData)
-	var artist: String = get_artist(songFileData)
-	var album_artist: String = get_album_artist(songFileData)
-	var album: String = get_album(songFileData)
+	songInfo["title"] = get_title(songFileData)
+	songInfo["artist"] = get_artist(songFileData)
+	songInfo["album"] = get_album(songFileData)
+	songInfo["album_artist"] = get_album_artist(songFileData)
+	songInfo["lyricist"] = get_lyricist(songFileData)
+	songInfo["genre"] = get_genre(songFileData)
+	songInfo["year"] = get_year(songFileData)
+	songInfo["date"] = get_date(songFileData) if get_date(songFileData) else get_date_alt(songFileData)
+	songInfo["release_label"] = get_release_label(songFileData)
+	songInfo["copyright"] = get_copyright(songFileData)
+	songInfo["isrc"] = get_isrc(songFileData)
+	songInfo["comments"] = get_comments(songFileData)
+	songInfo["user"] = get_user(songFileData)
+	songInfo["mood"] = get_mood(songFileData)
 	
 	# Estraiamo e processiamo la cover
-	var cover_data := get_cover(songFileData)
+	var cover_data: Dictionary = get_cover(songFileData)
 	var image: Image
 	
 	if !cover_data.is_empty():
@@ -56,8 +83,8 @@ func setCardInfosThreaded() -> void:
 			song_thumbnail_texture_rect.set_deferred("texture", texture)
 	
 	# Impostiamo i metadati nell'interfaccia
-	call_deferred("setTitle", title if title else songFileName)
-	call_deferred("setAuthor", artist if artist else album_artist)
+	call_deferred("setTitle", songInfo["title"] if songInfo["title"] else songFileName)
+	call_deferred("setAuthor", songInfo["artist"] if songInfo["artist"] else songInfo["album_artist"])
 	
 	call_deferred("thread_completed_info_import")
 
@@ -109,6 +136,9 @@ func read_frame(data: PackedByteArray, frame_id: String) -> PackedByteArray:
 		var Size: int = unsynchsafe(frame_header.slice(4, 8))
 		if Size > 0x7f and id == "APIC":
 			Size = (frame_header[4] << 24) | (frame_header[5] << 16) | (frame_header[6] << 8) | frame_header[7]
+		
+		# HACK: Uncomment This If You Need Debugging On What Tags Were Found.
+		#print(id)
 		
 		pos += 10
 		if id == frame_id:
@@ -180,8 +210,8 @@ func get_cover(data: PackedByteArray) -> Dictionary:
 	if !header.valid:
 		return {}
 		
-	var covers := []
-	var pos := 10  # Dopo l'header ID3
+	var covers: Array[Dictionary] = []
+	var pos: int = 10  # Dopo l'header ID3
 	
 	while pos < header.size + 10:  # +10 per includere la dimensione dell'header
 		if pos + 10 > data.size():
@@ -259,7 +289,7 @@ func parse_apic_frame(frame_data: PackedByteArray, id3_version: int) -> Dictiona
 			print("Dimensione dati immagine:", result.image_data.size())
 			# Verifica che l'immagine termini correttamente con EOI marker
 			var has_eoi := false
-			for i in range(result.image_data.size() - 2):
+			for i: int in range(result.image_data.size() - 2):
 				if result.image_data[i] == 0xFF and result.image_data[i + 1] == 0xD9:
 					has_eoi = true
 					# Taglia via eventuali dati extra dopo l'EOI
@@ -285,7 +315,7 @@ func create_image_from_cover_data(cover_data: Dictionary) -> Image:
 		print("Dati cover vuoti o mancanti")
 		return null
 		
-	var image := Image.new()
+	var image: Image = Image.new()
 	var error: Error
 	
 	print("Tentativo di caricamento immagine di tipo:", cover_data.mime_type)
@@ -302,10 +332,11 @@ func create_image_from_cover_data(cover_data: Dictionary) -> Image:
 		if error != OK:
 			print("Errore caricamento JPEG:", error)
 			# Prova a salvare i dati per debug
-			var file := FileAccess.open("user://debug_cover.jpg", FileAccess.WRITE)
+			var file: FileAccess = FileAccess.open(OS.get_user_data_dir().path_join("debug_cover.jpg"), FileAccess.WRITE)
 			if file:
 				file.store_buffer(cover_data.image_data)
-				print("Dati JPEG salvati in user://debug_cover.jpg per debug")
+				print("Dati JPEG salvati in '" + OS.get_user_data_dir().path_join("debug_cover.jpg") + "' per debug")
+			file.close()
 			return null
 			
 	elif cover_data.mime_type == "image/png":
@@ -328,12 +359,12 @@ func create_image_from_cover_data(cover_data: Dictionary) -> Image:
 		print("Errore generico nel caricamento dell'immagine:", error)
 		return null
 
-func select_best_cover(covers: Array) -> Dictionary:
+func select_best_cover(covers: Array[Dictionary]) -> Dictionary:
 	if covers.is_empty():
 		return {}
 	
 	# Priorità dei tipi di immagine (secondo lo standard ID3v2)
-	var type_priority := {
+	var type_priority: Dictionary[int, int] = {
 		3: 0,   # Cover frontale
 		2: 1,   # File icon
 		1: 2,   # Icon 32x32
@@ -342,7 +373,7 @@ func select_best_cover(covers: Array) -> Dictionary:
 	}
 	
 	# Priorità dei formati immagine
-	var mime_priority := {
+	var mime_priority: Dictionary[String, int] = {
 		"image/jpeg": 0,
 		"image/jpg": 0,
 		"image/png": 1,
@@ -350,13 +381,13 @@ func select_best_cover(covers: Array) -> Dictionary:
 	}
 	
 	var best_cover: Dictionary = covers[0]
-	var best_priority := 999
+	var best_priority: int = 999
 	
-	for cover in covers:
+	for cover: Dictionary[String, Variant] in covers:
 		var type_prio: int = type_priority.get(cover.picture_type, 999)
 		var mime_prio: int = mime_priority.get(cover.mime_type.to_lower(), 999)
 		var current_priority: int = type_prio * 1000 + mime_prio
-		
+		#print("COVER: ", cover)
 		if current_priority < best_priority:
 			best_priority = current_priority
 			best_cover = cover
@@ -391,7 +422,7 @@ func read_text_frame(data: PackedByteArray, frame_id: String) -> String:
 	
 	return ""
 
-# Funzione per ottenere il titolo
+## Funzione per ottenere il [i]titolo[/i]
 func get_title(data: PackedByteArray) -> String:
 	var title := read_text_frame(data, "TIT2")
 	if title.is_empty():
@@ -401,7 +432,7 @@ func get_title(data: PackedByteArray) -> String:
 	print("Titolo trovato:", title)
 	return title.strip_edges()
 
-# Funzione per ottenere l'artista
+## Funzione per ottenere l'[i]artista[/i]
 func get_artist(data: PackedByteArray) -> String:
 	var artist := read_text_frame(data, "TPE1")
 	if artist.is_empty():
@@ -411,7 +442,7 @@ func get_artist(data: PackedByteArray) -> String:
 	print("Artista trovato:", artist)
 	return artist.strip_edges()
 
-# Funzione per ottenere l'album
+## Funzione per ottenere l'[i]album[/i]
 func get_album(data: PackedByteArray) -> String:
 	var album := read_text_frame(data, "TALB")
 	if album.is_empty():
@@ -421,7 +452,7 @@ func get_album(data: PackedByteArray) -> String:
 	print("Album trovato:", album)
 	return album.strip_edges()
 
-# Funzione per ottenere l'artista dell'album
+## Funzione per ottenere l'[i]artista dell'album[/i]
 func get_album_artist(data: PackedByteArray) -> String:
 	var album_artist := read_text_frame(data, "TPE2")
 	if album_artist.is_empty():
@@ -431,10 +462,134 @@ func get_album_artist(data: PackedByteArray) -> String:
 	print("Artista dell'album trovato:", album_artist)
 	return album_artist.strip_edges()
 
+## Funzione per ottenere il [i]lyricist(paroliere)[/i]
+func get_lyricist(data: PackedByteArray) -> String:
+	var lyricist := read_text_frame(data, "TOLY")
+	if lyricist.is_empty():
+		print("Nessun lyricist trovato")
+		return ""
+	
+	print("Lyricist trovato:", lyricist)
+	return lyricist.strip_edges()
+
+## Funzione per ottenere l'[i]anno[/i]
+func get_year(data: PackedByteArray) -> int:
+	var year: String = read_text_frame(data, "TYER")
+	if year.is_empty():
+		print("Nessun anno trovato")
+		return -1
+	
+	print("Anno trovato:", year)
+	return int(year.strip_edges())
+
+## Funzione per ottenere la [i]data[/i]
+func get_date(data: PackedByteArray) -> String:
+	var date: String = read_text_frame(data, "TDRV")
+	if date.is_empty():
+		print("Nessun date trovato")
+		return ""
+	
+	print("Date trovato:", date)
+	return date.strip_edges()
+
+## Funzione alternativa per ottenere la [i]data[/i]
+func get_date_alt(data: PackedByteArray) -> String:
+	var date_alt: String = read_text_frame(data, "TDRC")
+	if date_alt.is_empty():
+		print("Nessun date alt trovato")
+		return ""
+	
+	print("Date Alt trovato:", date_alt)
+	return date_alt.strip_edges()
+
+## Funzione per ottenere il [i]release label[/i]
+func get_release_label(data: PackedByteArray) -> String:
+	var release_label: String = read_text_frame(data, "TPUB")
+	if release_label.is_empty():
+		print("Nessun release label trovato")
+		return ""
+	
+	print("Release label trovato:", release_label)
+	return release_label.strip_edges()
+
+## Funzione per ottenere il [i]genere[/i]
+func get_genre(data: PackedByteArray) -> String:
+	var genre: String = read_text_frame(data, "TCON")
+	if genre.is_empty():
+		print("Nessun genere trovato")
+		return ""
+	
+	print("Genere trovato:", genre)
+	return genre.strip_edges()
+
+## Funzione per ottenere il [i]copyright[/i]
+func get_copyright(data: PackedByteArray) -> String:
+	var copyright: String = read_text_frame(data, "TCOP")
+	if copyright.is_empty():
+		print("Nessun copyright trovato")
+		return ""
+	
+	print("Copyright trovato:", copyright)
+	return copyright.strip_edges()
+
+## Funzione per ottenere l'[i]isrc[/i]
+func get_isrc(data: PackedByteArray) -> String:
+	var isrc: String = read_text_frame(data, "TSRC")
+	if isrc.is_empty():
+		print("Nessun isrc trovato")
+		return ""
+	
+	print("ISRC trovato:", isrc)
+	return isrc.strip_edges()
+
+## Funzione per ottenere i [i]comments[/i]
+func get_comments(data: PackedByteArray) -> String:
+	var comments: String = read_text_frame(data, "COMM")
+	if comments.is_empty():
+		print("Nessun comments trovato")
+		return ""
+	
+	print("Comments trovato:", comments)
+	return comments.strip_edges()
+
+## Funzione per ottenere metadati aggiunti dall'[i]user[/i]
+func get_user(data: PackedByteArray) -> String:
+	var user: String = read_text_frame(data, "TXXX")
+	if user.is_empty():
+		print("Nessun user trovato")
+		return ""
+	
+	print("User trovato:", user)
+	return user.strip_edges()
+
+## Funzione per ottenere metadati aggiunti dall'[i]user[/i]
+func get_mood(data: PackedByteArray) -> String:
+	var mood: String = read_text_frame(data, "TMOO")
+	if mood.is_empty():
+		print("Nessun mood trovato")
+		return ""
+	
+	print("Mood trovato:", mood)
+	return mood.strip_edges()
+
+#endregion
+
+#region Metadata Writing Region
+
 #endregion
 
 func songElementPressed() -> void:
-	pass
+	if !main.smooth_scroll_container.velocity > Vector2.ZERO:
+		songElementButton.grab_focus()
+		songElementSelected.emit(self, songFileName, songFileNamePath, songFileNameDir, %Author.text, %SongTitle.text, %TotalDuration.text, currentSongTimestamp, songInfo)
+		
+		var tween: Tween = create_tween()
+		
+		tween.set_ease(Tween.EASE_IN_OUT)
+		tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+		tween.set_trans(Tween.TRANS_QUAD)
+		
+		tween.parallel().tween_property(self, "modulate", Color.WHITE * 1.15, 0.2).from_current()
 
 func _on_song_element_button_mouse_entered() -> void:
 	hover = true
@@ -449,7 +604,8 @@ func _on_song_element_button_mouse_entered() -> void:
 	tween.parallel().tween_property(self, "modulate", Color.WHITE * 1.175, .15).from_current()
 	#tween.chain().tween_property(songElementButton, "scale", Vector2(0.98, 0.98), .15)
 	
-	$Panel/Panel.show()
+	if !get_meta("mini", "bool"):
+		%HoverPanel.show()
 
 
 func _on_song_element_button_mouse_exited() -> void:
@@ -470,21 +626,12 @@ func _on_song_element_button_mouse_exited() -> void:
 	
 	#tween.chain().tween_property(songElementButton, "scale", Vector2(1.0, 1.0), .15)
 	
-	$Panel/Panel.hide()
+	if !get_meta("mini", "bool"):
+		%HoverPanel.hide()
 
 
 func _on_song_element_button_pressed() -> void:
-	if !main.smooth_scroll_container.velocity > Vector2.ZERO:
-		songElementButton.grab_focus()
-		songElementSelected.emit(self, songFileName, songFileNamePath, songFileNameDir, %Author.text, %SongTitle.text, %TotalDuration.text, currentSongTimestamp)
-		
-		var tween: Tween = create_tween()
-		
-		tween.set_ease(Tween.EASE_IN_OUT)
-		tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
-		tween.set_trans(Tween.TRANS_QUAD)
-		
-		tween.parallel().tween_property(self, "modulate", Color.WHITE * 1.15, 0.2).from_current()
+	pass
 
 
 func _on_song_element_button_button_up() -> void:
@@ -565,10 +712,10 @@ func stopPlayingAnimation() -> void:
 
 
 func _on_song_element_button_focus_entered() -> void:
-	$Panel/Panel.show()
+	%HoverPanel.show()
 
 func _on_song_element_button_focus_exited() -> void:
-	$Panel/Panel.hide()
+	%HoverPanel.hide()
 
 
 func _on_resized() -> void:

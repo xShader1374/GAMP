@@ -14,7 +14,6 @@ func importThreaded(files_paths: PackedStringArray) -> void:
 	for filePath: String in files_paths:
 		print("Importing dropped file: ", filePath)
 		main_node.importSingleSong(filePath)
-		#main_node.call_deferred("importSingleSong", filePath)
 	call_deferred("finishedImportingDroppedSongs")
 
 func files_dropped(files_paths: PackedStringArray) -> void:

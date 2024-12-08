@@ -1,19 +1,19 @@
-[gd_scene load_steps=109 format=3 uid="uid://bu7dco3gq5etw"]
+[gd_scene load_steps=111 format=3 uid="uid://bu7dco3gq5etw"]
 
-[ext_resource type="Script" path="res://Resources/main.gd" id="1_oad5e"]
-[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_d0112"]
+[ext_resource type="Script" uid="uid://mlhxa8426cmm" path="res://Resources/main.gd" id="1_oad5e"]
+[ext_resource type="Script" uid="uid://bh3po6gw28t5k" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_d0112"]
 [ext_resource type="Texture2D" uid="uid://bqr6dex5q3fyu" path="res://Resources/Bg.png" id="2_onraq"]
-[ext_resource type="Shader" path="res://Resources/Visualizers/visualizer2.gdshader" id="3_lelx5"]
-[ext_resource type="Shader" path="res://Resources/shiningText.gdshader" id="3_pnqxb"]
+[ext_resource type="Shader" uid="uid://g77woty8xljm" path="res://Resources/Visualizers/visualizer2.gdshader" id="3_lelx5"]
+[ext_resource type="Shader" uid="uid://b3fbfbdfi2lug" path="res://Resources/shiningText.gdshader" id="3_pnqxb"]
 [ext_resource type="Texture2D" uid="uid://bl2c2utyd533e" path="res://Resources/Spotify_icon.svg" id="3_txr0t"]
-[ext_resource type="Script" path="res://Resources/EQVolumeSlider.gd" id="4_05nc3"]
-[ext_resource type="Script" path="res://Resources/Visualizers/visualizer2.gd" id="4_ama8h"]
+[ext_resource type="Script" uid="uid://57y85e6scjc6" path="res://Resources/EQVolumeSlider.gd" id="4_05nc3"]
+[ext_resource type="Script" uid="uid://dfuiywk62151x" path="res://Resources/Visualizers/visualizer2.gd" id="4_ama8h"]
 [ext_resource type="Texture2D" uid="uid://bxo1o37an65xe" path="res://Resources/YouTube_Logo_2017.svg" id="4_mawki"]
-[ext_resource type="Script" path="res://addons/tattomoosa.network-texture-rect/network_texture_rect.gd" id="7_8qp3f"]
-[ext_resource type="Script" path="res://Resources/downloading_progress.gd" id="7_l4l3x"]
-[ext_resource type="Shader" path="res://Resources/BGShader.gdshader" id="8_fn18o"]
-[ext_resource type="Script" path="res://Resources/visualizer3.gd" id="12_jrqka"]
-[ext_resource type="Shader" path="res://Resources/visualizer3.gdshader" id="12_ptd8x"]
+[ext_resource type="Script" uid="uid://b8ik7tiwa0476" path="res://addons/tattomoosa.network-texture-rect/network_texture_rect.gd" id="7_8qp3f"]
+[ext_resource type="Script" uid="uid://2yik5l3uerej" path="res://Resources/downloading_progress.gd" id="7_l4l3x"]
+[ext_resource type="Shader" uid="uid://dwi4pevjg21ae" path="res://Resources/BGShader.gdshader" id="8_fn18o"]
+[ext_resource type="Script" uid="uid://bhc85pe5khgl4" path="res://Resources/visualizer3.gd" id="12_jrqka"]
+[ext_resource type="Shader" uid="uid://j107uwwyblhx" path="res://Resources/visualizer3.gdshader" id="12_ptd8x"]
 
 [sub_resource type="Environment" id="Environment_b1qu4"]
 background_mode = 3
@@ -21,7 +21,16 @@ ambient_light_source = 1
 reflected_light_source = 1
 tonemap_white = 4.58
 glow_enabled = true
+glow_levels/1 = 8.0
+glow_levels/2 = 4.0
+glow_levels/3 = 2.0
+glow_levels/4 = 1.0
+glow_levels/5 = 0.5
+glow_levels/6 = 0.25
+glow_levels/7 = 0.13
 glow_intensity = 8.0
+glow_mix = 0.01
+glow_blend_mode = 0
 glow_hdr_scale = 1.35
 adjustment_enabled = true
 adjustment_brightness = 1.05
@@ -86,7 +95,7 @@ corner_detail = 20
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jkvea"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2s6en"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ek8wc"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -98,7 +107,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q5ofi"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a0fdw"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -110,7 +119,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fgmfu"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ubtoq"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -122,7 +131,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbsyl"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cp502"]
 content_margin_left = 4.0
 content_margin_top = 0.0
 content_margin_right = 4.0
@@ -134,7 +143,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3cjxr"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fcijs"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -156,11 +165,11 @@ expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
 [sub_resource type="Theme" id="Theme_whic4"]
-VScrollBar/styles/grabber = SubResource("StyleBoxFlat_2s6en")
-VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_q5ofi")
-VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_fgmfu")
-VScrollBar/styles/scroll = SubResource("StyleBoxFlat_cbsyl")
-VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_3cjxr")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_ek8wc")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_a0fdw")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_ubtoq")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_cp502")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_fcijs")
 
 [sub_resource type="LabelSettings" id="LabelSettings_ll30e"]
 line_spacing = 0.0
@@ -340,12 +349,12 @@ corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 anti_aliasing_size = 2.0
 
-[sub_resource type="Gradient" id="Gradient_wsjo5"]
+[sub_resource type="Gradient" id="Gradient_cgqvr"]
 offsets = PackedFloat32Array(1)
 colors = PackedColorArray(0, 0, 0, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_8m7y8"]
-gradient = SubResource("Gradient_wsjo5")
+gradient = SubResource("Gradient_cgqvr")
 use_hdr = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_swqws"]
@@ -365,13 +374,13 @@ shader_parameter/wave_size = 2.8
 shader_parameter/wave_time_mul = 0.5
 shader_parameter/total_phases = 18
 
-[sub_resource type="Gradient" id="Gradient_r3xo5"]
+[sub_resource type="Gradient" id="Gradient_yv11u"]
 offsets = PackedFloat32Array(0, 0.3)
 colors = PackedColorArray(0, 0, 0, 0, 0.42, 0.333, 0.686, 0.475)
 metadata/_snap_enabled = true
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_l3dx1"]
-gradient = SubResource("Gradient_r3xo5")
+gradient = SubResource("Gradient_yv11u")
 use_hdr = true
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.5, 0)
@@ -429,14 +438,14 @@ corner_radius_bottom_left = 64
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tcm34"]
 
-[sub_resource type="Gradient" id="Gradient_g8i61"]
+[sub_resource type="Gradient" id="Gradient_w3lm6"]
 offsets = PackedFloat32Array(0.6, 0.8)
 colors = PackedColorArray(0.72549, 0.686275, 0.988235, 0.686275, 1, 1, 1, 0)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_oogqf"]
-gradient = SubResource("Gradient_g8i61")
+gradient = SubResource("Gradient_w3lm6")
 width = 16
 height = 16
 fill = 1
@@ -445,14 +454,14 @@ fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 
-[sub_resource type="Gradient" id="Gradient_tv4eu"]
+[sub_resource type="Gradient" id="Gradient_81j7q"]
 offsets = PackedFloat32Array(0.15, 0.45, 0.75, 0.95)
 colors = PackedColorArray(0.556863, 0.45098, 0.972549, 0.6, 0.718824, 0.670588, 0.986275, 0.660392, 0.788235, 0.764706, 0.992157, 0.686275, 1, 1, 1, 0)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ndvp4"]
-gradient = SubResource("Gradient_tv4eu")
+gradient = SubResource("Gradient_81j7q")
 width = 16
 height = 16
 fill = 1
@@ -461,14 +470,14 @@ fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 
-[sub_resource type="Gradient" id="Gradient_63wyi"]
+[sub_resource type="Gradient" id="Gradient_5aolv"]
 offsets = PackedFloat32Array(0, 0.45, 1)
 colors = PackedColorArray(0.137255, 0.113725, 0.239216, 0, 0.74902, 0.698039, 0.996078, 1, 0.137255, 0.113725, 0.239216, 0)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_jxeyf"]
-gradient = SubResource("Gradient_63wyi")
+gradient = SubResource("Gradient_5aolv")
 width = 17
 height = 2
 fill_from = Vector2(0.55, 0)
@@ -516,6 +525,20 @@ anti_aliasing_size = 2.0
 [sub_resource type="LabelSettings" id="LabelSettings_lx2la"]
 font_color = Color(0.772549, 0.721569, 1, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_a0fdw"]
+line_spacing = 0.0
+font_color = Color(0.772549, 0.721569, 1, 1)
+shadow_size = 0
+shadow_color = Color(0.592157, 0.501961, 1, 1)
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ubtoq"]
+line_spacing = 0.0
+font_color = Color(0.772549, 0.721569, 1, 1)
+shadow_size = 0
+shadow_color = Color(0.592157, 0.501961, 1, 1)
+shadow_offset = Vector2(0, 0)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ntnih"]
 bg_color = Color(0.282353, 0.243137, 0.458824, 0.784314)
 border_color = Color(0.592157, 0.501961, 1, 0.980392)
@@ -545,7 +568,7 @@ colors = PackedColorArray(0.5856, 0.528, 0.96, 1)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_01dlh"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_m0dly"]
 gradient = SubResource("Gradient_hvdmg")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
@@ -558,15 +581,15 @@ metadata/_snap_count = 20
 shader = ExtResource("3_lelx5")
 shader_parameter/columns = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/columnsAmount = 15
-shader_parameter/color = SubResource("GradientTexture2D_01dlh")
+shader_parameter/color = SubResource("GradientTexture2D_m0dly")
 
-[sub_resource type="Gradient" id="Gradient_37oi8"]
+[sub_resource type="Gradient" id="Gradient_6yx3x"]
 colors = PackedColorArray(0.137255, 0.113725, 0.239216, 1, 0.213181, 0.18088, 0.354193, 1)
 metadata/_snap_enabled = true
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_th261"]
 resource_local_to_scene = true
-gradient = SubResource("Gradient_37oi8")
+gradient = SubResource("Gradient_6yx3x")
 fill_from = Vector2(1, 0)
 fill_to = Vector2(0, 1)
 metadata/_snap_enabled = true
@@ -639,14 +662,14 @@ expand_margin_top = 4.0
 expand_margin_right = 4.0
 expand_margin_bottom = 4.0
 
-[sub_resource type="Gradient" id="Gradient_wl42h"]
+[sub_resource type="Gradient" id="Gradient_jtob5"]
 offsets = PackedFloat32Array(0.25, 0.5, 0.8, 0.95)
 colors = PackedColorArray(0, 0, 1, 1, 0.25098, 1, 0, 1, 0.417429, 0.777778, 0, 1, 1, 0, 0, 1)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_uo416"]
-gradient = SubResource("Gradient_wl42h")
+gradient = SubResource("Gradient_jtob5")
 width = 2
 height = 16
 use_hdr = true
@@ -807,6 +830,7 @@ font_color = Color(0.584314, 0.498039, 0.988235, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ri141"]
 
 [node name="MainControl" type="Control"]
+physics_interpolation_mode = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -817,9 +841,13 @@ script = ExtResource("1_oad5e")
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
+bus = &"Effects"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_b1qu4")
+
+[node name="borderTimer" type="Timer" parent="."]
+unique_name_in_owner = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -916,8 +944,8 @@ layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 text = "-"
 
 [node name="MaximizeButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer2/HBoxContainer"]
@@ -926,9 +954,9 @@ layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
-theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
 theme_override_colors/font_outline_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_font_sizes/font_size = 18
 text = "◻"
 
@@ -938,8 +966,8 @@ layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_font_sizes/font_size = 10
 theme_override_styles/hover = SubResource("StyleBoxFlat_8y3fn")
 theme_override_styles/normal = SubResource("StyleBoxFlat_qraka")
@@ -1034,7 +1062,7 @@ theme_override_styles/tab_selected = SubResource("StyleBoxFlat_hdwky")
 theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_5l4kh")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_ll108")
 tab_alignment = 1
-current_tab = 1
+current_tab = 4
 drag_to_rearrange_enabled = true
 
 [node name="Manage Songs" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
@@ -1052,7 +1080,7 @@ metadata/_tab_index = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 4
+columns = 5
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Manage Songs/GridContainer"]
 custom_minimum_size = Vector2(150, 200)
@@ -1115,6 +1143,7 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="Import" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_d0112")
@@ -1177,7 +1206,7 @@ stretch_mode = 5
 [node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
-text = "Spotify Download( <-- WIP ) and Import"
+text = "Download From a Spotify Link or Import local songs!"
 label_settings = SubResource("LabelSettings_oxnie")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1194,7 +1223,7 @@ clear_button_enabled = true
 unique_name_in_owner = true
 download_chunk_size = 32768
 use_threads = true
-timeout = 8.0
+timeout = 12.0
 
 [node name="songTitle&AuthorRetriever" type="HTTPRequest" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer/SpotifyLineEdit"]
 unique_name_in_owner = true
@@ -1237,6 +1266,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="ImportDirButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 mouse_filter = 1
@@ -1952,40 +1982,41 @@ layout_mode = 2
 size_flags_vertical = 0
 alignment = 1
 
-[node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-mouse_filter = 1
-text = " Presets: "
-label_settings = SubResource("LabelSettings_oxnie")
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="PresetsOptionButton" type="OptionButton" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 mouse_filter = 1
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.772549, 0.721569, 1, 1)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_48e86")
-flat = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_megpm")
 alignment = 1
 selected = 0
 allow_reselect = true
-item_count = 8
+item_count = 12
 popup/item_0/text = "default"
 popup/item_0/id = 0
 popup/item_1/text = "Bass boosted"
 popup/item_1/id = 1
-popup/item_2/text = "Vocals Enhanced"
+popup/item_2/text = "Bass Boosted 2"
 popup/item_2/id = 2
-popup/item_3/text = "Powerful"
+popup/item_3/text = "Vocals Enhanced"
 popup/item_3/id = 3
-popup/item_4/text = "Powerful 2"
+popup/item_4/text = "Vocals Enhanced 2"
 popup/item_4/id = 4
-popup/item_5/text = "Powerful 3"
+popup/item_5/text = "Vocals Enhanced 3"
 popup/item_5/id = 5
-popup/item_6/text = "Powerful 4"
+popup/item_6/text = "Powerful"
 popup/item_6/id = 6
-popup/item_7/text = "Save Custom 1 "
+popup/item_7/text = "Powerful 2"
 popup/item_7/id = 7
+popup/item_8/text = "Powerful 3"
+popup/item_8/id = 8
+popup/item_9/text = "Powerful 4"
+popup/item_9/id = 9
+popup/item_10/text = "Powerful 5"
+popup/item_10/id = 10
+popup/item_11/text = "Save Custom 1 "
+popup/item_11/id = 11
 
 [node name="VSeparator2" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer"]
 layout_mode = 2
@@ -3128,8 +3159,7 @@ mouse_filter = 1
 theme_override_constants/separation = 4
 theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
 
-[node name="Effects" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
-visible = false
+[node name="Effects(WIP)" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_d0112")
@@ -3139,45 +3169,163 @@ scrollbar_fade_in_time = 0.25
 scrollbar_fade_out_time = 0.25
 metadata/_tab_index = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VSeparator" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects/VBoxContainer"]
+[node name="VSeparator" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
 theme_override_constants/separation = 4
 theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_vqmtt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Playback Tempo"
+label_settings = SubResource("LabelSettings_a0fdw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="resetPlaybackTempoButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 11
+text = "↻"
+flat = true
+
+[node name="playbackTempoHSlider" type="HSlider" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+mouse_filter = 1
+theme_override_icons/grabber = SubResource("GradientTexture2D_oogqf")
+theme_override_icons/grabber_highlight = SubResource("GradientTexture2D_ndvp4")
+theme_override_styles/slider = SubResource("StyleBoxFlat_tv8v7")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_v2arp")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_1celm")
+min_value = 0.01
+max_value = 4.0
+step = 0.01
+value = 1.0
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Playback Pitch"
+label_settings = SubResource("LabelSettings_ubtoq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="resetPlaybackPitchButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 11
+text = "↻"
+flat = true
+
+[node name="playbackPitchHSlider" type="HSlider" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+mouse_filter = 1
+theme_override_icons/grabber = SubResource("GradientTexture2D_oogqf")
+theme_override_icons/grabber_highlight = SubResource("GradientTexture2D_ndvp4")
+theme_override_styles/slider = SubResource("StyleBoxFlat_tv8v7")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_v2arp")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_1celm")
+min_value = 0.01
+max_value = 4.0
+step = 0.01
+value = 1.0
+
+[node name="VSeparator3" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
+
+[node name="EffectsHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 8
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects/VBoxContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/EffectsHBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
 theme_override_constants/separation = 0
 theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
 
-[node name="Panel" type="Panel" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(145.59, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.05
-mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_vqmtt")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects/VBoxContainer/HBoxContainer"]
+[node name="AddEffectButtonHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/EffectsHBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.2
 
-[node name="AddEffectButton" type="MenuButton" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects/VBoxContainer/HBoxContainer/HBoxContainer"]
+[node name="AddEffectButton" type="MenuButton" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/EffectsHBoxContainer/AddEffectButtonHBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 1
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.772549, 0.721569, 1, 1)
 theme_override_styles/hover = SubResource("StyleBoxFlat_jupa2")
 theme_override_styles/normal = SubResource("StyleBoxFlat_xoyvr")
@@ -3223,7 +3371,7 @@ popup/item_17/id = 17
 popup/item_18/text = "StereoEnhance"
 popup/item_18/id = 18
 
-[node name="VSeparator2" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects/VBoxContainer"]
+[node name="VSeparator2" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
 theme_override_constants/separation = 4
@@ -3270,6 +3418,537 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Settings/HBoxContainer"]
 layout_mode = 2
 alignment = 1
+
+[node name="Metadata Inspector" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_d0112")
+hide_scrollbar_over_time = true
+scrollbar_hide_time = 0.25
+scrollbar_fade_in_time = 0.25
+scrollbar_fade_out_time = 0.25
+metadata/_tab_index = 6
+
+[node name="HBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VSeparator" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
+
+[node name="HBoxContainer2" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Currently listening to:"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="SongTitle" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Cellar Door"
+label_settings = SubResource("LabelSettings_ku8x2")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Author" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Spiritbox"
+label_settings = SubResource("LabelSettings_nkmiy")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.1
+alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/separator = SubResource("StyleBoxEmpty_dbthn")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="PanelContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_apx4s")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="Panel" type="PanelContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer"]
+clip_children = 1
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_fg8d3")
+
+[node name="metadataSongCoverTextureRect" type="TextureRect" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel"]
+unique_name_in_owner = true
+self_modulate = Color(1.2, 1.2, 1.2, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_mode = 2
+stretch_mode = 6
+
+[node name="songCoverLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel/metadataSongCoverTextureRect"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Song Cover"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 1
+theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
+
+[node name="Panel2" type="PanelContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_apx4s")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel2"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel2/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_megpm")
+text = "Confirm & Apply"
+
+[node name="VSeparator2" type="VSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_dbthn")
+
+[node name="Panel" type="PanelContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.9
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_apx4s")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Addable Metadata Properties"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="Panel" type="PanelContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer"]
+clip_children = 1
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_fg8d3")
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel"]
+layout_mode = 2
+script = ExtResource("2_d0112")
+metadata/_custom_type_script = ExtResource("2_d0112")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="metaTitleHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaTitleLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaTitleHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Title"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaTitleLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaTitleHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+caret_blink_interval = 0.33
+
+[node name="metaArtistHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaArtistLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaArtistHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Artist"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaArtistLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaArtistHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaAlbumHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaAlbumLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaAlbumHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Album"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaAlbumLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaAlbumHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaAlbumArtistHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaAlbumArtistLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaAlbumArtistHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Album Artist"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaAlbumArtistLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaAlbumArtistHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaLyricistHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaLyricistLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaLyricistHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Lyricist"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaLyricistLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaLyricistHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaGenreHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaGenreLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaGenreHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Genre"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaGenreLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaGenreHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaYearHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaYearLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaYearHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Year"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaYearLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaYearHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaDateHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaDateLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaDateHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Date"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaDateLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaDateHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaReleaseLabelHBoxContainer2" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaReleaseLabelLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaReleaseLabelHBoxContainer2"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Release Label"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaReleaseLabelLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaReleaseLabelHBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaCopyrightHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaCopyrightLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaCopyrightHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Copyright"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaCopyrightLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaCopyrightHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaIsrcHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaIsrcLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaIsrcHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "ISRC"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaIsrcLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaIsrcHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaCommentsHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaCommentsLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaCommentsHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Comments"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaCommentsLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaCommentsHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaUserHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaUserLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaUserHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "User"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaUserLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaUserHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="metaMoodHBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="metaMoodLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaMoodHBoxContainer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+mouse_filter = 1
+text = "Mood"
+label_settings = SubResource("LabelSettings_oxnie")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="metaMoodLineEdit" type="LineEdit" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MarginContainer/Panel/SmoothScrollContainer/VBoxContainer/metaMoodHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+draw_control_chars = true
+
+[node name="VSeparator3" type="VSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/separator = SubResource("StyleBoxEmpty_dbthn")
+
+[node name="VSeparator2" type="HSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxEmpty_jkvea")
 
 [node name="VSeparator3" type="VSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -3403,8 +4082,8 @@ layout_mode = 2
 focus_mode = 0
 mouse_filter = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_font_sizes/font_size = 20
 theme_override_styles/focus = SubResource("StyleBoxEmpty_jdbai")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_gwtpe")
@@ -3485,8 +4164,8 @@ grow_vertical = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_font_sizes/font_size = 20
 theme_override_styles/focus = SubResource("StyleBoxEmpty_jdbai")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_gwtpe")
@@ -3530,8 +4209,8 @@ layout_mode = 2
 focus_mode = 0
 mouse_filter = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 flat = true
 
 [node name="prevButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
@@ -3539,8 +4218,8 @@ custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 text = "I◀"
 flat = true
 
@@ -3550,8 +4229,8 @@ custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.733333, 0.698039, 1, 0.980392)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.219608, 0.188235, 0.364706, 1)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_8qgmb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_2c8c6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_6f8n5")
@@ -3564,8 +4243,8 @@ custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 text = "▶I"
 flat = true
 
@@ -3574,8 +4253,8 @@ custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_hover_color = Color(0.219608, 0.188235, 0.364706, 1)
-theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_colors/font_color = Color(0.592157, 0.501961, 1, 0.980392)
+theme_override_colors/font_pressed_color = Color(0.733333, 0.698039, 1, 0.980392)
 theme_override_fonts/font = SubResource("FontVariation_5haam")
 theme_override_font_sizes/font_size = 20
 toggle_mode = true
@@ -3610,6 +4289,7 @@ theme_override_constants/separation = 6
 theme_override_styles/separator = SubResource("StyleBoxEmpty_ri141")
 
 [connection signal="finished" from="MusicPlayer" to="." method="_on_music_player_finished"]
+[connection signal="timeout" from="borderTimer" to="." method="_on_border_timer_timeout"]
 [connection signal="gui_input" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer2" to="." method="_on_panel_gui_input"]
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer2/HBoxContainer/MinimizeButton" to="." method="_on_minimize_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer2/HBoxContainer/MaximizeButton" to="." method="_on_maximize_button_pressed"]
@@ -3648,6 +4328,11 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_ri141")
 [connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer8/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
 [connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer9/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
 [connection signal="dragValue" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Equalizer/HBoxContainer/HBoxContainer/Panel/VBoxContainer/HBoxContainer2/VBoxContainer10/VBoxContainer/VSlider" to="." method="EQBandSliderValueChanged"]
+[connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/resetPlaybackTempoButton" to="." method="_on_reset_playback_tempo_button_pressed"]
+[connection signal="value_changed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/playbackTempoHSlider" to="." method="_on_playback_tempo_h_slider_value_changed"]
+[connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/resetPlaybackPitchButton" to="." method="_on_reset_playback_pitch_button_pressed"]
+[connection signal="value_changed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer/playbackPitchHSlider" to="." method="_on_playback_pitch_h_slider_value_changed"]
+[connection signal="child_exiting_tree" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/EffectsHBoxContainer" to="." method="_on_effects_h_box_container_child_exiting_tree"]
 [connection signal="drag_ended" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider" to="." method="_on_progress_bar_2_drag_ended"]
 [connection signal="drag_started" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider" to="." method="_on_progress_bar_2_drag_started"]
 [connection signal="value_changed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider" to="." method="_on_progress_bar_2_value_changed"]

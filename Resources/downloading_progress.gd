@@ -7,9 +7,10 @@ func start_checking() -> void:
 	set_process(true)
 
 func stop_checking() -> void:
+	httpmanager_progress_update(%spotifyDownloadHTTPRequest.get_body_size(), %spotifyDownloadHTTPRequest.get_downloaded_bytes())
 	set_process(false)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	httpmanager_progress_update(%spotifyDownloadHTTPRequest.get_body_size(), %spotifyDownloadHTTPRequest.get_downloaded_bytes())
 
 func animateProgressBytes(newValue: float) -> void:
@@ -50,5 +51,5 @@ func format_bytes(bytes: int) -> String:
 	return str(snapped(value, pow(0.1, decimal_places))) + " " + unit
 
 func httpmanager_progress_update(total_bytes: int, current_bytes: int) -> void:
-	%downloadingProgressLabel.set_deferred("text", format_bytes(total_bytes) + " / " + format_bytes(current_bytes))
+	%downloadingProgressLabel.set_deferred("text", format_bytes(current_bytes) + " / " + format_bytes(total_bytes))
 	animateProgressBytes(current_bytes / (0.00001 + total_bytes) * 100)
