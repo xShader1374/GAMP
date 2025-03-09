@@ -258,13 +258,7 @@ func _on_border_timer_timeout() -> void:
 
 func check_window_borders() -> void:
 	var screen_size: Vector2i = DisplayServer.screen_get_size()
-	var window_pos: Vector2i = DisplayServer.window_get_position()  # Posizione attuale della finestra
-	var window_size: Vector2i = DisplayServer.window_get_size()  # Dimensione attuale della finestra
 	mouse_pos = DisplayServer.mouse_get_position()  # Posizione globale del mouse
-	
-	# Calcola la posizione relativa del mouse rispetto allo schermo
-	var relative_mouse_x: int = mouse_pos.x - window_pos.x
-	var relative_mouse_y: int = mouse_pos.y - window_pos.y
 	
 	# Controlla se il mouse è vicino ai bordi dello schermo (non della finestra)
 	var near_border: bool = (
@@ -674,7 +668,7 @@ func songElementSelectedFunction(songElementNode : Node, songFileName : String, 
 	
 	$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer.current_tab = 2
 
-func changeBGImage(newBGImage: ImageTexture) -> void:
+func changeBGImage(newBGImage: Texture2D) -> void:
 	var changeBGImageTween: Tween = create_tween()
 	
 	changeBGImageTween.set_ease(Tween.EASE_IN_OUT)
@@ -697,7 +691,7 @@ func changeAuthorImage() -> void:
 	changeAuthorImageTween.chain().tween_callback(%authorCoverTextureRect.request) #(%songCoverTextureRect, "texture", newSongCoverImage, 0)
 	changeAuthorImageTween.chain().tween_property(%authorCoverTextureRect, "self_modulate", Color.WHITE, 0.2).set_delay(0.2)
 
-func changeSongCoverImage(newSongCoverImage: ImageTexture) -> void:
+func changeSongCoverImage(newSongCoverImage: Texture2D) -> void:
 	var changeSongCoverImageTween: Tween = create_tween()
 	
 	changeSongCoverImageTween.set_ease(Tween.EASE_IN_OUT)
@@ -708,7 +702,7 @@ func changeSongCoverImage(newSongCoverImage: ImageTexture) -> void:
 	changeSongCoverImageTween.chain().tween_callback(%songCoverTextureRect.set_texture.bind(newSongCoverImage)) #(%songCoverTextureRect, "texture", newSongCoverImage, 0)
 	changeSongCoverImageTween.chain().tween_property(%songCoverTextureRect, "self_modulate", Color.WHITE, 0.2)
 
-func changeMetadataSongCoverImage(newSongCoverImage: ImageTexture) -> void:
+func changeMetadataSongCoverImage(newSongCoverImage: Texture2D) -> void:
 	var changeMetadataSongCoverImageTween: Tween = create_tween()
 	
 	changeMetadataSongCoverImageTween.set_ease(Tween.EASE_IN_OUT)
@@ -799,8 +793,8 @@ func _on_song_lyrics_http_request_request_completed(result: int, response_code: 
 		song_lyrics_label.text = "Can't find lyrics for this song.\n(Using LRCLIB API)"
 
 func stripEverythingBetweenSomethingFromString(string : String, symbol1 : String, symbol2 : String) -> String:
-	var newString : String = ""
-	var insideDelimeters : bool = false
+	var newString: String = ""
+	var insideDelimeters: bool = false
 	
 	for Char: String in string:
 		
@@ -813,16 +807,16 @@ func stripEverythingBetweenSomethingFromString(string : String, symbol1 : String
 	
 	return newString
 
-func stripSyncSecondsFromLyrics(FullLyrics : String) -> String:
+func stripSyncSecondsFromLyrics(FullLyrics: String) -> String:
 	return stripEverythingBetweenSomethingFromString(FullLyrics, "[", "]")
 
-func loadImportedSyncedLyrics(fullLyrics : String) -> void:
-	var lyricsLinesOLD : Array[Node] = %songLyricsLinesVBoxContainer.get_children()
+func loadImportedSyncedLyrics(fullLyrics: String) -> void:
+	var lyricsLinesOLD: Array[Node] = %songLyricsLinesVBoxContainer.get_children()
 	
 	for child: Label in lyricsLinesOLD:
 		child.queue_free()
 	
-	var lyricsLines : PackedStringArray = fullLyrics.split("\n")
+	var lyricsLines: PackedStringArray = fullLyrics.split("\n")
 	
 	# 10 characters
 	
@@ -883,8 +877,12 @@ func loadImportedPlainLyrics(fullLyrics: String) -> void:
 		newLyricsLineNode.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		newLyricsLineNode.label_settings = %loadingLyricsLabel.label_settings
 		
+		print(line)
+		
 		if line == " ":
 			newLyricsLineNode.text = "♪"
+		elif line == "":
+			continue
 		else:
 			newLyricsLineNode.text = line.right(-1)
 		
@@ -1231,17 +1229,17 @@ func _on_spotify_download_http_request_request_completed(result: int, response_c
 				
 				importSingleSong(file_path)
 			else:
+				printerr("HTTP Error: ", response_code, "Result:", result_name[result])
 				%downloadingLabel.text = "HTTP Error " + str(response_code)
 				var parsedBody: Dictionary = JSON.parse_string(body.get_string_from_ascii())
 				if parsedBody.has("message"):
 					%downloadingLabel.text += ": " + parsedBody["message"]
-				printerr("HTTP Error: ", response_code, "Result:", result_name[result])
 		else:
 			%downloadingLabel.text = "Download Error: " + result_name[result]
 			printerr("Download Error: ", result_name[result])
 	else:
 		%downloadingLabel.text = "Download Error:\n" + "content too small(corrupted?)"
-		printerr("Download Error: ", "Body was too small(corrupted?)")
+		printerr("Download Error: ", "Body was too small(corrupted?):\n", body.get_string_from_utf8())
 	
 	downloadingTrackID = ""
 	downloadingSongAuthorName = ""

@@ -1144,7 +1144,7 @@ theme_override_styles/tab_selected = SubResource("StyleBoxFlat_hdwky")
 theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_5l4kh")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_ll108")
 tab_alignment = 1
-current_tab = 6
+current_tab = 1
 drag_to_rearrange_enabled = true
 
 [node name="Manage Songs" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
@@ -1225,7 +1225,6 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="Import" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_d0112")
@@ -1359,6 +1358,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_xoyvr")
 text = "Manual Import"
 
 [node name="VSeparator2" type="VSeparator" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Import/HBoxContainer/HBoxContainer2"]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 theme_override_constants/separation = 8
@@ -3504,6 +3504,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Metadata Inspector" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_d0112")
@@ -3620,7 +3621,14 @@ vertical_alignment = 1
 layout_mode = 2
 alignment = 2
 
-[node name="changeImageMetadataButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -1
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = -1
+theme_override_constants/margin_bottom = -1
+
+[node name="changeImageMetadataButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel/VBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
@@ -4431,7 +4439,7 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_ri141")
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/resetPlaybackPitchButton" to="." method="_on_reset_playback_pitch_button_pressed"]
 [connection signal="value_changed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer/playbackPitchHSlider" to="." method="_on_playback_pitch_h_slider_value_changed"]
 [connection signal="child_exiting_tree" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Effects(WIP)/VBoxContainer/EffectsHBoxContainer" to="." method="_on_effects_h_box_container_child_exiting_tree"]
-[connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel/VBoxContainer/changeImageMetadataButton" to="." method="_on_change_image_metadata_button_pressed"]
+[connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel/MarginContainer/Panel/VBoxContainer/MarginContainer/changeImageMetadataButton" to="." method="_on_change_image_metadata_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel2/MarginContainer/VBoxContainer/fetchMetadataButton" to="." method="_on_fetch_metadata_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TabContainer/Metadata Inspector/HBoxContainer/HBoxContainer/VBoxContainer/Panel2/MarginContainer/VBoxContainer/metadataConfirm&ApplyButton" to="." method="_on_metadata_confirm_apply_button_pressed"]
 [connection signal="drag_ended" from="MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider" to="." method="_on_progress_bar_2_drag_ended"]
