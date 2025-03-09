@@ -2,7 +2,7 @@ extends TextureRect
 
 var spectrum_shader: ShaderMaterial = get_material()
 
-var analyzer: AudioEffectSpectrumAnalyzerInstance = AudioServer.get_bus_effect_instance(0, 0)
+var analyzer: AudioEffectSpectrumAnalyzerInstance = AudioServer.get_bus_effect_instance(2, 0)
 
 @export var VU_COUNT: int = 1024
 @export var FREQ_MAX: float =  3000.0

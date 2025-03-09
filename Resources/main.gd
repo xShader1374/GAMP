@@ -6,7 +6,7 @@ extends Control
 @onready var currentDurationLabel : Label = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/CurrentDuration
 @onready var progressBar : HSlider = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ProgressSlider
 @onready var totalDurationLabel : Label = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/TotalDuration
-@onready var volumeSlider : VSlider = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/volumeButton/Panel/VolumeSlider
+@onready var volumeSlider : VSlider = %VolumeSlider
 @onready var smooth_scroll_container: ScrollContainer = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SmoothScrollContainer
 @onready var songElementsContainer : VBoxContainer = $MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SmoothScrollContainer/HBoxContainer/VBoxContainer
 
@@ -77,7 +77,7 @@ var EQpresets: Array[PackedFloat32Array] = [
 ]
 #endregion
 
-@onready var EQ21Effect : AudioEffectEQ21 = AudioServer.get_bus_effect(0, 1)
+@onready var EQ21Effect : AudioEffectEQ21 = AudioServer.get_bus_effect(1, 0)
 var EQbandDragStarted : bool = false
 
 #endregion
@@ -101,6 +101,12 @@ var volumeSliderDragStarted : bool = false
 var volumeButtonHover : bool = false
 var volumeSliderHover : bool = false
 var volumeSliderPanelHover : bool = false
+
+var hover_states: Dictionary = {
+	"button": false,
+	"panel": false,
+	"slider": false
+}
 #endregion
 
 #region Window Management
@@ -254,7 +260,7 @@ func check_window_borders() -> void:
 	var screen_size: Vector2i = DisplayServer.screen_get_size()
 	var window_pos: Vector2i = DisplayServer.window_get_position()  # Posizione attuale della finestra
 	var window_size: Vector2i = DisplayServer.window_get_size()  # Dimensione attuale della finestra
-	var mouse_pos: Vector2i = DisplayServer.mouse_get_position()  # Posizione globale del mouse
+	mouse_pos = DisplayServer.mouse_get_position()  # Posizione globale del mouse
 	
 	# Calcola la posizione relativa del mouse rispetto allo schermo
 	var relative_mouse_x: int = mouse_pos.x - window_pos.x
@@ -727,6 +733,10 @@ func time_to_seconds(time_string: String) -> int:
 
 #region Lyrics Management
 func requestSongLyrics(Title: String, Author: String, Duration: String) -> void:
+	%manualLyricsSearchSongNameLineEdit.text = Title
+	%manualLyricsSearchSongNameAuthorLineEdit.text = Author
+	%manualLyricsSearchSongNameDurationLineEdit.text = Duration
+	
 	## This is the API we get the Lyrics from
 	var url_starting_part: String = "https://lrclib.net/api/get?artist_name="
 	
@@ -776,7 +786,10 @@ func _on_song_lyrics_http_request_request_completed(result: int, response_code: 
 				%songLyricsLinesVBoxContainer.show()
 				%songLyricsLinesVBoxContainer.get_parent().scroll_to_top()
 				
-				loadImportedSyncedLyrics(parsedBody.syncedLyrics)
+				if parsedBody.syncedLyrics:
+					loadImportedSyncedLyrics(parsedBody.syncedLyrics)
+				else:
+					loadImportedPlainLyrics(parsedBody.plainLyrics)
 				LyricsSynchronizer.set_process(true)
 			else:
 				%loadingLyricsCenterContainer.hide()
@@ -847,6 +860,48 @@ func loadImportedSyncedLyrics(fullLyrics : String) -> void:
 	
 	print(LyricsSynchronizer.syncSeconds, LyricsSynchronizer.syncSeconds.size())
 	print(LyricsSynchronizer.lyricsLineLabels, LyricsSynchronizer.lyricsLineLabels.size())
+
+func loadImportedPlainLyrics(fullLyrics: String) -> void:
+	#LyricsSynchronizer.set_process(false)
+	
+	var lyricsLinesOLD: Array[Node] = %songLyricsLinesVBoxContainer.get_children()
+	
+	for child: Label in lyricsLinesOLD:
+		child.queue_free()
+	
+	var lyricsLines: PackedStringArray = fullLyrics.split("\n")
+	
+	for line: String in lyricsLines:
+		
+		#var lyricLineStripped: String = line.right(line.length() - 10)
+		
+		#LyricsSynchronizer.syncSeconds.append(line.left(10))
+		
+		var newLyricsLineNode: Label = Label.new()
+		
+		newLyricsLineNode.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		newLyricsLineNode.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		newLyricsLineNode.label_settings = %loadingLyricsLabel.label_settings
+		
+		if line == " ":
+			newLyricsLineNode.text = "♪"
+		else:
+			newLyricsLineNode.text = line.right(-1)
+		
+		newLyricsLineNode.pivot_offset = newLyricsLineNode.size / 2.0
+		
+		%songLyricsLinesVBoxContainer.add_child(newLyricsLineNode)
+		
+		LyricsSynchronizer.lyricsLineLabels.append(newLyricsLineNode)
+		
+		newLyricsLineNode.gui_input.connect(LyricsSynchronizer.lyrics_line_GUI_input_event.bind(newLyricsLineNode))
+		newLyricsLineNode.mouse_entered.connect(LyricsSynchronizer.lyrics_line_mouse_entered.bind(newLyricsLineNode))
+		newLyricsLineNode.mouse_exited.connect(LyricsSynchronizer.lyrics_line_mouse_exited.bind(newLyricsLineNode))
+		
+		newLyricsLineNode.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		newLyricsLineNode.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		newLyricsLineNode.mouse_filter = Control.MOUSE_FILTER_PASS
+	
 #endregion
 
 
@@ -971,30 +1026,36 @@ func _on_progress_bar_2_drag_ended(_value_changed: bool) -> void:
 	progressBarDragStarted = false
 
 
+func _check_volume_button_hover_states() -> void:
+	# Verifica tutti gli stati contemporaneamente
+	
+	if hover_states.values().all(func(state: bool) -> bool: return state == false):
+		%volumeTimer.stop()
+		%volumeAnimationPlayer.play_backwards("show")
+
 func _on_volume_button_mouse_entered() -> void:
-	$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/volumeButton/AnimationPlayer.play("show")
-	volumeButtonHover = true
+	hover_states["button"] = true
+	%volumeAnimationPlayer.play("show")
+	%volumeTimer.start(0.0)
 
 func _on_volume_button_mouse_exited() -> void:
-	volumeButtonHover = false
-
-
-func _on_panel_mouse_exited() -> void:
-	volumeSliderPanelHover = false
-	
-	if volumeSliderHover == false and volumeSliderPanelHover == false and volumeButtonHover == false:
-		$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/volumeButton/AnimationPlayer.play_backwards("show")
+	hover_states["button"] = false
 
 func _on_panel_mouse_entered() -> void:
-	volumeSliderPanelHover = true
+	hover_states["panel"] = true
 
+func _on_panel_mouse_exited() -> void:
+	hover_states["panel"] = false
 
 func _on_volume_slider_mouse_entered() -> void:
-	volumeSliderHover = true
-
+	hover_states["slider"] = true
 
 func _on_volume_slider_mouse_exited() -> void:
-	volumeSliderHover = false
+	hover_states["slider"] = false
+
+func _on_volume_timer_timeout() -> void:
+	%volumeTimer.start(0.0)
+	_check_volume_button_hover_states()
 
 
 func setAudioBusVolume(volume : float) -> void:
@@ -1003,10 +1064,10 @@ func setAudioBusVolume(volume : float) -> void:
 func _on_volume_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		AudioServer.set_bus_mute(0, true)
-		$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/volumeButton/volumeButton/Label.show()
+		%volumeMutedLabel.show()
 	else:
 		AudioServer.set_bus_mute(0, false)
-		$MarginContainer/Panel/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/Panel/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/volumeButton/volumeButton/Label.hide()
+		%volumeMutedLabel.hide()
 
 
 func _on_volume_slider_drag_started() -> void:
@@ -1297,3 +1358,13 @@ func _on_effects_h_box_container_child_exiting_tree(_node: Node) -> void:
 	for child: Control in %EffectsHBoxContainer.get_children():
 		if child is PanelContainer:
 			child.update_index()
+
+
+func _on_metadata_confirm_apply_button_pressed() -> void:
+	pass # Replace with function body.
+
+func _on_fetch_metadata_button_pressed() -> void:
+	pass # Replace with function body.
+
+func _on_change_image_metadata_button_pressed() -> void:
+	pass # Replace with function body.

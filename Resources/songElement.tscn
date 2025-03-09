@@ -1,6 +1,6 @@
 [gd_scene load_steps=23 format=3 uid="uid://c6xmr7thb3j54"]
 
-[ext_resource type="Script" path="res://Resources/SongElement.gd" id="1_8hvke"]
+[ext_resource type="Script" uid="uid://crw8wj8hmyxpp" path="res://Resources/SongElement.gd" id="1_8hvke"]
 [ext_resource type="Texture2D" uid="uid://bqr6dex5q3fyu" path="res://Resources/Bg.png" id="2_dcy72"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ntnih"]
@@ -291,6 +291,7 @@ corner_radius_bottom_left = 16
 corner_detail = 20
 shadow_color = Color(0.592157, 0.501961, 1, 0.843137)
 shadow_size = 4
+anti_aliasing_size = 1.555
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qpfhy"]
 
@@ -556,17 +557,19 @@ metadata/_edit_use_anchors_ = true
 
 [node name="HoverPanel" type="Panel" parent="Panel"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(32, 6)
 layout_mode = 2
-anchor_left = 0.614
-anchor_top = 0.855
-anchor_right = 0.614
-anchor_bottom = 0.855
-offset_left = 0.0583038
-offset_top = 0.0350037
-offset_right = 32.0583
-offset_bottom = 6.035
+anchor_left = 0.666
+anchor_top = 0.88
+anchor_right = 0.666
+anchor_bottom = 0.88
+offset_left = -16.0617
+offset_top = -2.965
+offset_right = 15.9383
+offset_bottom = 3.035
+scale = Vector2(1e-05, 1e-05)
+pivot_offset = Vector2(16, 3)
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_umtcj")
 
 [node name="SongElementButton" type="Button" parent="."]

@@ -605,7 +605,7 @@ func _on_song_element_button_mouse_entered() -> void:
 	#tween.chain().tween_property(songElementButton, "scale", Vector2(0.98, 0.98), .15)
 	
 	if !get_meta("mini", "bool"):
-		%HoverPanel.show()
+		showAnim()
 
 
 func _on_song_element_button_mouse_exited() -> void:
@@ -627,7 +627,7 @@ func _on_song_element_button_mouse_exited() -> void:
 	#tween.chain().tween_property(songElementButton, "scale", Vector2(1.0, 1.0), .15)
 	
 	if !get_meta("mini", "bool"):
-		%HoverPanel.hide()
+		hideAnim()
 
 
 func _on_song_element_button_pressed() -> void:
@@ -681,7 +681,7 @@ func setSongFileNameDir(songDir : String) -> void:
 	songFileNameDir = songDir
 
 func songElementSelectedThumbnailOpacityOnAnimation() -> void:
-	var tween : Tween = create_tween()
+	var tween: Tween = create_tween()
 	
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
@@ -711,11 +711,27 @@ func stopPlayingAnimation() -> void:
 	$Panel/MarginContainer/HBoxContainer/MarginContainer/PanelContainer/Panel/HBoxContainer.hide()
 
 
+func showAnim() -> void:
+	var tween: Tween = create_tween()
+	
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_trans(Tween.TRANS_SINE)
+	
+	tween.tween_property(%HoverPanel, "scale", Vector2.ONE, 0.125).from_current()
+
+func hideAnim() -> void:
+	var tween: Tween = create_tween()
+	
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_trans(Tween.TRANS_EXPO)
+	
+	tween.tween_property(%HoverPanel, "scale", Vector2.ZERO, 0.125).from_current()
+
 func _on_song_element_button_focus_entered() -> void:
-	%HoverPanel.show()
+	showAnim()
 
 func _on_song_element_button_focus_exited() -> void:
-	%HoverPanel.hide()
+	hideAnim()
 
 
 func _on_resized() -> void:
