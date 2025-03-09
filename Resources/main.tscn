@@ -447,8 +447,8 @@ corner_radius_bottom_left = 64
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tcm34"]
 
 [sub_resource type="Gradient" id="Gradient_w3lm6"]
-offsets = PackedFloat32Array(0.6, 0.8)
-colors = PackedColorArray(0.72549, 0.686275, 0.988235, 0.686275, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0, 0.55, 0.8)
+colors = PackedColorArray(0.630529, 0.560504, 0.982449, 0.743, 0.73929, 0.703846, 0.988645, 0.827, 1, 1, 1, 0)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 
@@ -464,7 +464,7 @@ metadata/_snap_count = 20
 
 [sub_resource type="Gradient" id="Gradient_81j7q"]
 offsets = PackedFloat32Array(0.15, 0.45, 0.75, 0.95)
-colors = PackedColorArray(0.556863, 0.45098, 0.972549, 0.6, 0.718824, 0.670588, 0.986275, 0.660392, 0.788235, 0.764706, 0.992157, 0.686275, 1, 1, 1, 0)
+colors = PackedColorArray(0.556863, 0.45098, 0.972549, 0.6, 0.747572, 0.707582, 0.987512, 0.728, 0.824, 0.806, 0.993, 0.921, 1, 1, 1, 0)
 metadata/_snap_enabled = true
 metadata/_snap_count = 20
 

@@ -414,7 +414,7 @@ func importer_Thread_Finished_Importing() -> void:
 func importSingleSong(filePath: String) -> void:
 			var fileName: String = filePath.get_basename() + "." + filePath.get_extension()
 			var fileExtension: String = filePath.get_extension()
-			var baseFileName: String = filePath.get_basename() # File name, without the extention, ex. "g.mp3" becomes "g"
+			#var baseFileName: String = filePath.get_basename() # File name, without the extention, ex. "g.mp3" becomes "g"
 			
 			#region Maybe Delete
 			#var songAuthor : String = ""
@@ -761,7 +761,7 @@ func requestSongLyrics(Title: String, Author: String, Duration: String) -> void:
 	%songLyricsLinesVBoxContainer.hide()
 	%loadingLyricsCenterContainer.show()
 
-func _on_song_lyrics_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_song_lyrics_http_request_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	# stop and hide the loading thingy
 	
 	#printt(result, response_code, headers, body)
